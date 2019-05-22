@@ -3,6 +3,7 @@ import {IncomingMessage} from "http";
 import * as moment from "moment";
 import {Observable, of} from "rxjs";
 import {Script} from "vm";
+import {findScript} from "../../common/findScript";
 import {Response} from "../Response";
 import {ResponseProcess} from "../ResponseProcess";
 
@@ -18,20 +19,25 @@ export class ArenaProcess implements ResponseProcess {
 
         const data: any = {};
         const $body = load(body);
+        const script = findScript($body, `.arena_refresh_counter [rel="count"]`);
 
-        function $($data) {
-            if (typeof $data === "function") {
-                $data();
-            }
-            // tslint:disable-next-line
-            return { on: function () {}, name: $data };
+        if ( !script ) {
+            return of(body);
         }
 
         try {
+            function $($data) {
+                if (typeof $data === "function") {
+                    $data();
+                }
+                // tslint:disable-next-line
+                return { on: function () {}, name: $data };
+            }
+
             new Script($.toString()
                 + `var reload; var timer = {}; `
                 + `var HHTimers = {initDecTimer: function(a, time) {timer = time;}}`
-                + $body("body script").get()[2].children[0].data)
+                + script)
                 .runInNewContext(data)
             ;
 

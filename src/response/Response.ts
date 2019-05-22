@@ -25,4 +25,9 @@ export class Response {
      * Combat réalisé
      */
     public battle?: Battle;
+
+    /**
+     * Ensemble des caractéristique du joueur
+     */
+    public hero?: any;
 }

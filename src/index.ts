@@ -6,6 +6,7 @@ import {ConvertToStringProcess} from "./response/response-process/ConvertToStrin
 import {FetchMemberProcess} from "./response/response-process/FetchMemberProcess";
 import {FetchMoneyProcess} from "./response/response-process/FetchMoneyProcess";
 import {FilterDataProcess} from "./response/response-process/FilterDataProcess";
+import {HeroProcess} from "./response/response-process/HeroProcess";
 import {ShopProcess} from "./response/response-process/ShopProcess";
 import {ResponseManager} from "./response/ResponseManager";
 
@@ -20,6 +21,7 @@ rm.register(new ShopProcess());
 rm.register(new ArenaProcess());
 rm.register(new FetchMoneyProcess());
 rm.register(new BattleProcess());
+rm.register(new HeroProcess());
 
 /*
  * - Création d'une ligne temporelle pour un joueur
