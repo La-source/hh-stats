@@ -1,9 +1,11 @@
 import {IncomingMessage, ServerResponse} from "http";
 import {createProxyServer} from "http-proxy";
 import * as proxy from "http-proxy";
+import {parse} from "querystring";
 import {bindCallback, concat, empty, fromEvent, Observable, of} from "rxjs";
-import {buffer, catchError, first, map, mergeMap, takeUntil} from "rxjs/operators";
+import {catchError, first, map, mergeMap, takeUntil} from "rxjs/operators";
 import {gunzip} from "zlib";
+import {httpReadData} from "../common/httpReadData";
 import {ProxyListener} from "./ProxyListener";
 
 export class Proxy {
@@ -53,11 +55,9 @@ export class Proxy {
                     res.setHeader(header, proxyRes.headers[header]);
                 }
 
-                fromEvent(proxyRes, "data")
+                httpReadData(proxyRes)
                     .pipe(
                         takeUntil(close$),
-                        buffer(fromEvent(proxyRes, "end").pipe(first())),
-                        map(data => Buffer.concat(data as Uint8Array[])),
                         mergeMap(data => this.gunzip$(data, proxyRes)),
                         mergeMap(data => this.response$(data, proxyRes, req)),
                         catchError(() => empty()),
@@ -66,6 +66,15 @@ export class Proxy {
                 ;
             })
         ;
+
+        this.server.on("proxyReq", (_proxyRes, req) => {
+            httpReadData(req)
+                .pipe(
+                    map(data => data.toString("utf8")),
+                    map(data => parse(data)),
+                )
+                .subscribe(body => (req as any).body = body);
+        });
     }
 
     /**

@@ -1,3 +1,4 @@
+import {Battle} from "../game/Battle";
 
 export class Response {
     /**
@@ -14,4 +15,14 @@ export class Response {
      * Date du prochain refresh de l'arène
      */
     public arenaNextRefresh?: Date;
+
+    /**
+     * Monaie récupérée sur le harem
+     */
+    public haremMoneyFetch?: number;
+
+    /**
+     * Combat réalisé
+     */
+    public battle?: Battle;
 }

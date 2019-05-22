@@ -1,6 +1,7 @@
 import {IncomingMessage} from "http";
 import {Observable, of} from "rxjs";
 import {switchMap, tap} from "rxjs/operators";
+import {inspect} from "util";
 import {Proxy} from "../proxy/Proxy";
 import {ProxyListener} from "../proxy/ProxyListener";
 import {Response} from "./Response";
@@ -33,7 +34,7 @@ export class ResponseManager implements ProxyListener {
         }
 
         return obs
-            .pipe(tap(() => console.log(response)));
+            .pipe(tap(() => console.log(inspect(response, {depth: null}))));
     }
 
     public register(process: ResponseProcess) {
