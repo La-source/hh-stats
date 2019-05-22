@@ -15,6 +15,6 @@ export class ChangeReferenceProcess implements ResponseProcess {
                    _response: Response,
                    _proxyRes: IncomingMessage,
                    req: IncomingMessage): Observable<string> {
-        return of(body.replace(RegExp("https://www.hentaiheroes.com/", "gi"), `http://${req.headers.host}/`));
+        return of(body.replace(RegExp("https://www.hentaiheroes.com", "gi"), `http://${req.headers.host}`));
     }
 }

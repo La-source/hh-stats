@@ -15,6 +15,7 @@
             "timeEnd",
             "trace"
         ],
+        "no-empty": [true, "allow-empty-catch"],
         "no-duplicate-variable": true,
         "object-literal-sort-keys": [true, "match-declaration-order"],
         "variable-name": {

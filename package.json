@@ -25,6 +25,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/cheerio": "^0.22.11",
     "@types/gulp": "^4.0.6",
     "@types/http-proxy": "^1.17.0",
     "@types/node": "^11.13.10",
@@ -36,9 +37,11 @@
     "typescript": "^3.4.5"
   },
   "dependencies": {
+    "cheerio": "^1.0.0-rc.3",
     "cookie": "^0.4.0",
     "http-proxy": "^1.17.0",
     "mime": "^2.4.3",
+    "moment": "^2.24.0",
     "rxjs": "^6.5.2"
   }
 }

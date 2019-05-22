@@ -1,13 +1,12 @@
 import {Proxy} from "./proxy/Proxy";
+import {ArenaProcess} from "./response/response-process/ArenaProcess";
 import {ChangeReferenceProcess} from "./response/response-process/ChangeReferenceProcess";
 import {ConvertToStringProcess} from "./response/response-process/ConvertToStringProcess";
 import {FetchMemberProcess} from "./response/response-process/FetchMemberProcess";
 import {FilterDataProcess} from "./response/response-process/FilterDataProcess";
+import {ShopProcess} from "./response/response-process/ShopProcess";
 import {ResponseManager} from "./response/ResponseManager";
 
-console.log("starting...");
-
-// const proxy = new Proxy(3000, "https://zestedesavoir.com");
 const proxy = new Proxy(3000, "https://www.hentaiheroes.com/");
 const rm = new ResponseManager(proxy);
 
@@ -15,6 +14,8 @@ rm.register(new ChangeReferenceProcess());
 rm.register(new ConvertToStringProcess());
 rm.register(new FilterDataProcess());
 rm.register(new FetchMemberProcess());
+rm.register(new ShopProcess());
+rm.register(new ArenaProcess());
 
 /*
  * - Création d'une ligne temporelle pour un joueur
@@ -34,7 +35,4 @@ rm.register(new FetchMemberProcess());
  *      - Autre qui ne me vient pas à l'esprit
  */
 
-setTimeout(() => {
-    console.log("close");
-    proxy.close();
-}, 2000000);
+console.log("hh start");
