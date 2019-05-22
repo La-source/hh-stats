@@ -1,0 +1,29 @@
+version: '2'
+
+services:
+  node:
+    image: node:12
+
+    command: "tail -F /dev/null"
+
+    working_dir: /app
+
+    user: "node"
+
+    ports:
+      - 3000
+
+    volumes:
+      - .:/app
+
+    environment:
+      - DB_USER=test
+      - DB_PASSWORD=test
+      - DB_NAME=test
+      - DB_HOST=db
+      - NODE_ENV=development
+
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
