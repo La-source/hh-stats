@@ -6,7 +6,7 @@ export class DropsBattle {
         xp?: number;
     };
 
-    public items: string[];
+    public items: number[];
 
     public girlShards: Array<{
         idGirl: number;

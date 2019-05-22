@@ -58,7 +58,7 @@ export class BattleProcess implements ResponseProcess {
                 };
             }
 
-            drops.items = source.items;
+            drops.items = source.items.map(item => parseInt(item, 10));
             drops.girlShards = [];
 
             if ( !(source.girl_shards instanceof Array) ) {
