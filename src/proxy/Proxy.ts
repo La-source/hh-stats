@@ -99,7 +99,7 @@ export class Proxy {
      * @param req
      */
     private response$(data: Buffer, proxyRes: IncomingMessage, req: IncomingMessage): Observable<string|Buffer> {
-        return concat(...this.listeners.map(listener => listener.response(data, proxyRes, req)));
+        return concat(...this.listeners.map(listener => listener.query(data, proxyRes, req)));
     }
 
     /**

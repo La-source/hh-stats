@@ -1,24 +1,17 @@
-import {load} from "cheerio";
-import {IncomingMessage} from "http";
 import * as moment from "moment";
 import {Script} from "vm";
 import {findScript} from "../findScript";
-import {Response} from "../Response";
-import {ResponseProcess} from "../ResponseProcess";
+import {GameProcess} from "../GameProcess";
+import {Query} from "../Query";
 
-export class ArenaProcess implements ResponseProcess {
-    public process(body: string,
-                   response: Response,
-                   _proxyRes: IncomingMessage,
-                   req: IncomingMessage): void {
-
-        if ( !req.url.includes("arena.html") ) {
+export class ArenaProcess implements GameProcess {
+    public process(query: Query): void {
+        if ( !query.reqHttp.url.includes("arena.html") ) {
             return;
         }
 
         const data: any = {};
-        const $body = load(body);
-        const script = findScript($body, `.arena_refresh_counter [rel="count"]`);
+        const script = findScript(query.$, `.arena_refresh_counter [rel="count"]`);
 
         if ( !script ) {
             return;
@@ -40,7 +33,7 @@ export class ArenaProcess implements ResponseProcess {
                 .runInNewContext(data)
             ;
 
-            response.arenaNextRefresh = moment()
+            query.game.arenaNextRefresh = moment()
                 .add(parseInt(data.timer, 10), "s").toDate();
         } catch (e) {}
     }

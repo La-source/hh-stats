@@ -1,25 +1,21 @@
+import {ArenaProcess} from "./game/game-process/ArenaProcess";
+import {BattleProcess} from "./game/game-process/BattleProcess";
+import {ChangeProxyUrlProcess} from "./game/game-process/ChangeProxyUrlProcess";
+import {FetchMemberGuidProcess} from "./game/game-process/FetchMemberGuidProcess";
+import {HaremFetchMoneyProcess} from "./game/game-process/HaremFetchMoneyProcess";
+import {HeroProcess} from "./game/game-process/HeroProcess";
+import {ShopProcess} from "./game/game-process/ShopProcess";
+import {GameManager} from "./game/GameManager";
 import {Proxy} from "./proxy/Proxy";
-import {ArenaProcess} from "./response/response-process/ArenaProcess";
-import {BattleProcess} from "./response/response-process/BattleProcess";
-import {ChangeReferenceProcess} from "./response/response-process/ChangeReferenceProcess";
-import {ConvertToStringProcess} from "./response/response-process/ConvertToStringProcess";
-import {FetchMemberProcess} from "./response/response-process/FetchMemberProcess";
-import {FetchMoneyProcess} from "./response/response-process/FetchMoneyProcess";
-import {FilterDataProcess} from "./response/response-process/FilterDataProcess";
-import {HeroProcess} from "./response/response-process/HeroProcess";
-import {ShopProcess} from "./response/response-process/ShopProcess";
-import {ResponseManager} from "./response/ResponseManager";
 
 const proxy = new Proxy(3000, "https://www.hentaiheroes.com/");
-const rm = new ResponseManager(proxy);
+const rm = new GameManager(proxy);
 
-rm.register(new ChangeReferenceProcess());
-rm.register(new ConvertToStringProcess());
-rm.register(new FilterDataProcess());
-rm.register(new FetchMemberProcess());
+rm.register(new ChangeProxyUrlProcess());
+rm.register(new FetchMemberGuidProcess());
 rm.register(new ShopProcess());
 rm.register(new ArenaProcess());
-rm.register(new FetchMoneyProcess());
+rm.register(new HaremFetchMoneyProcess());
 rm.register(new BattleProcess());
 rm.register(new HeroProcess());
 

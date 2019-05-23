@@ -1,30 +1,24 @@
-import {IncomingMessage} from "http";
-import {Battle} from "../../game/Battle";
-import {DropsBattle} from "../../game/DropsBattle";
-import {Response} from "../Response";
-import {ResponseProcess} from "../ResponseProcess";
+import {GameProcess} from "../GameProcess";
+import {Battle} from "../model/Battle";
+import {DropsBattle} from "../model/DropsBattle";
+import {Query} from "../Query";
 
-export class BattleProcess implements ResponseProcess {
-    public process(body: string,
-                   response: Response,
-                   _proxyRes: IncomingMessage,
-                   req: IncomingMessage): void {
+export class BattleProcess implements GameProcess {
+    public process(query: Query): void {
 
-        if ( !req.url.includes("ajax.php") ) {
+        if ( !query.reqHttp.url.includes("ajax.php") ) {
             return;
         }
 
-        const post = (req as any).body;
-
-        if ( !post ) {
+        if ( !query.body ) {
             return;
         }
 
-        if ( post.class !== "Battle" || post.action !== "fight" ) {
+        if ( query.body.class !== "Battle" || query.body.action !== "fight" ) {
             return;
         }
 
-        const data = JSON.parse(body);
+        const data = JSON.parse(query.res);
 
         if ( !data.success ) {
             return;
@@ -32,15 +26,15 @@ export class BattleProcess implements ResponseProcess {
 
         const battle = new Battle();
 
-        if ( post["who[id_member]"] ) {
-            battle.idMember = parseInt(post["who[id_member]"], 10);
+        if ( query.body["who[id_member]"] ) {
+            battle.idMember = parseInt(query.body["who[id_member]"], 10);
         }
 
-        if ( post["who[id_troll]"] ) {
-            battle.idTroll = parseInt(post["who[id_troll]"], 10);
+        if ( query.body["who[id_troll]"] ) {
+            battle.idTroll = parseInt(query.body["who[id_troll]"], 10);
         }
 
-        battle.isArena = !!post["who[id_arena]"];
+        battle.isArena = !!query.body["who[id_arena]"];
         battle.isWin = !data.end.rewards.lose;
 
         if ( battle.isWin ) {
@@ -72,6 +66,6 @@ export class BattleProcess implements ResponseProcess {
             battle.drops = drops;
         }
 
-        response.battle = battle;
+        query.game.battle = battle;
     }
 }

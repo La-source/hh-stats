@@ -1,6 +1,6 @@
-import {Battle} from "../game/Battle";
+import {Battle} from "./Battle";
 
-export class Response {
+export class Game {
     /**
      * Identifiant unique du membre (cookie)
      */
