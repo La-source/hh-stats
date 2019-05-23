@@ -66,7 +66,7 @@ export class BattleProcess implements ResponseProcess {
 
                 drops.girlShards.push({
                     idGirl,
-                    shards: source.girl_shards[idGirl],
+                    shards: parseInt(source.girl_shards[idGirl], 10),
                 });
             }
 

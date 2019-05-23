@@ -1,29 +1,35 @@
 version: '2'
 
 services:
-  node:
-    image: node:12
-
+  app:
+    image: node:12-alpine
     command: "tail -F /dev/null"
-
     working_dir: /app
-
     user: "node"
-
     ports:
       - 3000
-
     volumes:
       - .:/app
-
     environment:
-      - DB_USER=test
-      - DB_PASSWORD=test
-      - DB_NAME=test
-      - DB_HOST=db
+      - REDIS=redis://redis
       - NODE_ENV=development
-
+    depends_on:
+      - redis
+    links:
+      - redis
     logging:
       driver: "json-file"
       options:
         max-size: "50m"
+    networks:
+      - app-net
+
+  redis:
+    image: redis:5-alpine
+    logging:
+      driver: "none"
+    networks:
+      - app-net
+
+networks:
+  app-net:
