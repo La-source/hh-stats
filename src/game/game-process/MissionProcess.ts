@@ -1,7 +1,8 @@
 import {GameProcess} from "../GameProcess";
+import {Reward} from "../model/Reward";
 import {Query} from "../Query";
 
-export class HaremFetchMoneyProcess implements GameProcess {
+export class MissionProcess implements GameProcess {
     public process(query: Query): void {
 
         if ( !query.reqHttp.url.includes("ajax.php") ) {
@@ -12,12 +13,7 @@ export class HaremFetchMoneyProcess implements GameProcess {
             return;
         }
 
-        const action = [
-            "get_salary",
-            "get_all_salaries",
-        ];
-
-        if ( query.body.class !== "Girl" || !action.includes(query.body.action) ) {
+        if ( query.body.class !== "Missions" || query.body.action !== "claim_reward" ) {
             return;
         }
 
@@ -25,6 +21,6 @@ export class HaremFetchMoneyProcess implements GameProcess {
             return;
         }
 
-        query.game.haremMoneyFetch = query.json.money;
+        query.game.mission = new Reward(query.json);
     }
 }

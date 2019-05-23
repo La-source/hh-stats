@@ -1,4 +1,5 @@
 import {Battle} from "./Battle";
+import {Reward} from "./Reward";
 
 export class Game {
     /**
@@ -25,6 +26,16 @@ export class Game {
      * Combat réalisé
      */
     public battle?: Battle;
+
+    /**
+     * Mission réalisée
+     */
+    public mission?: Reward;
+
+    /**
+     * Gain suite aux missions quotidienne
+     */
+    public gift?: number;
 
     /**
      * Ensemble des caractéristique du joueur

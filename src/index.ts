@@ -2,8 +2,10 @@ import {ArenaProcess} from "./game/game-process/ArenaProcess";
 import {BattleProcess} from "./game/game-process/BattleProcess";
 import {ChangeProxyUrlProcess} from "./game/game-process/ChangeProxyUrlProcess";
 import {FetchMemberGuidProcess} from "./game/game-process/FetchMemberGuidProcess";
+import {GiveGiftProcess} from "./game/game-process/GiveGiftProcess";
 import {HaremFetchMoneyProcess} from "./game/game-process/HaremFetchMoneyProcess";
 import {HeroProcess} from "./game/game-process/HeroProcess";
+import {MissionProcess} from "./game/game-process/MissionProcess";
 import {ShopProcess} from "./game/game-process/ShopProcess";
 import {GameManager} from "./game/GameManager";
 import {Proxy} from "./proxy/Proxy";
@@ -18,6 +20,8 @@ rm.register(new ArenaProcess());
 rm.register(new HaremFetchMoneyProcess());
 rm.register(new BattleProcess());
 rm.register(new HeroProcess());
+rm.register(new MissionProcess());
+rm.register(new GiveGiftProcess());
 
 /*
  * - Création d'une ligne temporelle pour un joueur
