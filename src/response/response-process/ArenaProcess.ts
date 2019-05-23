@@ -1,9 +1,8 @@
 import {load} from "cheerio";
 import {IncomingMessage} from "http";
 import * as moment from "moment";
-import {Observable, of} from "rxjs";
 import {Script} from "vm";
-import {findScript} from "../../common/findScript";
+import {findScript} from "../findScript";
 import {Response} from "../Response";
 import {ResponseProcess} from "../ResponseProcess";
 
@@ -11,10 +10,10 @@ export class ArenaProcess implements ResponseProcess {
     public process(body: string,
                    response: Response,
                    _proxyRes: IncomingMessage,
-                   req: IncomingMessage): Observable<string> {
+                   req: IncomingMessage): void {
 
         if ( !req.url.includes("arena.html") ) {
-            return of(body);
+            return;
         }
 
         const data: any = {};
@@ -22,7 +21,7 @@ export class ArenaProcess implements ResponseProcess {
         const script = findScript($body, `.arena_refresh_counter [rel="count"]`);
 
         if ( !script ) {
-            return of(body);
+            return;
         }
 
         try {
@@ -44,7 +43,5 @@ export class ArenaProcess implements ResponseProcess {
             response.arenaNextRefresh = moment()
                 .add(parseInt(data.timer, 10), "s").toDate();
         } catch (e) {}
-
-        return of(body);
     }
 }

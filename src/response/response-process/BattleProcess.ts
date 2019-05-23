@@ -1,5 +1,4 @@
 import {IncomingMessage} from "http";
-import {Observable, of} from "rxjs";
 import {Battle} from "../../game/Battle";
 import {DropsBattle} from "../../game/DropsBattle";
 import {Response} from "../Response";
@@ -9,26 +8,26 @@ export class BattleProcess implements ResponseProcess {
     public process(body: string,
                    response: Response,
                    _proxyRes: IncomingMessage,
-                   req: IncomingMessage): Observable<string> {
+                   req: IncomingMessage): void {
 
         if ( !req.url.includes("ajax.php") ) {
-            return of(body);
+            return;
         }
 
         const post = (req as any).body;
 
         if ( !post ) {
-            return of(body);
+            return;
         }
 
         if ( post.class !== "Battle" || post.action !== "fight" ) {
-            return of(body);
+            return;
         }
 
         const data = JSON.parse(body);
 
         if ( !data.success ) {
-            return of(body);
+            return;
         }
 
         const battle = new Battle();
@@ -74,7 +73,5 @@ export class BattleProcess implements ResponseProcess {
         }
 
         response.battle = battle;
-
-        return of(body);
     }
 }

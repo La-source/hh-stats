@@ -12,6 +12,7 @@ services:
       - .:/app
     environment:
       - REDIS=redis://redis
+      - TZ=Europe/Paris
       - NODE_ENV=development
     depends_on:
       - redis

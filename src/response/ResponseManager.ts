@@ -25,7 +25,15 @@ export class ResponseManager implements ProxyListener {
         let obs: Observable<string|Buffer> = of(data);
 
         for ( const process of this.process ) {
-            obs = obs.pipe(switchMap(content => process.process(content, response, proxyRes, req)));
+            obs = obs.pipe(switchMap(content => {
+                const result = process.process(content, response, proxyRes, req);
+
+                if ( !result ) {
+                    return of(content);
+                }
+
+                return result;
+            }));
 
             // Si on arrête le response
             if ( process.continueProcess && !process.continueProcess(data, proxyRes, req) ) {

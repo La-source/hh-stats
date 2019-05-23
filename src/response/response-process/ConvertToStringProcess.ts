@@ -11,12 +11,11 @@ export class ConvertToStringProcess implements ResponseProcess {
 
     public process(data: Buffer,
                    _response: Response,
-                   proxyRes: IncomingMessage): Observable<string|Buffer> {
-        if ( !this.isText(proxyRes) ) {
-            return of(data);
-        }
+                   proxyRes: IncomingMessage): void|Observable<string|Buffer> {
 
-        return of(data.toString("utf8"));
+        if ( this.isText(proxyRes) ) {
+            return of(data.toString("utf8"));
+        }
     }
 
     public continueProcess(_data: Buffer, proxyRes: IncomingMessage): boolean {

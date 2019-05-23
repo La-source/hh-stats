@@ -5,7 +5,7 @@ import {parse} from "querystring";
 import {bindCallback, concat, empty, fromEvent, Observable, of} from "rxjs";
 import {catchError, first, map, mergeMap, takeUntil} from "rxjs/operators";
 import {gunzip} from "zlib";
-import {httpReadData} from "../common/httpReadData";
+import {httpReadData} from "./httpReadData";
 import {ProxyListener} from "./ProxyListener";
 
 export class Proxy {

@@ -1,5 +1,4 @@
 import {IncomingMessage} from "http";
-import {Observable, of} from "rxjs";
 import {Response} from "../Response";
 import {ResponseProcess} from "../ResponseProcess";
 
@@ -7,16 +6,16 @@ export class FetchMoneyProcess implements ResponseProcess {
     public process(body: string,
                    response: Response,
                    _proxyRes: IncomingMessage,
-                   req: IncomingMessage): Observable<string> {
+                   req: IncomingMessage): void {
 
         if ( !req.url.includes("ajax.php") ) {
-            return of(body);
+            return;
         }
 
         const post = (req as any).body;
 
         if ( !post ) {
-            return of(body);
+            return;
         }
 
         const action = [
@@ -25,17 +24,15 @@ export class FetchMoneyProcess implements ResponseProcess {
         ];
 
         if ( post.class !== "Girl" || !action.includes(post.action) ) {
-            return of(body);
+            return;
         }
 
         const data = JSON.parse(body);
 
         if ( !data.success ) {
-            return of(body);
+            return;
         }
 
         response.haremMoneyFetch = data.money;
-
-        return of(body);
     }
 }

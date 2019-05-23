@@ -1,8 +1,7 @@
 import {load} from "cheerio";
 import {IncomingMessage} from "http";
-import {Observable, of} from "rxjs";
 import {Script} from "vm";
-import {findScript} from "../../common/findScript";
+import {findScript} from "../findScript";
 import {Response} from "../Response";
 import {ResponseProcess} from "../ResponseProcess";
 
@@ -10,10 +9,10 @@ export class HeroProcess implements ResponseProcess {
     public process(body: string,
                    response: Response,
                    _proxyRes: IncomingMessage,
-                   req: IncomingMessage): Observable<string> {
+                   req: IncomingMessage): void {
 
         if ( !req.url.includes(".html") ) {
-            return of(body);
+            return;
         }
 
         const data: any = {};
@@ -21,7 +20,7 @@ export class HeroProcess implements ResponseProcess {
         const script = findScript($body, "Hero.infos");
 
         if ( !script ) {
-            return of(body);
+            return;
         }
 
         try {
@@ -37,7 +36,5 @@ export class HeroProcess implements ResponseProcess {
         } catch (e) {
             console.error(e);
         }
-
-        return of(body);
     }
 }

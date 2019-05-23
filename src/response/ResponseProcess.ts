@@ -19,7 +19,7 @@ export interface ResponseProcess {
     process(body: string|Buffer,
             response: Response,
             proxyRes: IncomingMessage,
-            req: IncomingMessage): Observable<string|Buffer>;
+            req: IncomingMessage): void|Observable<string|Buffer>;
 
     /**
      * Défini si le response-response doit continuer d'être executé
