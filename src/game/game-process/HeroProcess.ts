@@ -12,7 +12,7 @@ export class HeroProcess implements GameProcess {
         }
 
         const data: any = {};
-        const script = findScript(query.$, "Hero.infos");
+        const script = findScript(query.$, "var GT");
 
         if ( !script ) {
             return;
