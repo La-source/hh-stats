@@ -37,13 +37,17 @@ export class GameManager implements ProxyListener {
 
         for ( const process of this.process ) {
             obs = obs.pipe(switchMap(() => {
-                const result = process.process(query);
+                try {
+                    const result = process.process(query);
 
-                if ( !result ) {
-                    return of({});
+                    if ( result ) {
+                        return result;
+                    }
+                } catch (e) {
+                    console.error(e);
                 }
 
-                return result;
+                return of({});
             }));
         }
 

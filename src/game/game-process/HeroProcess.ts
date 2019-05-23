@@ -1,3 +1,4 @@
+import {getExtension} from "mime";
 import {Script} from "vm";
 import {findScript} from "../findScript";
 import {GameProcess} from "../GameProcess";
@@ -6,7 +7,7 @@ import {Query} from "../Query";
 export class HeroProcess implements GameProcess {
     public process(query: Query): void {
 
-        if ( !query.reqHttp.url.includes(".html") ) {
+        if ( getExtension(query.resHttp.headers["content-type"]) !== "html" ) {
             return;
         }
 
