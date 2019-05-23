@@ -9,5 +9,7 @@ export class Battle {
 
     public isWin: boolean;
 
+    public isAutoFight: boolean;
+
     public reward?: Reward;
 }

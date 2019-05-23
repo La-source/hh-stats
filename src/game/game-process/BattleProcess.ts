@@ -33,8 +33,15 @@ export class BattleProcess implements GameProcess {
         }
 
         battle.isArena = !!query.body["who[id_arena]"];
-        battle.isWin = !query.json.end.rewards.lose;
-        battle.reward = new Reward(query.json.end.drops);
+        battle.isAutoFight = !!parseInt(query.body.autoFight, 10);
+
+        if ( query.json.end ) {
+            battle.isWin = !query.json.end.rewards.lose;
+            battle.reward = new Reward(query.json.end.drops);
+        } else {
+            battle.isWin = true; // on considère que en cas de x10 on gagne tous les combats
+            battle.reward = new Reward(query.json.drops);
+        }
 
         query.game.battle = battle;
     }
