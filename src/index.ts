@@ -6,6 +6,7 @@ import {GiveGiftProcess} from "./game/game-process/GiveGiftProcess";
 import {HaremFetchMoneyProcess} from "./game/game-process/HaremFetchMoneyProcess";
 import {HeroProcess} from "./game/game-process/HeroProcess";
 import {MissionProcess} from "./game/game-process/MissionProcess";
+import {RechargeFightProcess} from "./game/game-process/RechargeFightProcess";
 import {ShopProcess} from "./game/game-process/ShopProcess";
 import {GameManager} from "./game/GameManager";
 import {Proxy} from "./proxy/Proxy";
@@ -22,6 +23,7 @@ rm.register(new BattleProcess());
 rm.register(new HeroProcess());
 rm.register(new MissionProcess());
 rm.register(new GiveGiftProcess());
+rm.register(new RechargeFightProcess());
 
 /*
  * - Création d'une ligne temporelle pour un joueur

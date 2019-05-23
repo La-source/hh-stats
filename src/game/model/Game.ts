@@ -38,6 +38,11 @@ export class Game {
     public gift?: number;
 
     /**
+     * Indiquateur déterminant si on a recharger la jauge de combat
+     */
+    public fightRecharge?: boolean;
+
+    /**
      * Ensemble des caractéristique du joueur
      */
     public hero?: any;
