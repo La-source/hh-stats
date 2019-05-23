@@ -38,6 +38,12 @@ export class BattleProcess implements GameProcess {
         if ( query.json.end ) {
             battle.isWin = !query.json.end.rewards.lose;
             battle.reward = new Reward(query.json.end.drops);
+
+            // Si on a loot
+            if ( query.json.end.rewards.data.girls ) {
+                battle.reward.girls = query.json.end.rewards.data.girls
+                    .map(girl => parseInt(girl.id_girl, 10));
+            }
         } else {
             battle.isWin = true; // on considère que en cas de x10 on gagne tous les combats
             battle.reward = new Reward(query.json.drops);
