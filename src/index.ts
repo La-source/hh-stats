@@ -5,6 +5,7 @@ import {ChangeProxyUrlProcess} from "./exchange-process/ChangeProxyUrlProcess";
 import {FetchMemberGuidProcess} from "./exchange-process/FetchMemberGuidProcess";
 import {HaremFetchMoneyProcess} from "./exchange-process/HaremFetchMoneyProcess";
 import {HeroProcess} from "./exchange-process/HeroProcess";
+import {HomeProcess} from "./exchange-process/HomeProcess";
 import {MissionGiveGiftProcess} from "./exchange-process/MissionGiveGiftProcess";
 import {MissionProcess} from "./exchange-process/MissionProcess";
 import {PachinkoNextRefreshProcess} from "./exchange-process/PachinkoNextRefreshProcess";
@@ -28,6 +29,7 @@ rm.use(new MissionGiveGiftProcess());
 rm.use(new RechargeFightProcess());
 rm.use(new PachinkoRewardProcess());
 rm.use(new PachinkoNextRefreshProcess());
+rm.use(new HomeProcess());
 
 /*
  * - Création d'une ligne temporelle pour un joueur
