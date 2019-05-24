@@ -2,7 +2,7 @@ import {ExchangeProcess} from "../exchange-manager/ExchangeProcess";
 import {Game} from "../model/Game";
 import {Exchange} from "../proxy/Exchange";
 
-export class GiveGiftProcess implements ExchangeProcess {
+export class MissionGiveGiftProcess implements ExchangeProcess {
     public withUrlContains = "ajax.php";
 
     public withReqBody = true;
