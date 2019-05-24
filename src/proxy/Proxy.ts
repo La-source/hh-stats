@@ -28,6 +28,7 @@ export class Proxy {
     constructor(port: number, target: string) {
         this.server = createProxyServer({
             target,
+            ws: true,
             changeOrigin: true,
             autoRewrite: true,
             followRedirects: true,
