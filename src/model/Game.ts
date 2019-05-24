@@ -33,6 +33,11 @@ export class Game {
     public reward?: Reward;
 
     /**
+     * Marqueur indiquant si un pachinko a été joué
+     */
+    public isPachinko?: boolean;
+
+    /**
      * Marqueur indiquant si une mission a été réalisée
      */
     public isMission?: boolean;

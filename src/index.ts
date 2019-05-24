@@ -7,6 +7,7 @@ import {GiveGiftProcess} from "./exchange-process/GiveGiftProcess";
 import {HaremFetchMoneyProcess} from "./exchange-process/HaremFetchMoneyProcess";
 import {HeroProcess} from "./exchange-process/HeroProcess";
 import {MissionProcess} from "./exchange-process/MissionProcess";
+import {PachinkoProcess} from "./exchange-process/PachinkoProcess";
 import {RechargeFightProcess} from "./exchange-process/RechargeFightProcess";
 import {ShopProcess} from "./exchange-process/ShopProcess";
 import {Proxy} from "./proxy/Proxy";
@@ -24,6 +25,7 @@ rm.use(new HeroProcess());
 rm.use(new MissionProcess());
 rm.use(new GiveGiftProcess());
 rm.use(new RechargeFightProcess());
+rm.use(new PachinkoProcess());
 
 /*
  * - Création d'une ligne temporelle pour un joueur

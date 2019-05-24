@@ -31,16 +31,10 @@ export class BattleProcess implements ExchangeProcess {
 
         if ( exchange.response.json.end ) {
             battle.isWin = !exchange.response.json.end.rewards.lose;
-            game.reward = new Reward(exchange.response.json.end.drops);
-
-            // Si on a loot
-            if ( exchange.response.json.end.rewards.data.girls ) {
-                game.reward.girls = exchange.response.json.end.rewards.data.girls
-                    .map(girl => parseInt(girl.id_girl, 10));
-            }
+            game.reward = new Reward(exchange.response.json.end);
         } else {
             battle.isWin = true; // on considère que en cas de x10 on gagne tous les combats
-            game.reward = new Reward(exchange.response.json.drops);
+            game.reward = new Reward(exchange.response.json);
         }
 
         game.battle = battle;

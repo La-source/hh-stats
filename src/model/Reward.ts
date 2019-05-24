@@ -1,30 +1,61 @@
 
 export class Reward {
+    /**
+     * Récompense relatif au joueur
+     */
     public hero?: {
         softCurrency?: number;
         victoryPoints?: number;
         xp?: number;
     };
 
-    public items: number[];
+    /**
+     * Items obtenu
+     */
+    public items?: number[];
 
-    public girlShards: Array<{
+    /**
+     * Affection obtenu
+     */
+    public girlShards?: Array<{
         idGirl: number;
         shards: number;
     }> = [];
 
+    /**
+     * Filles obtenue
+     */
     public girls?: number[];
 
-    constructor(private reward: any) {
+    /**
+     * Données brute de la récompense
+     */
+    private readonly data: any;
+
+    /**
+     * Données formatée de la récompense
+     */
+    private readonly drops: any;
+
+    constructor(reward: any) {
         console.log(reward);
+
+        if ( reward.reward && reward.reward.data ) {
+            this.data = reward.reward.data;
+        }
+
+        if ( reward.drops ) {
+            this.drops = reward.drops;
+        }
 
         this.heroHydrate();
         this.itemsHydrate();
         this.girlsShardsHydrate();
+        this.girlsHydrate();
     }
 
     private heroHydrate(): void {
-        const hero = this.reward.hero;
+        const hero = this.drops.hero;
 
         if ( !hero || hero instanceof Array ) {
             return;
@@ -46,11 +77,19 @@ export class Reward {
     }
 
     private itemsHydrate(): void {
-        this.items = this.reward.items.map(item => parseInt(item, 10));
+        if ( !this.drops ) {
+            return;
+        }
+
+        this.items = this.drops.items.map(item => parseInt(item, 10));
     }
 
     private girlsShardsHydrate(): void {
-        const shards = this.reward.girl_shards;
+        if ( !this.drops ) {
+            return;
+        }
+
+        const shards = this.drops.girl_shards;
 
         if ( !shards || shards instanceof Array ) {
             return;
@@ -62,5 +101,15 @@ export class Reward {
             idGirl,
             shards: parseInt(shards[idGirl], 10),
         });
+    }
+
+    private girlsHydrate(): void {
+        if ( !this.data || !this.data.girls ) {
+            return;
+        }
+
+        this.girls = this.data.girls
+            .map(girl => parseInt(girl.id_girl, 10));
+
     }
 }
