@@ -1,13 +1,13 @@
 import {Script} from "vm";
 import {ExchangeProcess} from "../exchange-manager/ExchangeProcess";
 import {findScript} from "../exchange-manager/findScript";
-import {Game} from "../model/Game";
+import {Client} from "../model/Client";
 import {Exchange} from "../proxy/Exchange";
 
 export class HeroProcess implements ExchangeProcess {
     public withHtmlResponse = true;
 
-    public execute(exchange: Exchange, game: Game): void {
+    public execute(exchange: Exchange, client: Client): void {
         const data: any = {};
         const script = findScript(exchange.response.$, "var GT =");
 
@@ -24,7 +24,7 @@ export class HeroProcess implements ExchangeProcess {
                 .runInNewContext(data)
             ;
 
-            game.hero = data.Hero.infos;
+            client.hero = data.Hero.infos;
         } catch (e) {
             console.error(e);
         }

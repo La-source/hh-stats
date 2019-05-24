@@ -1,5 +1,5 @@
 import {ExchangeProcess} from "../exchange-manager/ExchangeProcess";
-import {Game} from "../model/Game";
+import {Client} from "../model/Client";
 import {Reward} from "../model/Reward";
 import {Exchange} from "../proxy/Exchange";
 
@@ -10,12 +10,13 @@ export class PachinkoRewardProcess implements ExchangeProcess {
 
     public withJson = true;
 
-    public execute(exchange: Exchange, game: Game): void {
+    public execute(exchange: Exchange, client: Client): void {
         if ( exchange.request.body.class !== "Pachinko" || exchange.request.body.action !== "play" ) {
             return;
         }
 
-        game.reward = new Reward(exchange.response.json);
-        game.isPachinko = true;
+        client.action = "pachinko";
+        client.reward = new Reward(exchange.response.json);
+        client.isPachinko = true;
     }
 }

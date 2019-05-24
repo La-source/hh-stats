@@ -1,5 +1,5 @@
 import {ExchangeProcess} from "../exchange-manager/ExchangeProcess";
-import {Game} from "../model/Game";
+import {Client} from "../model/Client";
 import {Exchange} from "../proxy/Exchange";
 
 export class HaremFetchMoneyProcess implements ExchangeProcess {
@@ -9,7 +9,7 @@ export class HaremFetchMoneyProcess implements ExchangeProcess {
 
     public withJson = true;
 
-    public execute(exchange: Exchange, game: Game): void {
+    public execute(exchange: Exchange, client: Client): void {
         const action = [
             "get_salary",
             "get_all_salaries",
@@ -19,6 +19,7 @@ export class HaremFetchMoneyProcess implements ExchangeProcess {
             return;
         }
 
-        game.haremMoneyFetch = exchange.response.json.money;
+        client.action = "fetchHaremMoney";
+        client.haremMoneyFetch = exchange.response.json.money;
     }
 }

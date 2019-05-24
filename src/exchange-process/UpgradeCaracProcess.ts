@@ -1,5 +1,5 @@
 import {ExchangeProcess} from "../exchange-manager/ExchangeProcess";
-import {Game} from "../model/Game";
+import {Client} from "../model/Client";
 import {Exchange} from "../proxy/Exchange";
 
 export class UpgradeCaracProcess implements ExchangeProcess {
@@ -9,11 +9,12 @@ export class UpgradeCaracProcess implements ExchangeProcess {
 
     public withJson = true;
 
-    public execute(exchange: Exchange, game: Game): void {
+    public execute(exchange: Exchange, client: Client): void {
         if ( exchange.request.body.class !== "Hero" || exchange.request.body.action !== "update_stats" ) {
             return;
         }
 
-        game.isUpgradeCarac = true;
+        client.action = "upgradeCarac";
+        client.isUpgradeCarac = true;
     }
 }

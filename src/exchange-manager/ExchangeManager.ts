@@ -1,10 +1,10 @@
 import {Observable, of} from "rxjs";
 import {switchMap, tap} from "rxjs/operators";
-import {inspect} from "util";
-import {Game} from "../model/Game";
+import {Client} from "../model/Client";
 import {Exchange} from "../proxy/Exchange";
 import {Proxy} from "../proxy/Proxy";
 import {ProxyListener} from "../proxy/ProxyListener";
+import {ExchangeListener} from "./ExchangeListener";
 import {ExchangeProcess} from "./ExchangeProcess";
 
 /**
@@ -16,6 +16,8 @@ import {ExchangeProcess} from "./ExchangeProcess";
 export class ExchangeManager implements ProxyListener {
     private readonly process: ExchangeProcess[] = [];
 
+    private readonly listeners: ExchangeListener[] = [];
+
     constructor(private proxy: Proxy) {
         this.proxy.register(this);
     }
@@ -25,12 +27,12 @@ export class ExchangeManager implements ProxyListener {
             return;
         }
 
-        const game = new Game();
+        const client = new Client();
         let obs: Observable<{}> = of({});
 
         for ( const process of this.process ) {
             obs = obs.pipe(switchMap(() => {
-                const result = this.executeProcess(process, exchange, game);
+                const result = this.executeProcess(process, exchange, client);
 
                 if ( result ) {
                     return result;
@@ -42,7 +44,7 @@ export class ExchangeManager implements ProxyListener {
 
         return obs
             .pipe(
-                tap(() => console.log(inspect(game, {depth: null}))),
+                tap(() => this.listeners.forEach(listener => listener.complete(client))),
             );
     }
 
@@ -50,13 +52,17 @@ export class ExchangeManager implements ProxyListener {
         this.process.push(process);
     }
 
+    public register(listener: ExchangeListener) {
+        this.listeners.push(listener);
+    }
+
     /**
      * Vérifie les pré-condition à l'execution du execute et l'execute
      * @param process
      * @param exchange
-     * @param game
+     * @param client
      */
-    private executeProcess(process: ExchangeProcess, exchange: Exchange, game: Game): void|Observable<{}> {
+    private executeProcess(process: ExchangeProcess, exchange: Exchange, client: Client): void|Observable<{}> {
         try {
             if ( process.withUrlContains && !exchange.request.req.url.includes(process.withUrlContains) ) {
                 return;
@@ -78,7 +84,7 @@ export class ExchangeManager implements ProxyListener {
                 return;
             }
 
-            return process.execute(exchange, game);
+            return process.execute(exchange, client);
         } catch (e) {
             console.error(e);
         }

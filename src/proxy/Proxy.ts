@@ -3,7 +3,7 @@ import {createProxyServer} from "http-proxy";
 import * as proxy from "http-proxy";
 import {parse} from "querystring";
 import {bindCallback, concat, fromEvent, Observable, of} from "rxjs";
-import {catchError, first, map, mergeMap, takeUntil} from "rxjs/operators";
+import {catchError, first, map, mergeMap, takeUntil, timeout} from "rxjs/operators";
 import {gunzip} from "zlib";
 import {Exchange} from "./Exchange";
 import {httpReadData} from "./httpReadData";
@@ -60,8 +60,10 @@ export class Proxy {
                     res.setHeader(header, proxyRes.headers[header]);
                 }
 
-                httpReadData(proxyRes)
+                of({})
                     .pipe(
+                        timeout(1000),
+                        mergeMap(() => httpReadData(proxyRes)),
                         takeUntil(close$),
                         mergeMap(body => this.gunzip$(body, proxyRes)),
                         mergeMap(body => {

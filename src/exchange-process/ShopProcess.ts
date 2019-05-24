@@ -1,6 +1,6 @@
 import * as moment from "moment";
 import {ExchangeProcess} from "../exchange-manager/ExchangeProcess";
-import {Game} from "../model/Game";
+import {Client} from "../model/Client";
 import {Exchange} from "../proxy/Exchange";
 
 export class ShopProcess implements ExchangeProcess {
@@ -8,8 +8,8 @@ export class ShopProcess implements ExchangeProcess {
 
     public withCheerio = true;
 
-    public execute(exchange: Exchange, game: Game): void {
-        game.shopNextRefresh = moment()
+    public execute(exchange: Exchange, client: Client): void {
+        client.shopNextRefresh = moment()
             .add(parseInt(exchange.response.$(`#shop .shop_count [rel="count"]`).attr("time"), 10), "s").toDate();
     }
 }

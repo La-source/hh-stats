@@ -1,6 +1,6 @@
 import {ExchangeProcess} from "../exchange-manager/ExchangeProcess";
 import {Battle} from "../model/Battle";
-import {Game} from "../model/Game";
+import {Client} from "../model/Client";
 import {Reward} from "../model/Reward";
 import {Exchange} from "../proxy/Exchange";
 
@@ -11,7 +11,7 @@ export class BattleProcess implements ExchangeProcess {
 
     public withJson = true;
 
-    public execute(exchange: Exchange, game: Game): void {
+    public execute(exchange: Exchange, client: Client): void {
         if ( exchange.request.body.class !== "Battle" || exchange.request.body.action !== "fight" ) {
             return;
         }
@@ -31,12 +31,20 @@ export class BattleProcess implements ExchangeProcess {
 
         if ( exchange.response.json.end ) {
             battle.isWin = !exchange.response.json.end.rewards.lose;
-            game.reward = new Reward(exchange.response.json.end);
+            client.reward = new Reward(exchange.response.json.end);
         } else {
             battle.isWin = true; // on considère que en cas de x10 on gagne tous les combats
-            game.reward = new Reward(exchange.response.json);
+            client.reward = new Reward(exchange.response.json);
         }
 
-        game.battle = battle;
+        client.battle = battle;
+
+        if ( battle.isArena ) {
+            client.action = "arenaBattle";
+        } else if ( battle.idTroll ) {
+            client.action = "trollBattle";
+        } else {
+            client.action = "leagueBattle";
+        }
     }
 }

@@ -2,7 +2,7 @@ import * as moment from "moment";
 import {Script} from "vm";
 import {ExchangeProcess} from "../exchange-manager/ExchangeProcess";
 import {findScript} from "../exchange-manager/findScript";
-import {Game} from "../model/Game";
+import {Client} from "../model/Client";
 import {Exchange} from "../proxy/Exchange";
 
 export class HomeProcess implements ExchangeProcess {
@@ -10,7 +10,7 @@ export class HomeProcess implements ExchangeProcess {
 
     public withCheerio = true;
 
-    public execute(exchange: Exchange, game: Game): void {
+    public execute(exchange: Exchange, client: Client): void {
         const data: any = {};
         const script = findScript(exchange.response.$, `var arena_data`);
 
@@ -22,7 +22,7 @@ export class HomeProcess implements ExchangeProcess {
             new Script(script).runInNewContext(data);
 
             if ( data.arena_data.countdown ) {
-                game.arenaNextRefresh = moment()
+                client.arenaNextRefresh = moment()
                     .add(data.arena_data.countdown, "s").toDate();
             }
         } catch (e) {}

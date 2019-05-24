@@ -1,3 +1,4 @@
+import {createClient} from "redis";
 import {ExchangeManager} from "./exchange-manager/ExchangeManager";
 import {ArenaProcess} from "./exchange-process/ArenaProcess";
 import {BattleProcess} from "./exchange-process/BattleProcess";
@@ -14,10 +15,13 @@ import {RechargeFightProcess} from "./exchange-process/RechargeFightProcess";
 import {ShopProcess} from "./exchange-process/ShopProcess";
 import {UpgradeCaracProcess} from "./exchange-process/UpgradeCaracProcess";
 import {Proxy} from "./proxy/Proxy";
+import {StorageManager} from "./storage-manager/StorageManager";
 
+const storage = new StorageManager(createClient(process.env.REDIS));
 const proxy = new Proxy(3000, "https://www.hentaiheroes.com/");
 const rm = new ExchangeManager(proxy);
 
+rm.register(storage);
 rm.use(new ChangeProxyUrlProcess());
 rm.use(new FetchMemberGuidProcess());
 rm.use(new ShopProcess());

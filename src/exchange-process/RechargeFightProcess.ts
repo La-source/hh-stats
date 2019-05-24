@@ -1,5 +1,5 @@
 import {ExchangeProcess} from "../exchange-manager/ExchangeProcess";
-import {Game} from "../model/Game";
+import {Client} from "../model/Client";
 import {Exchange} from "../proxy/Exchange";
 
 export class RechargeFightProcess implements ExchangeProcess {
@@ -9,13 +9,13 @@ export class RechargeFightProcess implements ExchangeProcess {
 
     public withJson = true;
 
-    public execute(exchange: Exchange, game: Game): void {
+    public execute(exchange: Exchange, client: Client): void {
         if ( exchange.request.body.class !== "Hero"
             || exchange.request.body.action !== "recharge"
             || exchange.request.body.type !== "fight" ) {
             return;
         }
 
-        game.fightRecharge = true;
+        client.fightRecharge = true;
     }
 }

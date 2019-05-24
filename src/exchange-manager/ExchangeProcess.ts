@@ -1,5 +1,5 @@
 import {Observable} from "rxjs";
-import {Game} from "../model/Game";
+import {Client} from "../model/Client";
 import {Exchange} from "../proxy/Exchange";
 
 export interface ExchangeProcess {
@@ -31,7 +31,7 @@ export interface ExchangeProcess {
     /**
      * Execute le traitement relatif au exchange-manager-exchange-manager
      * @param exchange
-     * @param game
+     * @param client
      */
-    execute(exchange: Exchange, game: Game): void|Observable<{}>;
+    execute(exchange: Exchange, client: Client): void|Observable<{}>;
 }
