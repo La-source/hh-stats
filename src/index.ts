@@ -1,18 +1,18 @@
-import {ArenaProcess} from "./game/game-process/ArenaProcess";
-import {BattleProcess} from "./game/game-process/BattleProcess";
-import {ChangeProxyUrlProcess} from "./game/game-process/ChangeProxyUrlProcess";
-import {FetchMemberGuidProcess} from "./game/game-process/FetchMemberGuidProcess";
-import {GiveGiftProcess} from "./game/game-process/GiveGiftProcess";
-import {HaremFetchMoneyProcess} from "./game/game-process/HaremFetchMoneyProcess";
-import {HeroProcess} from "./game/game-process/HeroProcess";
-import {MissionProcess} from "./game/game-process/MissionProcess";
-import {RechargeFightProcess} from "./game/game-process/RechargeFightProcess";
-import {ShopProcess} from "./game/game-process/ShopProcess";
-import {GameManager} from "./game/GameManager";
+import {ExchangeManager} from "./exchange-manager/ExchangeManager";
+import {ArenaProcess} from "./exchange-process/ArenaProcess";
+import {BattleProcess} from "./exchange-process/BattleProcess";
+import {ChangeProxyUrlProcess} from "./exchange-process/ChangeProxyUrlProcess";
+import {FetchMemberGuidProcess} from "./exchange-process/FetchMemberGuidProcess";
+import {GiveGiftProcess} from "./exchange-process/GiveGiftProcess";
+import {HaremFetchMoneyProcess} from "./exchange-process/HaremFetchMoneyProcess";
+import {HeroProcess} from "./exchange-process/HeroProcess";
+import {MissionProcess} from "./exchange-process/MissionProcess";
+import {RechargeFightProcess} from "./exchange-process/RechargeFightProcess";
+import {ShopProcess} from "./exchange-process/ShopProcess";
 import {Proxy} from "./proxy/Proxy";
 
 const proxy = new Proxy(3000, "https://www.hentaiheroes.com/");
-const rm = new GameManager(proxy);
+const rm = new ExchangeManager(proxy);
 
 rm.use(new ChangeProxyUrlProcess());
 rm.use(new FetchMemberGuidProcess());

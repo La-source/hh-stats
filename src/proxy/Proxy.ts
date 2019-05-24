@@ -2,7 +2,7 @@ import {ServerResponse} from "http";
 import {createProxyServer} from "http-proxy";
 import * as proxy from "http-proxy";
 import {parse} from "querystring";
-import {bindCallback, concat, empty, fromEvent, Observable, of} from "rxjs";
+import {bindCallback, concat, fromEvent, Observable, of} from "rxjs";
 import {catchError, first, map, mergeMap, takeUntil} from "rxjs/operators";
 import {gunzip} from "zlib";
 import {Exchange} from "./Exchange";
@@ -74,7 +74,7 @@ export class Proxy {
 
                             return this.exchange$(req.exchange);
                         }),
-                        catchError(() => empty()),
+                        catchError(() => of({})),
                     )
                     .subscribe(() => res.end(req.exchange.response.result))
                 ;

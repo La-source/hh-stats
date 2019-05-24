@@ -1,11 +1,11 @@
 import {Observable, of} from "rxjs";
 import {switchMap, tap} from "rxjs/operators";
 import {inspect} from "util";
+import {Game} from "../model/Game";
 import {Exchange} from "../proxy/Exchange";
 import {Proxy} from "../proxy/Proxy";
 import {ProxyListener} from "../proxy/ProxyListener";
-import {GameProcess} from "./GameProcess";
-import {Game} from "./model/Game";
+import {ExchangeProcess} from "./ExchangeProcess";
 
 /**
  * Il voit arriver une requête http brute
@@ -13,8 +13,8 @@ import {Game} from "./model/Game";
  * - Une représentation du joueur connecté
  * - Une représentation des données contenue dans la requête
  */
-export class GameManager implements ProxyListener {
-    private readonly process: GameProcess[] = [];
+export class ExchangeManager implements ProxyListener {
+    private readonly process: ExchangeProcess[] = [];
 
     constructor(private proxy: Proxy) {
         this.proxy.register(this);
@@ -46,17 +46,17 @@ export class GameManager implements ProxyListener {
             );
     }
 
-    public use(process: GameProcess) {
+    public use(process: ExchangeProcess) {
         this.process.push(process);
     }
 
     /**
-     * Vérifie les pré-condition à l'execution du process et l'execute
+     * Vérifie les pré-condition à l'execution du execute et l'execute
      * @param process
      * @param exchange
      * @param game
      */
-    private executeProcess(process: GameProcess, exchange: Exchange, game: Game): void|Observable<{}> {
+    private executeProcess(process: ExchangeProcess, exchange: Exchange, game: Game): void|Observable<{}> {
         try {
             if ( process.withUrlContains && !exchange.request.req.url.includes(process.withUrlContains) ) {
                 return;
@@ -78,7 +78,7 @@ export class GameManager implements ProxyListener {
                 return;
             }
 
-            return process.process(exchange, game);
+            return process.execute(exchange, game);
         } catch (e) {
             console.error(e);
         }

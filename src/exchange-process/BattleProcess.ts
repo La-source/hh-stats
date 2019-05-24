@@ -1,17 +1,17 @@
-import {Exchange} from "../../proxy/Exchange";
-import {GameProcess} from "../GameProcess";
+import {ExchangeProcess} from "../exchange-manager/ExchangeProcess";
 import {Battle} from "../model/Battle";
 import {Game} from "../model/Game";
 import {Reward} from "../model/Reward";
+import {Exchange} from "../proxy/Exchange";
 
-export class BattleProcess implements GameProcess {
+export class BattleProcess implements ExchangeProcess {
     public withUrlContains = "ajax.php";
 
     public withReqBody = true;
 
     public withJson = true;
 
-    public process(exchange: Exchange, game: Game): void {
+    public execute(exchange: Exchange, game: Game): void {
         if ( exchange.request.body.class !== "Battle" || exchange.request.body.action !== "fight" ) {
             return;
         }

@@ -1,16 +1,16 @@
 import * as moment from "moment";
 import {Script} from "vm";
-import {Exchange} from "../../proxy/Exchange";
-import {findScript} from "../findScript";
-import {GameProcess} from "../GameProcess";
+import {ExchangeProcess} from "../exchange-manager/ExchangeProcess";
+import {findScript} from "../exchange-manager/findScript";
 import {Game} from "../model/Game";
+import {Exchange} from "../proxy/Exchange";
 
-export class ArenaProcess implements GameProcess {
+export class ArenaProcess implements ExchangeProcess {
     public withUrlContains = "arena.html";
 
     public withCheerio = true;
 
-    public process(exchange: Exchange, game: Game): void {
+    public execute(exchange: Exchange, game: Game): void {
         const data: any = {};
         const script = findScript(exchange.response.$, `.arena_refresh_counter [rel="count"]`);
 

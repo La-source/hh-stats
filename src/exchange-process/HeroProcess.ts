@@ -1,13 +1,13 @@
 import {Script} from "vm";
-import {Exchange} from "../../proxy/Exchange";
-import {findScript} from "../findScript";
-import {GameProcess} from "../GameProcess";
+import {ExchangeProcess} from "../exchange-manager/ExchangeProcess";
+import {findScript} from "../exchange-manager/findScript";
 import {Game} from "../model/Game";
+import {Exchange} from "../proxy/Exchange";
 
-export class HeroProcess implements GameProcess {
+export class HeroProcess implements ExchangeProcess {
     public withHtmlResponse = true;
 
-    public process(exchange: Exchange, game: Game): void {
+    public execute(exchange: Exchange, game: Game): void {
         const data: any = {};
         const script = findScript(exchange.response.$, "var GT =");
 
