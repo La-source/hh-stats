@@ -18,10 +18,10 @@ export class Reward {
     /**
      * Affection obtenu
      */
-    public girlShards?: Array<{
+    public girlShards: Array<{
         idGirl: number;
         shards: number;
-    }> = [];
+    }>;
 
     /**
      * Filles obtenue
@@ -43,6 +43,8 @@ export class Reward {
 
         if ( reward.reward && reward.reward.data ) {
             this.data = reward.reward.data;
+        } else if ( reward.rewards && reward.rewards.data ) {
+            this.data = reward.rewards.data;
         }
 
         if ( reward.drops ) {
@@ -56,6 +58,10 @@ export class Reward {
     }
 
     private heroHydrate(): void {
+        if ( !this.drops ) {
+            return;
+        }
+
         const hero = this.drops.hero;
 
         if ( !hero || hero instanceof Array ) {
@@ -100,12 +106,14 @@ export class Reward {
             return;
         }
 
-        const idGirl: number = parseInt(Object.keys(shards)[0], 10);
+        this.girlShards = [];
 
-        this.girlShards.push({
-            idGirl,
-            shards: parseInt(shards[idGirl], 10),
-        });
+        for ( const [idGirl, shardsGirl] of Object.entries(shards) ) {
+            this.girlShards.push({
+                idGirl: parseInt(idGirl, 10),
+                shards: parseInt(shardsGirl as string, 10),
+            });
+        }
     }
 
     private girlsHydrate(): void {

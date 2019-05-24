@@ -15,7 +15,9 @@ export class MissionProcess implements ExchangeProcess {
             return;
         }
 
-        game.reward = new Reward(exchange.response.json);
+        game.reward = new Reward({
+            drops: exchange.response.json,
+        });
         game.isMission = true;
     }
 }
