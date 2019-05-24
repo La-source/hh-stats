@@ -3,7 +3,7 @@ import {Game} from "../model/Game";
 import {Reward} from "../model/Reward";
 import {Exchange} from "../proxy/Exchange";
 
-export class PachinkoProcess implements ExchangeProcess {
+export class PachinkoRewardProcess implements ExchangeProcess {
     public withUrlContains = "ajax.php";
 
     public withReqBody = true;

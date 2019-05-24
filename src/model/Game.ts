@@ -18,6 +18,11 @@ export class Game {
     public arenaNextRefresh?: Date;
 
     /**
+     * Date du prochain refresh du pachinko
+     */
+    public pachinkoNextRefresh?: Date;
+
+    /**
      * Monaie récupérée sur le harem
      */
     public haremMoneyFetch?: number;
