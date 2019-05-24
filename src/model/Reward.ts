@@ -7,6 +7,7 @@ export class Reward {
         softCurrency?: number;
         victoryPoints?: number;
         xp?: number;
+        leaguePoint?: number;
     };
 
     /**
@@ -73,6 +74,10 @@ export class Reward {
 
         if ( hero.xp ) {
             this.hero.xp = hero.xp;
+        }
+
+        if ( hero.league_points ) {
+            this.hero.leaguePoint = hero.league_points;
         }
     }
 
