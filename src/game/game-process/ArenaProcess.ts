@@ -1,17 +1,18 @@
 import * as moment from "moment";
 import {Script} from "vm";
+import {Exchange} from "../../proxy/Exchange";
 import {findScript} from "../findScript";
 import {GameProcess} from "../GameProcess";
-import {Query} from "../Query";
+import {Game} from "../model/Game";
 
 export class ArenaProcess implements GameProcess {
-    public process(query: Query): void {
-        if ( !query.reqHttp.url.includes("arena.html") ) {
-            return;
-        }
+    public withUrlContains = "arena.html";
 
+    public withCheerio = true;
+
+    public process(exchange: Exchange, game: Game): void {
         const data: any = {};
-        const script = findScript(query.$, `.arena_refresh_counter [rel="count"]`);
+        const script = findScript(exchange.response.$, `.arena_refresh_counter [rel="count"]`);
 
         if ( !script ) {
             return;
@@ -33,7 +34,7 @@ export class ArenaProcess implements GameProcess {
                 .runInNewContext(data)
             ;
 
-            query.game.arenaNextRefresh = moment()
+            game.arenaNextRefresh = moment()
                 .add(parseInt(data.timer, 10), "s").toDate();
         } catch (e) {}
     }

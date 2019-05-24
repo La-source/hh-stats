@@ -14,16 +14,16 @@ import {Proxy} from "./proxy/Proxy";
 const proxy = new Proxy(3000, "https://www.hentaiheroes.com/");
 const rm = new GameManager(proxy);
 
-rm.register(new ChangeProxyUrlProcess());
-rm.register(new FetchMemberGuidProcess());
-rm.register(new ShopProcess());
-rm.register(new ArenaProcess());
-rm.register(new HaremFetchMoneyProcess());
-rm.register(new BattleProcess());
-rm.register(new HeroProcess());
-rm.register(new MissionProcess());
-rm.register(new GiveGiftProcess());
-rm.register(new RechargeFightProcess());
+rm.use(new ChangeProxyUrlProcess());
+rm.use(new FetchMemberGuidProcess());
+rm.use(new ShopProcess());
+rm.use(new ArenaProcess());
+rm.use(new HaremFetchMoneyProcess());
+rm.use(new BattleProcess());
+rm.use(new HeroProcess());
+rm.use(new MissionProcess());
+rm.use(new GiveGiftProcess());
+rm.use(new RechargeFightProcess());
 
 /*
  * - Création d'une ligne temporelle pour un joueur

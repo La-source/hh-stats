@@ -1,18 +1,15 @@
-import {getExtension} from "mime";
 import {Script} from "vm";
+import {Exchange} from "../../proxy/Exchange";
 import {findScript} from "../findScript";
 import {GameProcess} from "../GameProcess";
-import {Query} from "../Query";
+import {Game} from "../model/Game";
 
 export class HeroProcess implements GameProcess {
-    public process(query: Query): void {
+    public withHtmlResponse = true;
 
-        if ( getExtension(query.resHttp.headers["content-type"]) !== "html" ) {
-            return;
-        }
-
+    public process(exchange: Exchange, game: Game): void {
         const data: any = {};
-        const script = findScript(query.$, "var GT =");
+        const script = findScript(exchange.response.$, "var GT =");
 
         if ( !script ) {
             return;
@@ -27,7 +24,7 @@ export class HeroProcess implements GameProcess {
                 .runInNewContext(data)
             ;
 
-            query.game.hero = data.Hero.infos;
+            game.hero = data.Hero.infos;
         } catch (e) {
             console.error(e);
         }

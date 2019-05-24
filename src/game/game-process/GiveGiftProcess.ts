@@ -1,25 +1,19 @@
+import {Exchange} from "../../proxy/Exchange";
 import {GameProcess} from "../GameProcess";
-import {Query} from "../Query";
+import {Game} from "../model/Game";
 
 export class GiveGiftProcess implements GameProcess {
-    public process(query: Query): void {
+    public withUrlContains = "ajax.php";
 
-        if ( !query.reqHttp.url.includes("ajax.php") ) {
+    public withReqBody = true;
+
+    public withJson = true;
+
+    public process(exchange: Exchange, game: Game): void {
+        if ( exchange.request.body.class !== "Missions" || exchange.request.body.action !== "give_gift" ) {
             return;
         }
 
-        if ( !query.body ) {
-            return;
-        }
-
-        if ( query.body.class !== "Missions" || query.body.action !== "give_gift" ) {
-            return;
-        }
-
-        if ( !query.json.success ) {
-            return;
-        }
-
-        query.game.gift = parseInt(query.json.rewards.data.rewards[0].value.match(/\b\d+\b/g)[0], 10);
+        game.gift = parseInt(exchange.response.json.rewards.data.rewards[0].value.match(/\b\d+\b/g)[0], 10);
     }
 }

@@ -1,15 +1,16 @@
 import {parse} from "cookie";
+import {Exchange} from "../../proxy/Exchange";
 import {GameProcess} from "../GameProcess";
-import {Query} from "../Query";
+import {Game} from "../model/Game";
 
 export class FetchMemberGuidProcess implements GameProcess {
-    public process(query: Query): void {
-        const cookie: string[] = query.resHttp.headers["set-cookie"];
+    public process(exchange: Exchange, game: Game): void {
+        const cookie: string[] = exchange.response.res.headers["set-cookie"];
 
         if ( !cookie ) {
             return;
         }
 
-        query.game.memberGuid = parse(cookie.join("; ")).member_guid;
+        game.memberGuid = parse(cookie.join("; ")).member_guid;
     }
 }

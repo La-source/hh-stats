@@ -1,15 +1,15 @@
 import * as moment from "moment";
+import {Exchange} from "../../proxy/Exchange";
 import {GameProcess} from "../GameProcess";
-import {Query} from "../Query";
+import {Game} from "../model/Game";
 
 export class ShopProcess implements GameProcess {
-    public process(query: Query): void {
+    public withUrlContains = "shop.html";
 
-        if ( !query.reqHttp.url.includes("shop.html") ) {
-            return;
-        }
+    public withCheerio = true;
 
-        query.game.shopNextRefresh = moment()
-            .add(parseInt(query.$(`#shop .shop_count [rel="count"]`).attr("time"), 10), "s").toDate();
+    public process(exchange: Exchange, game: Game): void {
+        game.shopNextRefresh = moment()
+            .add(parseInt(exchange.response.$(`#shop .shop_count [rel="count"]`).attr("time"), 10), "s").toDate();
     }
 }

@@ -1,12 +1,16 @@
-import {IncomingMessage, ServerResponse} from "http";
+import {ServerResponse} from "http";
 import {createProxyServer} from "http-proxy";
 import * as proxy from "http-proxy";
 import {parse} from "querystring";
 import {bindCallback, concat, empty, fromEvent, Observable, of} from "rxjs";
 import {catchError, first, map, mergeMap, takeUntil} from "rxjs/operators";
 import {gunzip} from "zlib";
+import {Exchange} from "./Exchange";
 import {httpReadData} from "./httpReadData";
+import {IncomingMessage} from "./IncomingMessage";
 import {ProxyListener} from "./ProxyListener";
+import {Request} from "./Request";
+import {Response} from "./Response";
 
 export class Proxy {
     /**
@@ -58,22 +62,35 @@ export class Proxy {
                 httpReadData(proxyRes)
                     .pipe(
                         takeUntil(close$),
-                        mergeMap(data => this.gunzip$(data, proxyRes)),
-                        mergeMap(data => this.response$(data, proxyRes, req)),
+                        mergeMap(body => this.gunzip$(body, proxyRes)),
+                        mergeMap(body => {
+                            if ( !req.exchange ) {
+                                req.exchange = new Exchange();
+                                req.exchange.request = new Request(req);
+                            }
+
+                            proxyRes.exchange = req.exchange;
+                            req.exchange.response = new Response(proxyRes, body);
+
+                            return this.exchange$(req.exchange);
+                        }),
                         catchError(() => empty()),
                     )
-                    .subscribe(body => res.end(body))
+                    .subscribe(() => res.end(req.exchange.response.result))
                 ;
             })
         ;
 
-        this.server.on("proxyReq", (_proxyRes, req) => {
+        this.server.on("proxyReq", (_proxyRes, req: IncomingMessage) => {
             httpReadData(req)
                 .pipe(
                     map(data => data.toString("utf8")),
                     map(data => parse(data)),
                 )
-                .subscribe(body => (req as any).body = body);
+                .subscribe(body => {
+                    req.exchange = new Exchange();
+                    req.exchange.request = new Request(req, body);
+                });
         });
     }
 
@@ -94,12 +111,10 @@ export class Proxy {
 
     /**
      * Délègue le traitement du message
-     * @param data
-     * @param proxyRes
-     * @param req
+     * @param exchange
      */
-    private response$(data: Buffer, proxyRes: IncomingMessage, req: IncomingMessage): Observable<string|Buffer> {
-        return concat(...this.listeners.map(listener => listener.query(data, proxyRes, req)));
+    private exchange$(exchange: Exchange): Observable<{}> {
+        return concat(...this.listeners.map(listener => listener.request(exchange)));
     }
 
     /**

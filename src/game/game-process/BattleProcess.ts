@@ -1,54 +1,48 @@
+import {Exchange} from "../../proxy/Exchange";
 import {GameProcess} from "../GameProcess";
 import {Battle} from "../model/Battle";
+import {Game} from "../model/Game";
 import {Reward} from "../model/Reward";
-import {Query} from "../Query";
 
 export class BattleProcess implements GameProcess {
-    public process(query: Query): void {
+    public withUrlContains = "ajax.php";
 
-        if ( !query.reqHttp.url.includes("ajax.php") ) {
-            return;
-        }
+    public withReqBody = true;
 
-        if ( !query.body ) {
-            return;
-        }
+    public withJson = true;
 
-        if ( query.body.class !== "Battle" || query.body.action !== "fight" ) {
-            return;
-        }
-
-        if ( !query.json.success ) {
+    public process(exchange: Exchange, game: Game): void {
+        if ( exchange.request.body.class !== "Battle" || exchange.request.body.action !== "fight" ) {
             return;
         }
 
         const battle = new Battle();
 
-        if ( query.body["who[id_member]"] ) {
-            battle.idMember = parseInt(query.body["who[id_member]"], 10);
+        if ( exchange.request.body["who[id_member]"] ) {
+            battle.idMember = parseInt(exchange.request.body["who[id_member]"], 10);
         }
 
-        if ( query.body["who[id_troll]"] ) {
-            battle.idTroll = parseInt(query.body["who[id_troll]"], 10);
+        if ( exchange.request.body["who[id_troll]"] ) {
+            battle.idTroll = parseInt(exchange.request.body["who[id_troll]"], 10);
         }
 
-        battle.isArena = !!query.body["who[id_arena]"];
-        battle.isAutoFight = !!parseInt(query.body.autoFight, 10);
+        battle.isArena = !!exchange.request.body["who[id_arena]"];
+        battle.isAutoFight = !!parseInt(exchange.request.body.autoFight, 10);
 
-        if ( query.json.end ) {
-            battle.isWin = !query.json.end.rewards.lose;
-            battle.reward = new Reward(query.json.end.drops);
+        if ( exchange.response.json.end ) {
+            battle.isWin = !exchange.response.json.end.rewards.lose;
+            game.reward = new Reward(exchange.response.json.end.drops);
 
             // Si on a loot
-            if ( query.json.end.rewards.data.girls ) {
-                battle.reward.girls = query.json.end.rewards.data.girls
+            if ( exchange.response.json.end.rewards.data.girls ) {
+                game.reward.girls = exchange.response.json.end.rewards.data.girls
                     .map(girl => parseInt(girl.id_girl, 10));
             }
         } else {
             battle.isWin = true; // on considère que en cas de x10 on gagne tous les combats
-            battle.reward = new Reward(query.json.drops);
+            game.reward = new Reward(exchange.response.json.drops);
         }
 
-        query.game.battle = battle;
+        game.battle = battle;
     }
 }

@@ -28,9 +28,14 @@ export class Game {
     public battle?: Battle;
 
     /**
-     * Mission réalisée
+     * Récompense obtenue
      */
-    public mission?: Reward;
+    public reward?: Reward;
+
+    /**
+     * Marqueur indiquant si une mission a été réalisée
+     */
+    public isMission?: boolean;
 
     /**
      * Gain suite aux missions quotidienne

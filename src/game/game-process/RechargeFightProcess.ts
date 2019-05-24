@@ -1,25 +1,21 @@
+import {Exchange} from "../../proxy/Exchange";
 import {GameProcess} from "../GameProcess";
-import {Query} from "../Query";
+import {Game} from "../model/Game";
 
 export class RechargeFightProcess implements GameProcess {
-    public process(query: Query): void {
+    public withUrlContains = "ajax.php";
 
-        if ( !query.reqHttp.url.includes("ajax.php") ) {
+    public withReqBody = true;
+
+    public withJson = true;
+
+    public process(exchange: Exchange, game: Game): void {
+        if ( exchange.request.body.class !== "Hero"
+            || exchange.request.body.action !== "recharge"
+            || exchange.request.body.type !== "fight" ) {
             return;
         }
 
-        if ( !query.body ) {
-            return;
-        }
-
-        if ( query.body.class !== "Hero" || query.body.action !== "recharge" || query.body.type !== "fight" ) {
-            return;
-        }
-
-        if ( !query.json.success ) {
-            return;
-        }
-
-        query.game.fightRecharge = true;
+        game.fightRecharge = true;
     }
 }

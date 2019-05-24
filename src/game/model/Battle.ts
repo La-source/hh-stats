@@ -1,5 +1,3 @@
-import {Reward} from "./Reward";
-
 export class Battle {
     public isArena: boolean;
 
@@ -10,6 +8,4 @@ export class Battle {
     public isWin: boolean;
 
     public isAutoFight: boolean;
-
-    public reward?: Reward;
 }

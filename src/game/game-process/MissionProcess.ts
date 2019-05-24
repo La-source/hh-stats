@@ -1,26 +1,21 @@
+import {Exchange} from "../../proxy/Exchange";
 import {GameProcess} from "../GameProcess";
+import {Game} from "../model/Game";
 import {Reward} from "../model/Reward";
-import {Query} from "../Query";
 
 export class MissionProcess implements GameProcess {
-    public process(query: Query): void {
+    public withUrlContains = "ajax.php";
 
-        if ( !query.reqHttp.url.includes("ajax.php") ) {
+    public withReqBody = true;
+
+    public withJson = true;
+
+    public process(exchange: Exchange, game: Game): void {
+        if ( exchange.request.body.class !== "Missions" || exchange.request.body.action !== "claim_reward" ) {
             return;
         }
 
-        if ( !query.body ) {
-            return;
-        }
-
-        if ( query.body.class !== "Missions" || query.body.action !== "claim_reward" ) {
-            return;
-        }
-
-        if ( !query.json.success ) {
-            return;
-        }
-
-        query.game.mission = new Reward(query.json);
+        game.reward = new Reward(exchange.response.json);
+        game.isMission = true;
     }
 }

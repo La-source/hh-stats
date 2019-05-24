@@ -1,6 +1,6 @@
-import {IncomingMessage} from "http";
 import {Observable} from "rxjs";
+import {Exchange} from "./Exchange";
 
 export interface ProxyListener {
-    query(body: Buffer, proxyRes: IncomingMessage, req: IncomingMessage): Observable<string|Buffer>;
+    request(exchange: Exchange): Observable<{}>;
 }

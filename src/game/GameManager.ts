@@ -1,13 +1,11 @@
-import {IncomingMessage} from "http";
-import {getExtension} from "mime";
 import {Observable, of} from "rxjs";
-import {map, switchMap, tap} from "rxjs/operators";
+import {switchMap, tap} from "rxjs/operators";
 import {inspect} from "util";
+import {Exchange} from "../proxy/Exchange";
 import {Proxy} from "../proxy/Proxy";
 import {ProxyListener} from "../proxy/ProxyListener";
 import {GameProcess} from "./GameProcess";
 import {Game} from "./model/Game";
-import {Query} from "./Query";
 
 /**
  * Il voit arriver une requête http brute
@@ -22,29 +20,20 @@ export class GameManager implements ProxyListener {
         this.proxy.register(this);
     }
 
-    public query(dataSource: Buffer, proxyRes: IncomingMessage, req: IncomingMessage): Observable<string|Buffer> {
-        if ( !this.isText(proxyRes) ) {
-            return of(dataSource);
+    public request(exchange: Exchange): Observable<{}> {
+        if ( !exchange.response.isText() ) {
+            return;
         }
 
-        const query = new Query();
-        query.res = dataSource.toString("utf8");
-        query.reqHttp = req;
-        query.resHttp = proxyRes;
-        query.game = new Game();
-
+        const game = new Game();
         let obs: Observable<{}> = of({});
 
         for ( const process of this.process ) {
             obs = obs.pipe(switchMap(() => {
-                try {
-                    const result = process.process(query);
+                const result = this.executeProcess(process, exchange, game);
 
-                    if ( result ) {
-                        return result;
-                    }
-                } catch (e) {
-                    console.error(e);
+                if ( result ) {
+                    return result;
                 }
 
                 return of({});
@@ -53,20 +42,45 @@ export class GameManager implements ProxyListener {
 
         return obs
             .pipe(
-                map(() => query.res),
-                tap(() => console.log(inspect(query.game, {depth: null}))),
+                tap(() => console.log(inspect(game, {depth: null}))),
             );
     }
 
-    public register(process: GameProcess) {
+    public use(process: GameProcess) {
         this.process.push(process);
     }
 
     /**
-     * Vérifie si la réponse est de type texte
-     * @param req
+     * Vérifie les pré-condition à l'execution du process et l'execute
+     * @param process
+     * @param exchange
+     * @param game
      */
-    private isText(req: IncomingMessage): boolean {
-        return ["html", "json", "js"].includes(getExtension(req.headers["content-type"]));
+    private executeProcess(process: GameProcess, exchange: Exchange, game: Game): void|Observable<{}> {
+        try {
+            if ( process.withUrlContains && !exchange.request.req.url.includes(process.withUrlContains) ) {
+                return;
+            }
+
+            if ( process.withHtmlResponse && !exchange.response.isHtml() ) {
+                return;
+            }
+
+            if ( process.withCheerio && !exchange.response.$ ) {
+                return;
+            }
+
+            if ( process.withReqBody && !exchange.request.body ) {
+                return;
+            }
+
+            if ( process.withJson && ( !exchange.response.json || !exchange.response.json.success ) ) {
+                return;
+            }
+
+            return process.process(exchange, game);
+        } catch (e) {
+            console.error(e);
+        }
     }
 }

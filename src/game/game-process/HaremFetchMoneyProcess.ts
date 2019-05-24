@@ -1,30 +1,24 @@
+import {Exchange} from "../../proxy/Exchange";
 import {GameProcess} from "../GameProcess";
-import {Query} from "../Query";
+import {Game} from "../model/Game";
 
 export class HaremFetchMoneyProcess implements GameProcess {
-    public process(query: Query): void {
+    public withUrlContains = "ajax.php";
 
-        if ( !query.reqHttp.url.includes("ajax.php") ) {
-            return;
-        }
+    public withReqBody = true;
 
-        if ( !query.body ) {
-            return;
-        }
+    public withJson = true;
 
+    public process(exchange: Exchange, game: Game): void {
         const action = [
             "get_salary",
             "get_all_salaries",
         ];
 
-        if ( query.body.class !== "Girl" || !action.includes(query.body.action) ) {
+        if ( exchange.request.body.class !== "Girl" || !action.includes(exchange.request.body.action) ) {
             return;
         }
 
-        if ( !query.json.success ) {
-            return;
-        }
-
-        query.game.haremMoneyFetch = query.json.money;
+        game.haremMoneyFetch = exchange.response.json.money;
     }
 }
