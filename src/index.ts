@@ -12,6 +12,7 @@ import {PachinkoNextRefreshProcess} from "./exchange-process/PachinkoNextRefresh
 import {PachinkoRewardProcess} from "./exchange-process/PachinkoRewardProcess";
 import {RechargeFightProcess} from "./exchange-process/RechargeFightProcess";
 import {ShopProcess} from "./exchange-process/ShopProcess";
+import {UpgradeCaracProcess} from "./exchange-process/UpgradeCaracProcess";
 import {Proxy} from "./proxy/Proxy";
 
 const proxy = new Proxy(3000, "https://www.hentaiheroes.com/");
@@ -30,6 +31,7 @@ rm.use(new RechargeFightProcess());
 rm.use(new PachinkoRewardProcess());
 rm.use(new PachinkoNextRefreshProcess());
 rm.use(new HomeProcess());
+rm.use(new UpgradeCaracProcess());
 
 /*
  * - Création d'une ligne temporelle pour un joueur

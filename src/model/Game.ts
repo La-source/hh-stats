@@ -48,6 +48,11 @@ export class Game {
     public isMission?: boolean;
 
     /**
+     * Marqueur indiquant si une amélioration de caractérisitque du joueur a été réalisé
+     */
+    public isUpgradeCarac?: boolean;
+
+    /**
      * Gain suite aux missions quotidienne
      */
     public gift?: number;
