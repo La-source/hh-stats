@@ -2,8 +2,8 @@ import {ServerResponse} from "http";
 import {createProxyServer} from "http-proxy";
 import * as proxy from "http-proxy";
 import {parse} from "querystring";
-import {bindCallback, concat, fromEvent, Observable, of} from "rxjs";
-import {catchError, first, map, mergeMap, takeUntil, timeout} from "rxjs/operators";
+import {bindCallback, concat, empty, fromEvent, Observable, of} from "rxjs";
+import {catchError, first, map, mergeMap, takeUntil} from "rxjs/operators";
 import {gunzip} from "zlib";
 import {Exchange} from "./Exchange";
 import {httpReadData} from "./httpReadData";
@@ -60,10 +60,8 @@ export class Proxy {
                     res.setHeader(header, proxyRes.headers[header]);
                 }
 
-                of({})
+                httpReadData(proxyRes)
                     .pipe(
-                        timeout(1000),
-                        mergeMap(() => httpReadData(proxyRes)),
                         takeUntil(close$),
                         mergeMap(body => this.gunzip$(body, proxyRes)),
                         mergeMap(body => {
@@ -89,12 +87,18 @@ export class Proxy {
                 .pipe(
                     map(data => data.toString("utf8")),
                     map(data => parse(data)),
+                    catchError(() => {
+                        console.log("error req");
+                        return empty();
+                    }),
                 )
                 .subscribe(body => {
                     req.exchange = new Exchange();
                     req.exchange.request = new Request(req, body);
                 });
         });
+
+        this.server.on("error", e => console.error("error proxy", e));
     }
 
     /**
