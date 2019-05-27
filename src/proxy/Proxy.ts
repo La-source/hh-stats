@@ -1,9 +1,10 @@
+import * as express from "express";
+import {Server} from "http";
 import {ServerResponse} from "http";
-import {createProxyServer} from "http-proxy";
-import * as proxy from "http-proxy";
+import * as proxy from "http-proxy-middleware";
 import {parse} from "querystring";
-import {bindCallback, concat, empty, fromEvent, Observable, of} from "rxjs";
-import {catchError, first, map, mergeMap, takeUntil} from "rxjs/operators";
+import {bindCallback, concat, empty, Observable, of} from "rxjs";
+import {catchError, map, mergeMap} from "rxjs/operators";
 import {gunzip} from "zlib";
 import {Exchange} from "./Exchange";
 import {httpReadData} from "./httpReadData";
@@ -16,7 +17,7 @@ export class Proxy {
     /**
      * Http Server
      */
-    private readonly server: proxy;
+    private readonly server: Server;
 
     private readonly listeners: ProxyListener[] = [];
 
@@ -26,76 +27,78 @@ export class Proxy {
      * @param target
      */
     constructor(port: number, target: string) {
-        this.server = createProxyServer({
+        const app = express();
+
+        app.get("/coucou", (_req, res) => {
+            res.send("coucou");
+        });
+
+        app.use(proxy({
             target,
             ws: true,
             changeOrigin: true,
             autoRewrite: true,
             followRedirects: true,
             selfHandleResponse: true,
-        }).listen(port);
+            onProxyRes: (proxyRes: IncomingMessage, req: IncomingMessage, res: ServerResponse): void => {
+                const headerIgnore = [
+                    "content-encoding",
+                    "connection",
+                    "transfer-encoding",
+                    "content-length",
+                    "cookie",
+                ];
 
-        const close$ = fromEvent(this.server, "close").pipe(first());
+                for ( const header in proxyRes.headers ) {
+                    if ( !proxyRes.headers.hasOwnProperty(header) ) {
+                        continue;
+                    }
 
-        this.server.on("proxyRes", (proxyRes: IncomingMessage, req: IncomingMessage, res: ServerResponse): void => {
-            const headerIgnore = [
-                "content-encoding",
-                "connection",
-                "transfer-encoding",
-                "content-length",
-                "cookie",
-            ];
+                    if ( headerIgnore.includes(header) ) {
+                        continue;
+                    }
 
-            for ( const header in proxyRes.headers ) {
-                if ( !proxyRes.headers.hasOwnProperty(header) ) {
-                    continue;
+                    res.setHeader(header, proxyRes.headers[header]);
                 }
 
-                if ( headerIgnore.includes(header) ) {
-                    continue;
-                }
+                httpReadData(proxyRes)
+                    .pipe(
+                        mergeMap(body => this.gunzip$(body, proxyRes)),
+                        mergeMap(body => {
+                            if ( !req.exchange ) {
+                                req.exchange = new Exchange();
+                                req.exchange.request = new Request(req);
+                            }
 
-                res.setHeader(header, proxyRes.headers[header]);
-            }
+                            proxyRes.exchange = req.exchange;
+                            req.exchange.response = new Response(proxyRes, body);
 
-            httpReadData(proxyRes)
-                .pipe(
-                    takeUntil(close$),
-                    mergeMap(body => this.gunzip$(body, proxyRes)),
-                    mergeMap(body => {
-                        if ( !req.exchange ) {
-                            req.exchange = new Exchange();
-                            req.exchange.request = new Request(req);
-                        }
+                            return this.exchange$(req.exchange);
+                        }),
+                        catchError(() => of({})),
+                    )
+                    .subscribe(() => res.end(req.exchange.response.result))
+                ;
+            },
+            onProxyReq: (_proxyRes, req: IncomingMessage) => {
+                httpReadData(req)
+                    .pipe(
+                        map(data => data.toString("utf8")),
+                        map(data => parse(data)),
+                        catchError(() => {
+                            console.log("error req");
+                            return empty();
+                        }),
+                    )
+                    .subscribe(body => {
+                        req.exchange = new Exchange();
+                        req.exchange.request = new Request(req, body);
+                    });
+            },
+            logLevel: "silent",
+        }));
 
-                        proxyRes.exchange = req.exchange;
-                        req.exchange.response = new Response(proxyRes, body);
-
-                        return this.exchange$(req.exchange);
-                    }),
-                    catchError(() => of({})),
-                )
-                .subscribe(() => res.end(req.exchange.response.result))
-            ;
-        });
-
-        this.server.on("proxyReq", (_proxyRes, req: IncomingMessage) => {
-            httpReadData(req)
-                .pipe(
-                    map(data => data.toString("utf8")),
-                    map(data => parse(data)),
-                    catchError(() => {
-                        console.log("error req");
-                        return empty();
-                    }),
-                )
-                .subscribe(body => {
-                    req.exchange = new Exchange();
-                    req.exchange.request = new Request(req, body);
-                });
-        });
-
-        this.server.on("error", e => console.error("error proxy", e));
+        this.server = app.listen(port);
     }
 
     /**
