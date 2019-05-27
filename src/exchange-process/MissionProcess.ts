@@ -1,6 +1,6 @@
 import {Client} from "../client-model/Client";
-import {ExchangeProcess} from "../exchange-manager/ExchangeProcess";
 import {Reward} from "../client-model/Reward";
+import {ExchangeProcess} from "../exchange-manager/ExchangeProcess";
 import {Exchange} from "../proxy/Exchange";
 
 export class MissionProcess implements ExchangeProcess {

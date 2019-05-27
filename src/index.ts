@@ -1,4 +1,6 @@
 import {createClient} from "redis";
+import "reflect-metadata";
+import {createConnection} from "typeorm";
 import {ExchangeManager} from "./exchange-manager/ExchangeManager";
 import {ArenaProcess} from "./exchange-process/ArenaProcess";
 import {BattleProcess} from "./exchange-process/BattleProcess";
@@ -17,25 +19,31 @@ import {UpgradeCaracProcess} from "./exchange-process/UpgradeCaracProcess";
 import {Proxy} from "./proxy/Proxy";
 import {StorageManager} from "./storage-manager/StorageManager";
 
-const storage = new StorageManager(createClient(process.env.REDIS));
-const proxy = new Proxy(3000, "https://www.hentaiheroes.com/");
-const rm = new ExchangeManager(proxy);
+(async () => {
+    // TODO wait mysql ready (docker-compose production)
 
-rm.register(storage);
-rm.use(new ChangeProxyUrlProcess());
-rm.use(new FetchMemberGuidProcess());
-rm.use(new ShopProcess());
-rm.use(new ArenaProcess());
-rm.use(new HaremFetchMoneyProcess());
-rm.use(new BattleProcess());
-rm.use(new HeroProcess());
-rm.use(new MissionProcess());
-rm.use(new MissionGiveGiftProcess());
-rm.use(new RechargeFightProcess());
-rm.use(new PachinkoRewardProcess());
-rm.use(new PachinkoNextRefreshProcess());
-rm.use(new HomeProcess());
-rm.use(new UpgradeCaracProcess());
+    const storage = new StorageManager(createClient(process.env.REDIS), await createConnection());
+    const proxy = new Proxy(3000, "https://www.hentaiheroes.com/");
+    const rm = new ExchangeManager(proxy);
+
+    rm.register(storage);
+    rm.use(new ChangeProxyUrlProcess());
+    rm.use(new FetchMemberGuidProcess());
+    rm.use(new ShopProcess());
+    rm.use(new ArenaProcess());
+    rm.use(new HaremFetchMoneyProcess());
+    rm.use(new BattleProcess());
+    rm.use(new HeroProcess());
+    rm.use(new MissionProcess());
+    rm.use(new MissionGiveGiftProcess());
+    rm.use(new RechargeFightProcess());
+    rm.use(new PachinkoRewardProcess());
+    rm.use(new PachinkoNextRefreshProcess());
+    rm.use(new HomeProcess());
+    rm.use(new UpgradeCaracProcess());
+
+    console.log("HH stats is started");
+})();
 
 /*
  * - Création d'une ligne temporelle pour un joueur
@@ -89,5 +97,3 @@ rm.use(new UpgradeCaracProcess());
  *              |                   + 250 xp  + 180 affection                |
  *              --------------------------------------------------------------
  */
-
-console.log("hh start");

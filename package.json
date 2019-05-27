@@ -43,7 +43,10 @@
     "http-proxy": "^1.17.0",
     "mime": "^2.4.3",
     "moment": "^2.24.0",
+    "mysql": "^2.17.1",
     "redis": "^2.8.0",
-    "rxjs": "^6.5.2"
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^6.5.2",
+    "typeorm": "^0.2.17"
   }
 }

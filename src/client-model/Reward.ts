@@ -3,7 +3,7 @@ interface HeroReward {
     softCurrency?: number;
     victoryPoints?: number;
     xp?: number;
-    leaguePoint?: number;
+    leaguePoints?: number;
 }
 
 export class Reward {
@@ -83,7 +83,7 @@ export class Reward {
         }
 
         if ( hero.league_points ) {
-            this.hero.leaguePoint = hero.league_points;
+            this.hero.leaguePoints = hero.league_points;
         }
     }
 

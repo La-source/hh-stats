@@ -7,17 +7,27 @@ services:
     working_dir: /app
     user: "node"
     ports:
-      - 3000
+      - "3000:3000"
     volumes:
       - .:/app
     environment:
       - REDIS=redis://redis
       - TZ=Europe/Paris
       - NODE_ENV=development
+      - TYPEORM_CONNECTION=mysql
+      - TYPEORM_HOST=db
+      - TYPEORM_USERNAME=root
+      - TYPEORM_PASSWORD=pass
+      - TYPEORM_DATABASE=hh
+      - TYPEORM_PORT=3306
+      - TYPEORM_SYNCHRONIZE=true
+      - TYPEORM_ENTITIES=src/entities/**/*.ts
     depends_on:
       - redis
+      - db
     links:
       - redis
+      - db
     logging:
       driver: "json-file"
       options:
@@ -27,6 +37,17 @@ services:
 
   redis:
     image: redis:5-alpine
+    logging:
+      driver: "none"
+    networks:
+      - app-net
+
+  db:
+    image: mariadb:10
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=pass
     logging:
       driver: "none"
     networks:

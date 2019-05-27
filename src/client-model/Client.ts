@@ -101,17 +101,19 @@ export class Client {
      * @param source
      */
     public mergeWith(source: Client): boolean {
-        if ( this.action === "none" ) {
-            if ( source.action === "none" && this.hero ) {
-                this.lastHeroIdle = this.hero;
-            }
-        }
-
         // Si on était en train de faire quelque chose et qu'on fait maintenant autre chose
         if ( this.action !== source.action && source.action !== "none" && this.action !== "none"  ) {
             return false;
-        } else if ( source.action !== "none" ) {
+        }
+
+        if ( source.action !== "none" ) {
             this.action = source.action;
+        }
+
+        if ( this.action === "none" && this.hero ) {
+            this.lastHeroIdle = this.hero;
+        } else if ( source.lastHeroIdle ) {
+            this.lastHeroIdle = source.lastHeroIdle;
         }
 
         this.copyPropertyFrom(source, "shopNextRefresh");
@@ -125,6 +127,10 @@ export class Client {
             this.hero = source.hero;
         }
 
+        if ( !this.lastHeroIdle ) {
+            this.lastHeroIdle = source.lastHeroIdle;
+        }
+
         this.haremMoneyFetch += source.haremMoneyFetch;
         return true;
     }
@@ -135,7 +141,7 @@ export class Client {
     public clear(): this {
         this.action = "none";
         this.haremMoneyFetch = 0;
-        delete this.lastHeroIdle;
+        this.lastHeroIdle = this.hero;
         delete this.hero;
         this.battle = [];
         this.reward = [];
