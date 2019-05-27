@@ -1,17 +1,20 @@
-import {ChildEntity, Column} from "typeorm";
+import {Column, Entity, JoinColumn, OneToOne} from "typeorm";
 import {Client} from "../client-model/Client";
 import {Event, TypeEvent} from "./Event";
 
-@ChildEntity()
-export class FetchMoneyHaremEvent extends Event {
+@Entity()
+export class FetchMoneyHaremEvent {
+    @OneToOne(() => Event, {cascade: true, primary: true})
+    @JoinColumn()
+    public event: Event;
+
     @Column()
     public softCurrency: number;
 
     constructor(client?: Client) {
-        super();
-        this.type = TypeEvent.fetchHaremMoney;
-
         if ( client ) {
+            this.event = new Event();
+            this.event.type = TypeEvent.fetchHaremMoney;
             this.softCurrency = client.haremMoneyFetch;
         }
     }

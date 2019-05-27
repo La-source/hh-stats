@@ -3,7 +3,7 @@ import {Connection} from "typeorm";
 import {promisify} from "util";
 import {Client} from "../client-model/Client";
 import {BattleEvent} from "../entities/BattleEvent";
-import {Event} from "../entities/Event";
+import {EventEntity} from "../entities/EventEntity";
 import {FetchMoneyHaremEvent} from "../entities/FetchMoneyHaremEvent";
 import {MissionEvent} from "../entities/MissionEvent";
 import {PachinkoEvent} from "../entities/PachinkoEvent";
@@ -97,7 +97,7 @@ export class StorageManager implements ExchangeListener {
     }
 
     /**
-     * Enregistre le client dans la première ligne
+     * Enregistre le client sur redis
      * @param client
      */
     private registerClient(client: Client): Promise<void> {
@@ -126,7 +126,7 @@ export class StorageManager implements ExchangeListener {
             .orUpdate({overwrite: user.overwrite()})
             .execute();
 
-        let event: Event;
+        let event: EventEntity;
 
         switch ( client.action ) {
             case "fetchHaremMoney":
@@ -170,7 +170,7 @@ export class StorageManager implements ExchangeListener {
         }
 
         if ( event ) {
-            event.user = user;
+            event.event.user = user;
 
             await this.db
                 .manager

@@ -1,10 +1,14 @@
-import {ChildEntity, Column} from "typeorm";
+import {Column, Entity, JoinColumn, OneToOne} from "typeorm";
 import {Client} from "../client-model/Client";
 import {Event, TypeEvent} from "./Event";
 import {Reward} from "./Reward";
 
-@ChildEntity()
-export class BattleEvent extends Event {
+@Entity()
+export class BattleEvent {
+    @OneToOne(() => Event, {cascade: true, primary: true})
+    @JoinColumn()
+    public event: Event;
+
     @Column()
     public nbBattle: number;
 
@@ -12,15 +16,15 @@ export class BattleEvent extends Event {
     public reward: Reward = new Reward();
 
     constructor(client?: Client) {
-        super();
-
         if ( client ) {
+            this.event = new Event();
+
             if ( client.action === "arenaBattle" ) {
-                this.type = TypeEvent.arenaBattle;
+                this.event.type = TypeEvent.arenaBattle;
             } else if ( client.action === "trollBattle" ) {
-                this.type = TypeEvent.trollBattle;
+                this.event.type = TypeEvent.trollBattle;
             } else if ( client.action === "leagueBattle" ) {
-                this.type = TypeEvent.leagueBattle;
+                this.event.type = TypeEvent.leagueBattle;
             } else {
                 return;
             }

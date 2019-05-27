@@ -1,4 +1,4 @@
-import {Column, Entity, Index, ManyToOne, PrimaryGeneratedColumn, TableInheritance} from "typeorm";
+import {Column, Entity, Index, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
 import {User} from "./User";
 
 export enum TypeEvent {
@@ -12,7 +12,23 @@ export enum TypeEvent {
 }
 
 @Entity()
-@TableInheritance({column: {type: "varchar", name: "typeClass"}})
+/*
+TODO j'aimerai réduire le poids utilisé dans la db mais cette technique ne fonctionne pas
+@TableInheritance({column: {
+    name: "typeClass",
+    type: "varchar",
+    generatedType: "VIRTUAL",
+    asExpression: `CASE type
+        WHEN "arenaBattle" THEN "BattleEvent"
+        WHEN "fetchHaremMoney" THEN "FetchMoneyHaremEvent"
+        WHEN "trollBattle" THEN "BattleEvent"
+        WHEN "leagueBattle" THEN "BattleEvent"
+        WHEN "pachinko" THEN "PachinkoEvent"
+        WHEN "mission" THEN "BattleEvent"
+        WHEN "upgradeCarac" THEN "UpgradeCaracEvent"
+    END`,
+}})
+ */
 export class Event {
     @PrimaryGeneratedColumn()
     public id: number;
