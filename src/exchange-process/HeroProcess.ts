@@ -1,7 +1,8 @@
 import {Script} from "vm";
+import {Client} from "../client-model/Client";
+import {Hero} from "../client-model/Hero";
 import {ExchangeProcess} from "../exchange-manager/ExchangeProcess";
 import {findScript} from "../exchange-manager/findScript";
-import {Client} from "../model/Client";
 import {Exchange} from "../proxy/Exchange";
 
 export class HeroProcess implements ExchangeProcess {
@@ -24,7 +25,7 @@ export class HeroProcess implements ExchangeProcess {
                 .runInNewContext(data)
             ;
 
-            client.hero = data.Hero.infos;
+            client.hero = new Hero(data.Hero.infos);
         } catch (e) {
             console.error(e);
         }

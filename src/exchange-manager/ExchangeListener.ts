@@ -1,4 +1,4 @@
-import {Client} from "../model/Client";
+import {Client} from "../client-model/Client";
 
 export interface ExchangeListener {
     complete(client: Client): void;

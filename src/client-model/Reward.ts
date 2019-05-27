@@ -1,14 +1,16 @@
 
+interface HeroReward {
+    softCurrency?: number;
+    victoryPoints?: number;
+    xp?: number;
+    leaguePoint?: number;
+}
+
 export class Reward {
     /**
      * Récompense relatif au joueur
      */
-    public hero?: {
-        softCurrency?: number;
-        victoryPoints?: number;
-        xp?: number;
-        leaguePoint?: number;
-    };
+    public hero?: HeroReward;
 
     /**
      * Items obtenu
@@ -39,8 +41,6 @@ export class Reward {
     private readonly drops: any;
 
     constructor(reward: any) {
-        console.log(reward);
-
         if ( reward.reward && reward.reward.data ) {
             this.data = reward.reward.data;
         } else if ( reward.rewards && reward.rewards.data ) {

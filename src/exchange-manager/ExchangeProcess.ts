@@ -1,5 +1,5 @@
 import {Observable} from "rxjs";
-import {Client} from "../model/Client";
+import {Client} from "../client-model/Client";
 import {Exchange} from "../proxy/Exchange";
 
 export interface ExchangeProcess {

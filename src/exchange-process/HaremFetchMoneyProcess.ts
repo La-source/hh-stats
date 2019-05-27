@@ -1,5 +1,5 @@
+import {Client} from "../client-model/Client";
 import {ExchangeProcess} from "../exchange-manager/ExchangeProcess";
-import {Client} from "../model/Client";
 import {Exchange} from "../proxy/Exchange";
 
 export class HaremFetchMoneyProcess implements ExchangeProcess {

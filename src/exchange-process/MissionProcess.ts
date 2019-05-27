@@ -1,6 +1,6 @@
+import {Client} from "../client-model/Client";
 import {ExchangeProcess} from "../exchange-manager/ExchangeProcess";
-import {Client} from "../model/Client";
-import {Reward} from "../model/Reward";
+import {Reward} from "../client-model/Reward";
 import {Exchange} from "../proxy/Exchange";
 
 export class MissionProcess implements ExchangeProcess {
@@ -16,7 +16,7 @@ export class MissionProcess implements ExchangeProcess {
         }
 
         client.action = "mission";
-        client.reward = new Reward({drops: exchange.response.json});
+        client.reward.push(new Reward({drops: exchange.response.json}));
         client.isMission = true;
     }
 }

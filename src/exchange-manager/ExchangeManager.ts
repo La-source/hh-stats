@@ -1,6 +1,6 @@
 import {Observable, of} from "rxjs";
 import {switchMap, tap} from "rxjs/operators";
-import {Client} from "../model/Client";
+import {Client} from "../client-model/Client";
 import {Exchange} from "../proxy/Exchange";
 import {Proxy} from "../proxy/Proxy";
 import {ProxyListener} from "../proxy/ProxyListener";

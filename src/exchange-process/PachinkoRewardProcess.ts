@@ -1,6 +1,6 @@
+import {Client} from "../client-model/Client";
+import {Reward} from "../client-model/Reward";
 import {ExchangeProcess} from "../exchange-manager/ExchangeProcess";
-import {Client} from "../model/Client";
-import {Reward} from "../model/Reward";
 import {Exchange} from "../proxy/Exchange";
 
 export class PachinkoRewardProcess implements ExchangeProcess {
@@ -16,7 +16,7 @@ export class PachinkoRewardProcess implements ExchangeProcess {
         }
 
         client.action = "pachinko";
-        client.reward = new Reward(exchange.response.json);
+        client.reward.push(new Reward(exchange.response.json));
         client.isPachinko = true;
     }
 }

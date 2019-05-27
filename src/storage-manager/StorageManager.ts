@@ -1,6 +1,6 @@
 import {RedisClient} from "redis";
+import {Client} from "../client-model/Client";
 import {ExchangeListener} from "../exchange-manager/ExchangeListener";
-import {Client} from "../model/Client";
 import {Queue} from "./Queue";
 
 export class StorageManager implements ExchangeListener {
@@ -34,14 +34,10 @@ export class StorageManager implements ExchangeListener {
             this.redis.get(client.memberGuid, (_err, value) => {
                 const past: Client = new Client(value);
 
-                console.log("past", past);
-
                 if ( !client.mergeWith(past) ) {
-                    this.persist(client);
+                    this.persist(past);
                     client.mergeWith(past.clear());
                 }
-
-                console.log("client", client);
 
                 this.redis.set(client.memberGuid, JSON.stringify(client), () => resolve());
             });
@@ -55,7 +51,7 @@ export class StorageManager implements ExchangeListener {
     /**
      * Enregistre l'information dans la base de données
      */
-    private persist(_client: Client) {
-        console.log("persist");
+    private persist(client: Client) {
+        console.log("persist", client);
     }
 }

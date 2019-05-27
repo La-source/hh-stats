@@ -1,4 +1,5 @@
 import {Battle} from "./Battle";
+import {Hero} from "./Hero";
 import {Reward} from "./Reward";
 
 export type Action =
@@ -44,12 +45,12 @@ export class Client {
     /**
      * Combat réalisé
      */
-    public battle?: Battle;
+    public battle?: Battle[] = [];
 
     /**
      * Récompense obtenue
      */
-    public reward?: Reward;
+    public reward?: Reward[] = [];
 
     /**
      * Marqueur indiquant si un pachinko a été joué
@@ -79,16 +80,14 @@ export class Client {
     /**
      * Ensemble des caractéristique du joueur
      */
-    public hero?: any;
+    public hero?: Hero;
+
+    /**
+     * Caractéristiques précédente du hero lorsque le client était idle
+     */
+    public lastHeroIdle?: Hero;
 
     constructor(source?: string) {
-        // pour le debug
-        Object.defineProperty(this, "hero", {
-            enumerable: false,
-            writable: true,
-            configurable: true,
-        });
-
         if ( source ) {
             Object.assign(this, JSON.parse(source));
             this.jsonToDate("shopNextRefresh");
@@ -102,18 +101,29 @@ export class Client {
      * @param source
      */
     public mergeWith(source: Client): boolean {
-        // Si on était en train de faire quelque chose et qu'on a changer d'activité
-        if ( this.action !== source.action && source.action !== "none" && this.action !== "none"  ) {
-            return false;
+        if ( this.action === "none" ) {
+            if ( source.action === "none" && this.hero ) {
+                this.lastHeroIdle = this.hero;
+            }
         }
 
-        if ( source.action !== "none" ) {
+        // Si on était en train de faire quelque chose et qu'on fait maintenant autre chose
+        if ( this.action !== source.action && source.action !== "none" && this.action !== "none"  ) {
+            return false;
+        } else if ( source.action !== "none" ) {
             this.action = source.action;
         }
 
         this.copyPropertyFrom(source, "shopNextRefresh");
         this.copyPropertyFrom(source, "arenaNextRefresh");
         this.copyPropertyFrom(source, "pachinkoNextRefresh");
+        this.copyPropertyFrom(source, "lastHeroIdle");
+        this.battle = this.battle.concat(source.battle);
+        this.reward = this.reward.concat(source.reward);
+
+        if ( !this.hero ) {
+            this.hero = source.hero;
+        }
 
         this.haremMoneyFetch += source.haremMoneyFetch;
         return true;
@@ -125,6 +135,10 @@ export class Client {
     public clear(): this {
         this.action = "none";
         this.haremMoneyFetch = 0;
+        delete this.lastHeroIdle;
+        delete this.hero;
+        this.battle = [];
+        this.reward = [];
 
         return this;
     }
@@ -134,7 +148,9 @@ export class Client {
      * @param source
      * @param property
      */
-    private copyPropertyFrom(source: Client, property: keyof Client) {
+    // TODO j'aurai aimé écrire keyof Client pour property mais prend en compte l'ensemble de la classe et non
+    //  uniquement les propriétés
+    private copyPropertyFrom(source: Client, property: any): void {
         if ( source[property] ) {
             this[property] = source[property];
         }
@@ -144,9 +160,11 @@ export class Client {
      * Transforme les date sous forme de chaine en object Date
      * @param property
      */
-    private jsonToDate(property: keyof Client) {
-        if ( this[property] ) {
-            this[property] = new Date(this[property]);
+    private jsonToDate(property: keyof Client): void {
+        if ( typeof this[property] !== "string") {
+            return;
         }
+
+        this[property] = new Date(this[property] as string);
     }
 }

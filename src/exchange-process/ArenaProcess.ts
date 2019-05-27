@@ -1,8 +1,8 @@
 import * as moment from "moment";
 import {Script} from "vm";
+import {Client} from "../client-model/Client";
 import {ExchangeProcess} from "../exchange-manager/ExchangeProcess";
 import {findScript} from "../exchange-manager/findScript";
-import {Client} from "../model/Client";
 import {Exchange} from "../proxy/Exchange";
 
 export class ArenaProcess implements ExchangeProcess {
