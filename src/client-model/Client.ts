@@ -78,14 +78,26 @@ export class Client {
     public fightRecharge?: boolean;
 
     /**
-     * Ensemble des caractéristique du joueur
-     */
-    public hero?: Hero;
-
-    /**
      * Caractéristiques précédente du hero lorsque le client était idle
      */
     public lastHeroIdle?: Hero;
+
+    /**
+     * Ensemble des caractéristique du joueur
+     */
+    private _hero?: Hero;
+
+    public get hero(): Hero {
+        if ( !this._hero ) {
+            return this.lastHeroIdle;
+        }
+
+        return this._hero;
+    }
+
+    public set hero(hero: Hero) {
+        this._hero = hero;
+    }
 
     constructor(source?: string) {
         if ( source ) {
@@ -102,7 +114,7 @@ export class Client {
      */
     public mergeWith(source: Client): boolean {
         // Si on était en train de faire quelque chose et qu'on fait maintenant autre chose
-        if ( this.action !== source.action && source.action !== "none" && this.action !== "none"  ) {
+        if ( this.action !== source.action && source.action !== "none" && this.action !== "none" ) {
             return false;
         }
 
@@ -110,8 +122,8 @@ export class Client {
             this.action = source.action;
         }
 
-        if ( this.action === "none" && this.hero ) {
-            this.lastHeroIdle = this.hero;
+        if ( this.action === "none" && this._hero ) {
+            this.lastHeroIdle = this._hero;
         } else if ( source.lastHeroIdle ) {
             this.lastHeroIdle = source.lastHeroIdle;
         }
@@ -123,8 +135,8 @@ export class Client {
         this.battle = this.battle.concat(source.battle);
         this.reward = this.reward.concat(source.reward);
 
-        if ( !this.hero ) {
-            this.hero = source.hero;
+        if ( !this._hero ) {
+            this._hero = source._hero;
         }
 
         if ( !this.lastHeroIdle ) {
@@ -141,8 +153,8 @@ export class Client {
     public clear(): this {
         this.action = "none";
         this.haremMoneyFetch = 0;
-        this.lastHeroIdle = this.hero;
-        delete this.hero;
+        this.lastHeroIdle = this._hero;
+        delete this._hero;
         this.battle = [];
         this.reward = [];
 

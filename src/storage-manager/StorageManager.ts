@@ -1,4 +1,4 @@
-import {RedisClient} from "redis";
+import {createClient, RedisClient} from "redis";
 import {Connection} from "typeorm";
 import {promisify} from "util";
 import {Client} from "../client-model/Client";
@@ -18,16 +18,35 @@ export class StorageManager implements ExchangeListener {
      */
     private queues: Map<string, Queue> = new Map();
 
+    private readonly redis: RedisClient;
+
     private readonly redisAsync: {
         get: (key: string) => Promise<string>,
-        set: (key: string, value: string) => Promise<void>,
+        set: (key: string, value: string, mode?: string, duration?: number) => Promise<void>,
+        del: (key: string) => Promise<string>,
+        send_command: (command: string, args?: any[]) => Promise<boolean>,
     };
 
-    constructor(private readonly redis: RedisClient, private readonly db: Connection) {
+    constructor(readonly redisHost: string, private readonly db: Connection) {
+        this.redis = createClient(redisHost);
         this.redisAsync = {
             get: promisify(this.redis.get).bind(this.redis),
             set: promisify(this.redis.set).bind(this.redis),
+            del: promisify(this.redis.del).bind(this.redis),
+            send_command: promisify(this.redis.send_command).bind(this.redis),
         };
+
+        this.redisAsync
+            .send_command("config", ["set", "notify-keyspace-events", "Ex"])
+            .then(() => {
+                const sub = createClient(redisHost);
+                sub.subscribe("__keyevent@0__:expired", () =>
+                    sub.on("message", (_channel, key) => {
+                        if ( key.startsWith("activity_") ) {
+                            return this.activityExpire(key.split("_")[1]);
+                        }
+                    }));
+            });
     }
 
     /**
@@ -50,15 +69,15 @@ export class StorageManager implements ExchangeListener {
 
     public async execute(client: Client): Promise<void> {
         const value = await this.redisAsync.get(client.memberGuid);
-
-        const past: Client = new Client(value);
+        const past = new Client(value);
 
         if ( !client.mergeWith(past) ) {
             await this.persist(past);
             client.mergeWith(past.clear());
         }
 
-        await this.redisAsync.set(client.memberGuid, JSON.stringify(client));
+        await this.registerClient(client);
+        await this.redisAsync.set(`activity_${client.memberGuid}`, "", "EX", 30);
     }
 
     public finishQueue(memberGuid: string) {
@@ -66,13 +85,37 @@ export class StorageManager implements ExchangeListener {
     }
 
     /**
+     * Callback appelé lorsque le timeout de l'utilisateur est atteins
+     * @param memberGuid
+     */
+    private async activityExpire(memberGuid: string) {
+        console.log("timeout activity", memberGuid, new Date());
+
+        const client = new Client(await this.redisAsync.get(memberGuid));
+        await this.persist(client);
+        await this.registerClient(client.clear());
+    }
+
+    /**
+     * Enregistre le client dans la première ligne
+     * @param client
+     */
+    private registerClient(client: Client): Promise<void> {
+        return this.redisAsync.set(client.memberGuid, JSON.stringify(client), "EX", 86400);
+    }
+
+    /**
      * Enregistre l'information dans la base de données
      */
     private async persist(client: Client): Promise<void> {
+        if ( !client.hero ) {
+            return;
+        }
+
+        console.log("persist", client.memberGuid);
+
         const user = new User();
         user.fromClient(client);
-
-        // TODO comment je me débrouille si je n'ai pas de hero ?
 
         await this.db
             .getRepository(User)
@@ -111,10 +154,15 @@ export class StorageManager implements ExchangeListener {
                 break;
 
             case "missionGiveGift":
+                // TODO
                 break;
 
             case "upgradeCarac":
                 event = new UpgradeCaracEvent(client);
+                break;
+
+            case "none":
+                // nothing
                 break;
 
             default:
@@ -128,7 +176,5 @@ export class StorageManager implements ExchangeListener {
                 .manager
                 .save(event);
         }
-
-        console.log("persist", client);
     }
 }

@@ -1,4 +1,3 @@
-import {createClient} from "redis";
 import "reflect-metadata";
 import {createConnection} from "typeorm";
 import {ExchangeManager} from "./exchange-manager/ExchangeManager";
@@ -22,7 +21,7 @@ import {StorageManager} from "./storage-manager/StorageManager";
 (async () => {
     // TODO wait mysql ready (docker-compose production)
 
-    const storage = new StorageManager(createClient(process.env.REDIS), await createConnection());
+    const storage = new StorageManager(process.env.REDIS, await createConnection());
     const proxy = new Proxy(3000, "https://www.hentaiheroes.com/");
     const rm = new ExchangeManager(proxy);
 
