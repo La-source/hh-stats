@@ -1,3 +1,5 @@
+import * as express from "express";
+import {__express} from "hbs";
 import "reflect-metadata";
 import {createConnection} from "typeorm";
 import {ExchangeManager} from "./exchange-manager/ExchangeManager";
@@ -21,8 +23,18 @@ import {StorageManager} from "./storage-manager/StorageManager";
 (async () => {
     // TODO wait mysql ready (docker-compose production)
 
+    const app = express();
+
+    app.engine("html", __express);
+    app.set("view engine", "html");
+    app.set("views", __dirname + "/views");
+
+    app.get("/coucou", (_req, res) => {
+        res.render("coucou", {title: "coucou"});
+    });
+
     const storage = new StorageManager(process.env.REDIS, await createConnection());
-    const proxy = new Proxy(3000, "https://www.hentaiheroes.com/");
+    const proxy = new Proxy(app, "https://www.hentaiheroes.com/");
     const rm = new ExchangeManager(proxy);
 
     rm.register(storage);
@@ -40,6 +52,8 @@ import {StorageManager} from "./storage-manager/StorageManager";
     rm.use(new PachinkoNextRefreshProcess());
     rm.use(new HomeProcess());
     rm.use(new UpgradeCaracProcess());
+
+    app.listen(process.env.PORT || 3000);
 
     console.log("HH stats is started");
 })();

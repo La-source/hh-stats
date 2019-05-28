@@ -1,5 +1,4 @@
-import * as express from "express";
-import {Server} from "http";
+import {Application} from "express";
 import {ServerResponse} from "http";
 import * as proxy from "http-proxy-middleware";
 import {parse} from "querystring";
@@ -14,26 +13,14 @@ import {Request} from "./Request";
 import {Response} from "./Response";
 
 export class Proxy {
-    /**
-     * Http Server
-     */
-    private readonly server: Server;
-
     private readonly listeners: ProxyListener[] = [];
 
     /**
-     *
-     * @param port
+     * @param express
      * @param target
      */
-    constructor(port: number, target: string) {
-        const app = express();
-
-        app.get("/coucou", (_req, res) => {
-            res.send("coucou");
-        });
-
-        app.use(proxy({
+    constructor(express: Application, target: string) {
+        express.use(proxy({
             target,
             ws: true,
             changeOrigin: true,
@@ -97,15 +84,6 @@ export class Proxy {
             },
             logLevel: "silent",
         }));
-
-        this.server = app.listen(port);
-    }
-
-    /**
-     * Ferme le proxy
-     */
-    public close(): void {
-        this.server.close();
     }
 
     /**
