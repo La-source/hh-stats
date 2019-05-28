@@ -38,8 +38,9 @@
   "dependencies": {
     "cheerio": "^1.0.0-rc.3",
     "cookie": "^0.4.0",
+    "cookie-parser": "^1.4.4",
+    "ejs": "^2.6.1",
     "express": "^4.17.1",
-    "hbs": "^4.0.4",
     "http-proxy-middleware": "^0.19.1",
     "mime": "^2.4.3",
     "moment": "^2.24.0",

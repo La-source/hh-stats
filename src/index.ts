@@ -1,5 +1,5 @@
+import * as cookieParser from "cookie-parser";
 import * as express from "express";
-import {__express} from "hbs";
 import "reflect-metadata";
 import {createConnection} from "typeorm";
 import {ExchangeManager} from "./exchange-manager/ExchangeManager";
@@ -18,6 +18,7 @@ import {RechargeFightProcess} from "./exchange-process/RechargeFightProcess";
 import {ShopProcess} from "./exchange-process/ShopProcess";
 import {UpgradeCaracProcess} from "./exchange-process/UpgradeCaracProcess";
 import {Proxy} from "./proxy/Proxy";
+import {StatsManager} from "./stats-manager/StatsManager";
 import {StorageManager} from "./storage-manager/StorageManager";
 
 (async () => {
@@ -25,15 +26,13 @@ import {StorageManager} from "./storage-manager/StorageManager";
 
     const app = express();
 
-    app.engine("html", __express);
-    app.set("view engine", "html");
+    app.set("view engine", "ejs");
     app.set("views", __dirname + "/views");
 
-    app.get("/coucou", (_req, res) => {
-        res.render("coucou", {title: "coucou"});
-    });
+    app.use(cookieParser());
 
     const storage = new StorageManager(process.env.REDIS, await createConnection());
+    new StatsManager(app, storage);
     const proxy = new Proxy(app, "https://www.hentaiheroes.com/");
     const rm = new ExchangeManager(proxy);
 
@@ -72,7 +71,7 @@ import {StorageManager} from "./storage-manager/StorageManager";
  * - Utilitaire IG
  *      - Amélioration touche clavier
  *      - Discord IG
- *      - Notification (marché prêt, pvp prêt, xx $ collectable attein, autre event)
+ *      - Notification (marché prêt, pvp prêt, xx $ collectable attein, autre events)
  *      - Autre qui ne me vient pas à l'esprit
  */
 

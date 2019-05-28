@@ -1,4 +1,9 @@
-import {Column, Entity, Index, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
+import {Column, Entity, Index, ManyToOne, OneToOne, PrimaryGeneratedColumn} from "typeorm";
+import {BattleEvent} from "./BattleEvent";
+import {FetchMoneyHaremEvent} from "./FetchMoneyHaremEvent";
+import {MissionEvent} from "./MissionEvent";
+import {PachinkoEvent} from "./PachinkoEvent";
+import {UpgradeCaracEvent} from "./UpgradeCaracEvent";
 import {User} from "./User";
 
 export enum TypeEvent {
@@ -12,23 +17,6 @@ export enum TypeEvent {
 }
 
 @Entity()
-/*
-TODO j'aimerai réduire le poids utilisé dans la db mais cette technique ne fonctionne pas
-@TableInheritance({column: {
-    name: "typeClass",
-    type: "varchar",
-    generatedType: "VIRTUAL",
-    asExpression: `CASE type
-        WHEN "arenaBattle" THEN "BattleEvent"
-        WHEN "fetchHaremMoney" THEN "FetchMoneyHaremEvent"
-        WHEN "trollBattle" THEN "BattleEvent"
-        WHEN "leagueBattle" THEN "BattleEvent"
-        WHEN "pachinko" THEN "PachinkoEvent"
-        WHEN "mission" THEN "BattleEvent"
-        WHEN "upgradeCarac" THEN "UpgradeCaracEvent"
-    END`,
-}})
- */
 export class Event {
     @PrimaryGeneratedColumn()
     public id: number;
@@ -42,4 +30,19 @@ export class Event {
 
     @Column("enum", {enum: TypeEvent})
     public type: TypeEvent;
+
+    @OneToOne(() => BattleEvent, battle => battle.event)
+    public battle: BattleEvent;
+
+    @OneToOne(() => FetchMoneyHaremEvent, fetchMoneyHarem => fetchMoneyHarem.event)
+    public fetchMoneyHarem: FetchMoneyHaremEvent;
+
+    @OneToOne(() => MissionEvent, mission => mission.event)
+    public mission: MissionEvent;
+
+    @OneToOne(() => PachinkoEvent, pachinko => pachinko.event)
+    public pachinko: PachinkoEvent;
+
+    @OneToOne(() => UpgradeCaracEvent, upgrade => upgrade.event)
+    public upgradeCarac: UpgradeCaracEvent;
 }

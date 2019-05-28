@@ -1,0 +1,21 @@
+<% if ( reward.softCurrency !== 0 ) { %>
+    +<%= reward.softCurrency %>$<br />
+<% } %>
+<% if ( reward.leaguePoints !== 0 ) { %>
+    +<%= reward.leaguePoints %> points de league<br />
+<% } %>
+<% if ( reward.victoryPoints !== 0 ) { %>
+    +<%= reward.victoryPoints %> mojo<br />
+<% } %>
+<% if ( reward.xp !== 0 ) { %>
+    +<%= reward.xp %> XP<br />
+<% } %>
+<% reward.girlShards.forEach(girlShards => { %>
+    <%= girlShards.idGirl %> +<%= girlShards.shards%> affection<br />
+<% }); %>
+<% reward.girls.forEach(girl => { %>
+    +<%= girl %> (fille)<br />
+<% }); %>
+<% reward.items.forEach(item => { %>
+    +<%= item %> (item)<br />
+<% }); %>

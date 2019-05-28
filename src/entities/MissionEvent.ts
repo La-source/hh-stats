@@ -5,7 +5,7 @@ import {Reward} from "./Reward";
 
 @Entity()
 export class MissionEvent {
-    @OneToOne(() => Event, {cascade: true, primary: true})
+    @OneToOne(() => Event, event => event.mission, {cascade: true, primary: true})
     @JoinColumn()
     public event: Event;
 

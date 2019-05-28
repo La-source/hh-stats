@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><%= title%></title>
+    <style type="text/css">
+        .event {
+            width: 300px;
+            margin: 5px auto;
+            padding: 3px;
+            border: 1px solid black;
+            text-align: center;
+        }
+
+        .event .date {
+            text-align: right;
+            font-size: 0.8em;
+            padding-top: 5px;
+            color: gray;
+        }
+    </style>
+</head>
+<body>
+    <h1><%= title%></h1>
+
+    <% events.forEach(event => {%>
+    <div class="event">
+        <% if ( event.type === "fetchHaremMoney" ) { %>
+            <%- include("events/fetchHaremMoney", {event}) -%>
+        <% } else if ( event.type === "arenaBattle" ) { %>
+            <%- include("events/arenaBattle", {event}) -%>
+        <% } else if ( event.type === "trollBattle" ) { %>
+            <%- include("events/trollBattle", {event}) -%>
+        <% } else if ( event.type === "leagueBattle" ) { %>
+            <%- include("events/leagueBattle", {event}) -%>
+        <% } else if ( event.type === "mission" ) { %>
+            <%- include("events/mission", {event}) -%>
+        <% } else { %>
+            <%= event.type %>
+        <% } %>
+        <div class="date"><%= moment(event.date).format("DD/MM - HH:mm") %></div>
+    </div>
+    <% }); %>
+</body>
+</html>

@@ -4,7 +4,7 @@ import {Event, TypeEvent} from "./Event";
 
 @Entity()
 export class FetchMoneyHaremEvent {
-    @OneToOne(() => Event, {cascade: true, primary: true})
+    @OneToOne(() => Event, event => event.fetchMoneyHarem, {cascade: true, primary: true})
     @JoinColumn()
     public event: Event;
 

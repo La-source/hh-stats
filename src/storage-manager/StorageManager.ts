@@ -3,6 +3,7 @@ import {Connection} from "typeorm";
 import {promisify} from "util";
 import {Client} from "../client-model/Client";
 import {BattleEvent} from "../entities/BattleEvent";
+import {Event} from "../entities/Event";
 import {EventEntity} from "../entities/EventEntity";
 import {FetchMoneyHaremEvent} from "../entities/FetchMoneyHaremEvent";
 import {MissionEvent} from "../entities/MissionEvent";
@@ -13,6 +14,21 @@ import {ExchangeListener} from "../exchange-manager/ExchangeListener";
 import {Queue} from "./Queue";
 
 export class StorageManager implements ExchangeListener {
+    /**
+     * Timeout d'affacement d'un client dans redis
+     */
+    public static TIMEOUT_CLIENT = 86400;
+
+    /**
+     * Timeout où l'on considère qu'un utilisateur est idle
+     */
+    public static TIMEOUT_ACTIVITY = 30;
+
+    /**
+     * Nombre de résultats retourné de statistiques pour un joueur
+     */
+    public static NB_STATS_RESULT = 50;
+
     /**
      * Ensemble des queues de requêtes en cour de traitement
      */
@@ -77,11 +93,32 @@ export class StorageManager implements ExchangeListener {
         }
 
         await this.registerClient(client);
-        await this.redisAsync.set(`activity_${client.memberGuid}`, "", "EX", 30);
+        await this.redisAsync.set(`activity_${client.memberGuid}`, "", "EX", StorageManager.TIMEOUT_ACTIVITY);
     }
 
     public finishQueue(memberGuid: string) {
         this.queues.delete(memberGuid);
+    }
+
+    public async getMemberEvents(memberGuid: string): Promise<Event[]> {
+        const client = new Client(await this.redisAsync.get(memberGuid));
+
+        if ( !client.hero ) {
+            return;
+        }
+
+        return this.db
+            .getRepository(Event)
+            .createQueryBuilder("event")
+            .leftJoinAndSelect("event.battle", "battle")
+            .leftJoinAndSelect("event.fetchMoneyHarem", "fetchMoneyHarem")
+            .leftJoinAndSelect("event.mission", "mission")
+            .leftJoinAndSelect("event.pachinko", "pachinko")
+            .leftJoinAndSelect("event.upgradeCarac", "upgradeCarac")
+            .where("event.userId = :id", {id: client.hero.id})
+            .limit(StorageManager.NB_STATS_RESULT)
+            .orderBy("event.date", "DESC")
+            .getMany();
     }
 
     /**
@@ -101,7 +138,7 @@ export class StorageManager implements ExchangeListener {
      * @param client
      */
     private registerClient(client: Client): Promise<void> {
-        return this.redisAsync.set(client.memberGuid, JSON.stringify(client), "EX", 86400);
+        return this.redisAsync.set(client.memberGuid, JSON.stringify(client), "EX", StorageManager.TIMEOUT_CLIENT);
     }
 
     /**
