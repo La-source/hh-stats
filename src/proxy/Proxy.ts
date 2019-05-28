@@ -16,11 +16,11 @@ export class Proxy {
     private readonly listeners: ProxyListener[] = [];
 
     /**
-     * @param express
+     * @param app
      * @param target
      */
-    constructor(express: Application, target: string) {
-        express.use(proxy({
+    constructor(app: Application, private readonly target: string) {
+        app.use(proxy({
             target,
             ws: true,
             changeOrigin: true,
@@ -33,7 +33,6 @@ export class Proxy {
                     "connection",
                     "transfer-encoding",
                     "content-length",
-                    "cookie",
                 ];
 
                 for ( const header in proxyRes.headers ) {
@@ -45,7 +44,16 @@ export class Proxy {
                         continue;
                     }
 
-                    res.setHeader(header, proxyRes.headers[header]);
+                    const oldHeader = proxyRes.headers[header];
+                    let newHeader: string|string[];
+
+                    if ( typeof oldHeader === "string" ) {
+                        newHeader = this.replaceHost(oldHeader);
+                    } else {
+                        newHeader = oldHeader.map(_header => this.replaceHost(_header));
+                    }
+
+                    res.setHeader(header, newHeader);
                 }
 
                 httpReadData(proxyRes)
@@ -120,5 +128,19 @@ export class Proxy {
 
             return result;
         })(data);
+    }
+
+    private replaceHost(content: string): string {
+        const target = new URL(this.target);
+        const targetArray = target.host.split(".");
+
+        if ( targetArray.length > 2 ) {
+            targetArray.shift();
+        }
+
+        return content
+            .replace(target.host, "")
+            .replace(targetArray.join("."), "")
+        ;
     }
 }

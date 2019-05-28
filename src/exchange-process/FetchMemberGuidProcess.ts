@@ -5,7 +5,7 @@ import {Exchange} from "../proxy/Exchange";
 
 export class FetchMemberGuidProcess implements ExchangeProcess {
     public execute(exchange: Exchange, client: Client): void {
-        const cookie: string[] = exchange.response.res.headers["set-cookie"];
+        const cookie: string[] = exchange.response.res.headers["set-cookie"] || [exchange.request.req.headers.cookie];
 
         if ( !cookie ) {
             return;
