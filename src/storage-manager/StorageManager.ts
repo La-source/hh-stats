@@ -116,7 +116,7 @@ export class StorageManager implements ExchangeListener {
             .leftJoinAndSelect("event.pachinko", "pachinko")
             .leftJoinAndSelect("event.upgradeCarac", "upgradeCarac")
             .where("event.userId = :id", {id: client.hero.id})
-            .limit(StorageManager.NB_STATS_RESULT)
+            .take(StorageManager.NB_STATS_RESULT)
             .orderBy("event.date", "DESC")
             .getMany();
     }
@@ -151,8 +151,8 @@ export class StorageManager implements ExchangeListener {
 
         console.log("persist", client.memberGuid);
 
-        const user = new User();
-        user.fromClient(client);
+        const user = new User(client.hero);
+        user.lastActivity = new Date();
 
         await this.db
             .getRepository(User)
@@ -208,6 +208,25 @@ export class StorageManager implements ExchangeListener {
 
         if ( event ) {
             event.event.user = user;
+
+            const users = event.users();
+
+            if ( users.length !== 0 ) {
+                console.log(users);
+                await this.db
+                    .getRepository(User)
+                    .createQueryBuilder()
+                    .insert()
+                    .into(User)
+                    .values(users)
+                    .orUpdate({
+                        overwrite: [
+                            "name",
+                            "level",
+                        ],
+                    })
+                    .execute();
+            }
 
             await this.db
                 .manager

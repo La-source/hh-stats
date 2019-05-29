@@ -152,6 +152,10 @@ export class Client {
      * Ré-initialise l'objet de façon à ce qu'il soit prêt à être accumulé
      */
     public clear(): this {
+        if ( this._hero ) {
+            this.lastHeroIdle = this._hero;
+        }
+
         this.action = "none";
         this.haremMoneyFetch = 0;
         delete this._hero;

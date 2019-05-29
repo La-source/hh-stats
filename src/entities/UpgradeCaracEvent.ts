@@ -1,14 +1,13 @@
-import {Entity, JoinColumn, OneToOne} from "typeorm";
+import {Entity} from "typeorm";
 import {Client} from "../client-model/Client";
 import {Event, TypeEvent} from "./Event";
+import {EventEntity} from "./EventEntity";
 
 @Entity()
-export class UpgradeCaracEvent {
-    @OneToOne(() => Event, event => event.upgradeCarac, {cascade: true, primary: true})
-    @JoinColumn()
-    public event: Event;
-
+export class UpgradeCaracEvent extends EventEntity {
     constructor(client?: Client) {
+        super();
+
         if ( client ) {
             this.event = new Event();
             this.event.type = TypeEvent.upgradeCarac;

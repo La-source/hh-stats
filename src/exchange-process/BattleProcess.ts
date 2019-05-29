@@ -1,5 +1,6 @@
 import {Battle} from "../client-model/Battle";
 import {Client} from "../client-model/Client";
+import {Opponent} from "../client-model/Opponent";
 import {Reward} from "../client-model/Reward";
 import {ExchangeProcess} from "../exchange-manager/ExchangeProcess";
 import {Exchange} from "../proxy/Exchange";
@@ -35,6 +36,10 @@ export class BattleProcess implements ExchangeProcess {
         } else {
             battle.isWin = true; // on considère que en cas de x10 on gagne tous les combats
             client.reward.push(new Reward(exchange.response.json));
+        }
+
+        if ( exchange.response.json.J2 ) {
+            battle.opponent = new Opponent(exchange.response.json.J2);
         }
 
         client.battle.push(battle);

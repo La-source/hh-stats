@@ -1,21 +1,28 @@
-import {Column, Entity, JoinColumn, OneToOne} from "typeorm";
+import {Column, Entity, OneToMany} from "typeorm";
 import {Client} from "../client-model/Client";
 import {Event, TypeEvent} from "./Event";
+import {EventEntity} from "./EventEntity";
+import {Opponent} from "./Opponent";
 import {Reward} from "./Reward";
+import {User} from "./User";
 
 @Entity()
-export class BattleEvent {
-    @OneToOne(() => Event, event => event.battle, {cascade: true, primary: true})
-    @JoinColumn()
-    public event: Event;
-
+export class BattleEvent extends EventEntity {
     @Column()
     public nbBattle: number;
 
     @Column(() => Reward)
     public reward: Reward = new Reward();
 
+    @Column({nullable: true, default: null})
+    public idTroll: number;
+
+    @OneToMany(() => Opponent, opponent => opponent.battle, {cascade: true})
+    public opponents: Opponent[];
+
     constructor(client?: Client) {
+        super();
+
         if ( client ) {
             this.event = new Event();
 
@@ -29,11 +36,30 @@ export class BattleEvent {
                 return;
             }
 
+            this.opponents = [];
             this.nbBattle = client.battle.length;
 
             for ( const reward of client.reward ) {
                 this.reward.formClient(reward);
             }
+
+            for ( const battle of client.battle ) {
+                if ( battle.idMember ) {
+                    this.opponents.push(new Opponent(battle));
+                }
+
+                if ( battle.idTroll ) {
+                    this.idTroll = battle.idTroll;
+                }
+            }
         }
+    }
+
+    public users(): User[] {
+        if ( !this.opponents ) {
+            return [];
+        }
+
+        return this.opponents.map(opponent => opponent.user);
     }
 }

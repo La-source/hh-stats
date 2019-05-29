@@ -1,3 +1,5 @@
+import {Opponent} from "./Opponent";
+
 export class Battle {
     public isArena: boolean;
 
@@ -8,4 +10,6 @@ export class Battle {
     public isWin: boolean;
 
     public isAutoFight: boolean;
+
+    public opponent: Opponent;
 }

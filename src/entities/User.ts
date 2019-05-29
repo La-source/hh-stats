@@ -1,5 +1,5 @@
 import {Column, Entity, PrimaryColumn} from "typeorm";
-import {Client} from "../client-model/Client";
+import {Hero} from "../client-model/Hero";
 
 @Entity()
 export class User {
@@ -9,32 +9,32 @@ export class User {
     @Column("varchar", {length: 60})
     public name: string;
 
-    @Column("datetime")
-    public lastActivity: Date = new Date();
+    @Column("datetime", {nullable: true, default: null})
+    public lastActivity: Date;
 
-    @Column()
+    @Column({nullable: true, default: true})
     public softCurrency: number;
 
-    @Column()
+    @Column({nullable: true, default: true})
     public hardCurrency: number;
 
-    @Column()
+    @Column({nullable: true, default: true})
     public xp: number;
 
-    @Column()
+    @Column({nullable: true, default: true})
     public level: number;
 
-    public fromClient(client: Client): void {
-        if ( !client.hero ) {
+    constructor(hero?: Hero) {
+        if ( !hero ) {
             return;
         }
 
-        this.id = client.hero.id;
-        this.name = client.hero.name;
-        this.softCurrency = client.hero.softCurrency;
-        this.hardCurrency = client.hero.hardCurrency;
-        this.xp = client.hero.xp;
-        this.level = client.hero.level;
+        this.copyProperty("id", hero);
+        this.copyProperty("name", hero);
+        this.copyProperty("softCurrency", hero);
+        this.copyProperty("hardCurrency", hero);
+        this.copyProperty("xp", hero);
+        this.copyProperty("level", hero);
     }
 
     public overwrite(): string[] {
@@ -46,5 +46,11 @@ export class User {
             "level",
             "lastActivity",
         ];
+    }
+
+    private copyProperty(property: string, hero: Hero): void {
+        if ( hero[property] ) {
+            this[property] = hero[property];
+        }
     }
 }
