@@ -14,6 +14,9 @@ export class Reward {
     @Column()
     public leaguePoints: number = 0;
 
+    @Column()
+    public level: number = 0;
+
     @Column("simple-array")
     public items: number[] = [];
 
@@ -42,6 +45,10 @@ export class Reward {
 
             if ( reward.hero.leaguePoints ) {
                 this.leaguePoints += reward.hero.leaguePoints;
+            }
+
+            if ( reward.hero.level ) {
+                this.level += reward.hero.level;
             }
         }
 

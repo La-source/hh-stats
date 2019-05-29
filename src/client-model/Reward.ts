@@ -4,6 +4,7 @@ interface HeroReward {
     victoryPoints?: number;
     xp?: number;
     leaguePoints?: number;
+    level?: number;
 }
 
 export class Reward {
@@ -51,6 +52,16 @@ export class Reward {
             this.drops = reward.drops;
         }
 
+        if ( reward.rewards && reward.rewards.heroChangesUpdate ) {
+            const heroChangesUpdate = reward.rewards.heroChangesUpdate;
+
+            if ( heroChangesUpdate.level ) {
+                this.hero = {
+                    level: 1,
+                };
+            }
+        }
+
         this.heroHydrate();
         this.itemsHydrate();
         this.girlsShardsHydrate();
@@ -68,7 +79,9 @@ export class Reward {
             return;
         }
 
-        this.hero = {};
+        if ( !this.hero ) {
+            this.hero = {};
+        }
 
         if ( hero.soft_currency ) {
             this.hero.softCurrency = hero.soft_currency;
