@@ -15,6 +15,7 @@ import {MissionGiveGiftProcess} from "./exchange-process/MissionGiveGiftProcess"
 import {MissionProcess} from "./exchange-process/MissionProcess";
 import {PachinkoNextRefreshProcess} from "./exchange-process/PachinkoNextRefreshProcess";
 import {PachinkoRewardProcess} from "./exchange-process/PachinkoRewardProcess";
+import {QuestProcess} from "./exchange-process/QuestProcess";
 import {RechargeFightProcess} from "./exchange-process/RechargeFightProcess";
 import {SellProcess} from "./exchange-process/SellProcess";
 import {ShopProcess} from "./exchange-process/ShopProcess";
@@ -57,6 +58,7 @@ import {StorageManager} from "./storage-manager/StorageManager";
     rm.use(new SellProcess());
     rm.use(new BuyProcess());
     rm.use(new TrollProcess());
+    rm.use(new QuestProcess());
 
     app.listen(process.env.PORT || 3000);
 

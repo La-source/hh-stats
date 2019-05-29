@@ -6,6 +6,8 @@ export class Hero {
 
     public hardCurrency: number;
 
+    public energyQuest: number;
+
     public xp: number;
 
     public level: number;
@@ -17,6 +19,7 @@ export class Hero {
             this.id = source.id;
             this.softCurrency = source.soft_currency;
             this.hardCurrency = source.hard_currency;
+            this.energyQuest = source.energy_quest;
             this.xp = source.xp;
             this.level = source.level;
             this.name = source.Name;
