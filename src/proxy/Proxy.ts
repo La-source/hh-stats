@@ -70,9 +70,13 @@ export class Proxy {
 
                             return this.exchange$(req.exchange);
                         }),
-                        catchError(() => of({})),
+                        map(() => req.exchange.response.result),
+                        catchError(e => {
+                            console.error("error response", e);
+                            return of({});
+                        }),
                     )
-                    .subscribe(() => res.end(req.exchange.response.result))
+                    .subscribe(result => res.end(result))
                 ;
             },
             onProxyReq: (_proxyRes, req: IncomingMessage) => {
@@ -80,8 +84,8 @@ export class Proxy {
                     .pipe(
                         map(data => data.toString("utf8")),
                         map(data => parse(data)),
-                        catchError(() => {
-                            console.log("error req");
+                        catchError(e => {
+                            console.log("error req", e);
                             return empty();
                         }),
                     )
