@@ -24,7 +24,7 @@ export class ExchangeManager implements ProxyListener {
 
     public request(exchange: Exchange): Observable<{}> {
         if ( !exchange.response.isText() ) {
-            return;
+            return of({});
         }
 
         const client = new Client();

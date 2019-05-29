@@ -73,7 +73,7 @@ export class Proxy {
                         map(() => req.exchange.response.result),
                         catchError(e => {
                             console.error("error response", e);
-                            return of({});
+                            return of(null);
                         }),
                     )
                     .subscribe(result => res.end(result))
