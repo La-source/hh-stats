@@ -84,6 +84,7 @@ export class ExchangeManager implements ProxyListener {
                 return;
             }
 
+            console.log(new Date(), "execute process", process.constructor.name, client.memberGuid);
             return process.execute(exchange, client);
         } catch (e) {
             console.error(e);
