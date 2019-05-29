@@ -14,7 +14,7 @@ export class StatsManager {
                 return;
             }
 
-            res.render("me", {title: "coucou", events, moment});
+            res.render("me", {events, moment});
         });
     }
 }

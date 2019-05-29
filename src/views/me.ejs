@@ -2,14 +2,25 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title><%= title%></title>
+    <title>Statistiques personnelle</title>
     <style type="text/css">
         .event {
             width: 300px;
-            margin: 5px auto;
+            margin: auto;
             padding: 3px;
             border: 1px solid black;
             text-align: center;
+        }
+
+        .separator {
+            width: 1px;
+            height: 10px;
+            background-color: black;
+            margin: auto;
+        }
+
+        .separator:last-child {
+            display: none;
         }
 
         .event .date {
@@ -21,8 +32,6 @@
     </style>
 </head>
 <body>
-    <h1><%= title%></h1>
-
     <% events.forEach(event => {%>
     <div class="event">
         <% if ( event.type === "fetchHaremMoney" ) { %>
@@ -40,6 +49,7 @@
         <% } %>
         <div class="date"><%= moment(event.date).format("DD/MM - HH:mm") %></div>
     </div>
+    <div class="separator"></div>
     <% }); %>
 </body>
 </html>
