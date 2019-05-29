@@ -9,6 +9,16 @@ export interface ExchangeProcess {
     withReqBody?: boolean;
 
     /**
+     * Défini quel est la class du corp de la requête pour executer le execute
+     */
+    withReqClass?: string;
+
+    /**
+     * Défini quel est l'action du corp de la requête pour executer le execute
+     */
+    withReqAction?: string | string[];
+
+    /**
      * Défini ce que doit contenir l'url de la requête pour executer le execute
      */
     withUrlContains?: string;

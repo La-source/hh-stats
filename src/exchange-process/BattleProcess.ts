@@ -10,13 +10,13 @@ export class BattleProcess implements ExchangeProcess {
 
     public withReqBody = true;
 
+    public withReqClass = "Battle";
+
+    public withReqAction = "fight";
+
     public withJson = true;
 
     public execute(exchange: Exchange, client: Client): void {
-        if ( exchange.request.body.class !== "Battle" || exchange.request.body.action !== "fight" ) {
-            return;
-        }
-
         const battle = new Battle();
 
         if ( exchange.request.body["who[id_member]"] ) {

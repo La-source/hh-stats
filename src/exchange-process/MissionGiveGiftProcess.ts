@@ -7,13 +7,13 @@ export class MissionGiveGiftProcess implements ExchangeProcess {
 
     public withReqBody = true;
 
+    public withReqClass = "Missions";
+
+    public withReqAction = "give_gift";
+
     public withJson = true;
 
     public execute(exchange: Exchange, client: Client): void {
-        if ( exchange.request.body.class !== "Missions" || exchange.request.body.action !== "give_gift" ) {
-            return;
-        }
-
         client.action = "missionGiveGift";
         client.gift = parseInt(exchange.response.json.rewards.data.rewards[0].value.match(/\b\d+\b/g)[0], 10);
     }

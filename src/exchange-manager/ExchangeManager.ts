@@ -80,6 +80,27 @@ export class ExchangeManager implements ProxyListener {
                 return;
             }
 
+            if ( process.withReqClass &&
+                ( !exchange.request.body || exchange.request.body.class !== process.withReqClass ) ) {
+                return;
+            }
+
+            if ( process.withReqAction ) {
+                if ( !exchange.request.body ) {
+                    return;
+                }
+
+                if ( typeof process.withReqAction === "string" ) {
+                    if ( exchange.request.body.action !== process.withReqAction ) {
+                        return;
+                    }
+                } else {
+                    if ( !process.withReqAction.includes(exchange.request.body.action) ) {
+                        return;
+                    }
+                }
+            }
+
             if ( process.withJson && ( !exchange.response.json || !exchange.response.json.success ) ) {
                 return;
             }

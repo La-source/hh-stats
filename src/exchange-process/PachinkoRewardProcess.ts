@@ -8,13 +8,13 @@ export class PachinkoRewardProcess implements ExchangeProcess {
 
     public withReqBody = true;
 
+    public withReqClass = "Pachinko";
+
+    public withReqAction = "play";
+
     public withJson = true;
 
     public execute(exchange: Exchange, client: Client): void {
-        if ( exchange.request.body.class !== "Pachinko" || exchange.request.body.action !== "play" ) {
-            return;
-        }
-
         client.action = "pachinko";
         client.reward.push(new Reward(exchange.response.json));
         client.isPachinko = true;

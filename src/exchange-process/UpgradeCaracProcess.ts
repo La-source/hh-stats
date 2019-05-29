@@ -7,13 +7,13 @@ export class UpgradeCaracProcess implements ExchangeProcess {
 
     public withReqBody = true;
 
+    public withReqClass = "Hero";
+
+    public withReqAction = "update_stats";
+
     public withJson = true;
 
-    public execute(exchange: Exchange, client: Client): void {
-        if ( exchange.request.body.class !== "Hero" || exchange.request.body.action !== "update_stats" ) {
-            return;
-        }
-
+    public execute(_exchange: Exchange, client: Client): void {
         client.action = "upgradeCarac";
         client.isUpgradeCarac = true;
     }

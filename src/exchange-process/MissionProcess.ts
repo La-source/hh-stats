@@ -8,13 +8,13 @@ export class MissionProcess implements ExchangeProcess {
 
     public withReqBody = true;
 
+    public withReqClass = "Missions";
+
+    public withReqAction = "claim_reward";
+
     public withJson = true;
 
     public execute(exchange: Exchange, client: Client): void {
-        if ( exchange.request.body.class !== "Missions" || exchange.request.body.action !== "claim_reward" ) {
-            return;
-        }
-
         client.action = "mission";
         client.reward.push(new Reward({drops: exchange.response.json}));
         client.nbMissions++;

@@ -8,13 +8,13 @@ export class BuyProcess implements ExchangeProcess {
 
     public withReqBody = true;
 
+    public withReqClass = "Item";
+
+    public withReqAction = "buy";
+
     public withJson = true;
 
     public execute(exchange: Exchange, client: Client): void {
-        if ( exchange.request.body.class !== "Item" || exchange.request.body.action !== "buy" ) {
-            return;
-        }
-
         const buy = new Buy();
         buy.item = parseInt(exchange.request.body.id_item, 10);
 

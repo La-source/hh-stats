@@ -9,6 +9,10 @@ export class QuestProcess implements ExchangeProcess {
 
     public withReqBody = true;
 
+    public withReqClass = "Quest";
+
+    public withReqAction = "next";
+
     public withJson = true;
 
     public execute(exchange: Exchange, client: Client): void {

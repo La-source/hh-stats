@@ -7,18 +7,13 @@ export class HaremFetchMoneyProcess implements ExchangeProcess {
 
     public withReqBody = true;
 
+    public withReqClass = "Girl";
+
+    public withReqAction = ["get_salary", "get_all_salaries"];
+
     public withJson = true;
 
     public execute(exchange: Exchange, client: Client): void {
-        const action = [
-            "get_salary",
-            "get_all_salaries",
-        ];
-
-        if ( exchange.request.body.class !== "Girl" || !action.includes(exchange.request.body.action) ) {
-            return;
-        }
-
         client.action = "fetchHaremMoney";
         client.haremMoneyFetch = exchange.response.json.money;
     }

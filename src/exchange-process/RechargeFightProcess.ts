@@ -5,17 +5,15 @@ import {Exchange} from "../proxy/Exchange";
 export class RechargeFightProcess implements ExchangeProcess {
     public withUrlContains = "ajax.php";
 
+    public withReqClass = "Hero";
+
+    public withReqAction = ["recharge", "fight"];
+
     public withReqBody = true;
 
     public withJson = true;
 
-    public execute(exchange: Exchange, client: Client): void {
-        if ( exchange.request.body.class !== "Hero"
-            || exchange.request.body.action !== "recharge"
-            || exchange.request.body.type !== "fight" ) {
-            return;
-        }
-
+    public execute(_exchange: Exchange, client: Client): void {
         client.fightRecharge = true;
     }
 }
