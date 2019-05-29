@@ -1,5 +1,6 @@
 import {Battle} from "./Battle";
 import {Buy} from "./Buy";
+import {GirlUpgrade} from "./GirlUpgrade";
 import {Hero} from "./Hero";
 import {Quest} from "./Quest";
 import {Reward} from "./Reward";
@@ -17,7 +18,8 @@ export type Action =
     "upgradeCarac" |
     "sell" |
     "buy" |
-    "quest"
+    "quest" |
+    "girlUpgrade"
 ;
 
 export class Client {
@@ -72,6 +74,11 @@ export class Client {
      * Quêtes réalisée
      */
     public quests?: Quest[] = [];
+
+    /**
+     * Amélioration de fille
+     */
+    public girlUpgrade: GirlUpgrade[] = [];
 
     /**
      * Marqueur indiquant si un pachinko a été joué
@@ -164,6 +171,7 @@ export class Client {
         this.sells = this.sells.concat(source.sells);
         this.buys = this.buys.concat(source.buys);
         this.quests = this.quests.concat(source.quests);
+        this.girlUpgrade = this.girlUpgrade.concat(source.girlUpgrade);
         this.nbMissions += source.nbMissions;
 
         if ( !this._hero ) {
@@ -194,6 +202,7 @@ export class Client {
         this.sells = [];
         this.buys = [];
         this.quests = [];
+        this.girlUpgrade = [];
         this.nbMissions = 0;
         this.isGirlLootable = false;
 

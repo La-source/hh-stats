@@ -7,6 +7,7 @@ import {BuyEvent} from "../entities/BuyEvent";
 import {Event} from "../entities/Event";
 import {EventEntity} from "../entities/EventEntity";
 import {FetchMoneyHaremEvent} from "../entities/FetchMoneyHaremEvent";
+import {GirlUpgradeEvent} from "../entities/GirlUpgradeEvent";
 import {MissionEvent} from "../entities/MissionEvent";
 import {PachinkoEvent} from "../entities/PachinkoEvent";
 import {QuestEvent} from "../entities/QuestEvent";
@@ -209,6 +210,10 @@ export class StorageManager implements ExchangeListener {
 
             case "quest":
                 event = new QuestEvent(client);
+                break;
+
+            case "girlUpgrade":
+                event = new GirlUpgradeEvent(client);
                 break;
 
             case "none":

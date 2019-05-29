@@ -17,6 +17,7 @@ export enum TypeEvent {
     sell = "sell",
     buy = "buy",
     quest = "quest",
+    girlUpgrade = "girlUpgrade",
 }
 
 @Entity()
