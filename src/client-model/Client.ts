@@ -94,6 +94,11 @@ export class Client {
     public lastHeroIdle?: Hero;
 
     /**
+     * Flag indiquant si une fille est lootable
+     */
+    public isGirlLootable?: boolean;
+
+    /**
      * Ensemble des caractéristique du joueur
      */
     private _hero?: Hero;
@@ -143,6 +148,7 @@ export class Client {
         this.copyPropertyFrom(source, "arenaNextRefresh");
         this.copyPropertyFrom(source, "pachinkoNextRefresh");
         this.copyPropertyFrom(source, "lastHeroIdle");
+        this.copyPropertyFrom(source, "isGirlLootable");
         this.battle = this.battle.concat(source.battle);
         this.reward = this.reward.concat(source.reward);
         this.sells = this.sells.concat(source.sells);
@@ -177,6 +183,7 @@ export class Client {
         this.sells = [];
         this.buys = [];
         this.nbMissions = 0;
+        this.isGirlLootable = false;
 
         return this;
     }

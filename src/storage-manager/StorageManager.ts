@@ -152,7 +152,6 @@ export class StorageManager implements ExchangeListener {
         }
 
         console.log("persist", client.memberGuid);
-        console.log(client);
 
         const user = new User(client.hero);
         user.lastActivity = new Date();

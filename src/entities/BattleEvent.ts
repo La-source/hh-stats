@@ -17,6 +17,9 @@ export class BattleEvent extends EventEntity {
     @Column({nullable: true, default: null})
     public idTroll: number;
 
+    @Column()
+    public isGirlLootable: boolean = false;
+
     @OneToMany(() => Opponent, opponent => opponent.battle, {cascade: true})
     public opponents: Opponent[];
 
@@ -38,6 +41,7 @@ export class BattleEvent extends EventEntity {
 
             this.opponents = [];
             this.nbBattle = client.battle.length;
+            this.isGirlLootable = !!client.isGirlLootable;
 
             for ( const reward of client.reward ) {
                 this.reward.formClient(reward);
