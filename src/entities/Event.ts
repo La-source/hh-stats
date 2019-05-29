@@ -1,8 +1,13 @@
 import {Column, Entity, Index, ManyToOne, OneToOne, PrimaryGeneratedColumn} from "typeorm";
-import {BattleEvent} from "./BattleEvent";
+import {BuyEvent} from "./BuyEvent";
 import {FetchMoneyHaremEvent} from "./FetchMoneyHaremEvent";
+import {GirlUpgradeEvent} from "./GirlUpgradeEvent";
 import {MissionEvent} from "./MissionEvent";
 import {PachinkoEvent} from "./PachinkoEvent";
+import {PvpBattleEvent} from "./PvpBattleEvent";
+import {QuestEvent} from "./QuestEvent";
+import {SellEvent} from "./SellEvent";
+import {TrollBattleEvent} from "./TrollBattleEvent";
 import {UpgradeCaracEvent} from "./UpgradeCaracEvent";
 import {User} from "./User";
 
@@ -35,8 +40,11 @@ export class Event {
     @Column("enum", {enum: TypeEvent})
     public type: TypeEvent;
 
-    @OneToOne(() => BattleEvent, battle => battle.event)
-    public battle: BattleEvent;
+    @OneToOne(() => PvpBattleEvent, battle => battle.event)
+    public pvpBattle: PvpBattleEvent;
+
+    @OneToOne(() => TrollBattleEvent, battle => battle.event)
+    public trollBattle: TrollBattleEvent;
 
     @OneToOne(() => FetchMoneyHaremEvent, fetchMoneyHarem => fetchMoneyHarem.event)
     public fetchMoneyHarem: FetchMoneyHaremEvent;
@@ -49,4 +57,16 @@ export class Event {
 
     @OneToOne(() => UpgradeCaracEvent, upgrade => upgrade.event)
     public upgradeCarac: UpgradeCaracEvent;
+
+    @OneToOne(() => BuyEvent, buy => buy.event)
+    public buy: BuyEvent;
+
+    @OneToOne(() => GirlUpgradeEvent, girlUpgrade => girlUpgrade.event)
+    public girlUpgrade: GirlUpgradeEvent;
+
+    @OneToOne(() => QuestEvent, quest => quest.event)
+    public quest: QuestEvent;
+
+    @OneToOne(() => SellEvent, sell => sell.event)
+    public sell: SellEvent;
 }

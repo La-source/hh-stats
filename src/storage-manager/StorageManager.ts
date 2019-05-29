@@ -2,7 +2,6 @@ import {createClient, RedisClient} from "redis";
 import {Connection} from "typeorm";
 import {promisify} from "util";
 import {Client} from "../client-model/Client";
-import {BattleEvent} from "../entities/BattleEvent";
 import {BuyEvent} from "../entities/BuyEvent";
 import {Event} from "../entities/Event";
 import {EventEntity} from "../entities/EventEntity";
@@ -10,8 +9,10 @@ import {FetchMoneyHaremEvent} from "../entities/FetchMoneyHaremEvent";
 import {GirlUpgradeEvent} from "../entities/GirlUpgradeEvent";
 import {MissionEvent} from "../entities/MissionEvent";
 import {PachinkoEvent} from "../entities/PachinkoEvent";
+import {PvpBattleEvent} from "../entities/PvpBattleEvent";
 import {QuestEvent} from "../entities/QuestEvent";
 import {SellEvent} from "../entities/SellEvent";
+import {TrollBattleEvent} from "../entities/TrollBattleEvent";
 import {UpgradeCaracEvent} from "../entities/UpgradeCaracEvent";
 import {User} from "../entities/User";
 import {ExchangeListener} from "../exchange-manager/ExchangeListener";
@@ -114,11 +115,16 @@ export class StorageManager implements ExchangeListener {
         return this.db
             .getRepository(Event)
             .createQueryBuilder("event")
-            .leftJoinAndSelect("event.battle", "battle")
+            .leftJoinAndSelect("event.pvpBattle", "pvpBattle")
+            .leftJoinAndSelect("event.trollBattle", "trollBattle")
             .leftJoinAndSelect("event.fetchMoneyHarem", "fetchMoneyHarem")
             .leftJoinAndSelect("event.mission", "mission")
             .leftJoinAndSelect("event.pachinko", "pachinko")
             .leftJoinAndSelect("event.upgradeCarac", "upgradeCarac")
+            .leftJoinAndSelect("event.buy", "buy")
+            .leftJoinAndSelect("event.girlUpgrade", "girlUpgrade")
+            .leftJoinAndSelect("event.quest", "quest")
+            .leftJoinAndSelect("event.sell", "sell")
             .where("event.userId = :id", {id: client.hero.id})
             .take(StorageManager.NB_STATS_RESULT)
             .orderBy("event.date", "DESC")
@@ -173,15 +179,15 @@ export class StorageManager implements ExchangeListener {
                 break;
 
             case "arenaBattle":
-                event = new BattleEvent(client);
+                event = new PvpBattleEvent(client);
                 break;
 
             case "trollBattle":
-                event = new BattleEvent(client);
+                event = new TrollBattleEvent(client);
                 break;
 
             case "leagueBattle":
-                event = new BattleEvent(client);
+                event = new PvpBattleEvent(client);
                 break;
 
             case "pachinko":

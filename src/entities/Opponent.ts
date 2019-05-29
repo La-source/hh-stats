@@ -1,6 +1,6 @@
 import {Column, Entity, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
 import {Battle} from "../client-model/Battle";
-import {BattleEvent} from "./BattleEvent";
+import {PvpBattleEvent} from "./PvpBattleEvent";
 import {User} from "./User";
 
 @Entity()
@@ -41,8 +41,8 @@ export class Opponent {
     @Column()
     public isWin: boolean;
 
-    @ManyToOne(() => BattleEvent, battle => battle.opponents)
-    public battle: BattleEvent;
+    @ManyToOne(() => PvpBattleEvent, battle => battle.opponents)
+    public battle: PvpBattleEvent;
 
     constructor(battle?: Battle) {
         if ( !battle || !battle.opponent ) {
