@@ -5,6 +5,7 @@ import {createConnection} from "typeorm";
 import {ExchangeManager} from "./exchange-manager/ExchangeManager";
 import {ArenaProcess} from "./exchange-process/ArenaProcess";
 import {BattleProcess} from "./exchange-process/BattleProcess";
+import {BuyProcess} from "./exchange-process/BuyProcess";
 import {ChangeProxyUrlProcess} from "./exchange-process/ChangeProxyUrlProcess";
 import {FetchMemberGuidProcess} from "./exchange-process/FetchMemberGuidProcess";
 import {HaremFetchMoneyProcess} from "./exchange-process/HaremFetchMoneyProcess";
@@ -53,6 +54,7 @@ import {StorageManager} from "./storage-manager/StorageManager";
     rm.use(new HomeProcess());
     rm.use(new UpgradeCaracProcess());
     rm.use(new SellProcess());
+    rm.use(new BuyProcess());
 
     app.listen(process.env.PORT || 3000);
 

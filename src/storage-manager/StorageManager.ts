@@ -3,6 +3,7 @@ import {Connection} from "typeorm";
 import {promisify} from "util";
 import {Client} from "../client-model/Client";
 import {BattleEvent} from "../entities/BattleEvent";
+import {BuyEvent} from "../entities/BuyEvent";
 import {Event} from "../entities/Event";
 import {EventEntity} from "../entities/EventEntity";
 import {FetchMoneyHaremEvent} from "../entities/FetchMoneyHaremEvent";
@@ -151,6 +152,7 @@ export class StorageManager implements ExchangeListener {
         }
 
         console.log("persist", client.memberGuid);
+        console.log(client);
 
         const user = new User(client.hero);
         user.lastActivity = new Date();
@@ -197,6 +199,10 @@ export class StorageManager implements ExchangeListener {
 
             case "upgradeCarac":
                 event = new UpgradeCaracEvent(client);
+                break;
+
+            case "buy":
+                event = new BuyEvent(client);
                 break;
 
             case "sell":
