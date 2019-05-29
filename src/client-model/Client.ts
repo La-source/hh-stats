@@ -1,6 +1,7 @@
 import {Battle} from "./Battle";
 import {Hero} from "./Hero";
 import {Reward} from "./Reward";
+import {Sell} from "./Sell";
 
 export type Action =
     "none" |
@@ -11,7 +12,8 @@ export type Action =
     "missionGiveGift" |
     "mission" |
     "pachinko" |
-    "upgradeCarac"
+    "upgradeCarac" |
+    "sell"
 ;
 
 export class Client {
@@ -51,6 +53,11 @@ export class Client {
      * Récompense obtenue
      */
     public reward?: Reward[] = [];
+
+    /**
+     * Objects vendu
+     */
+    public sells?: Sell[] = [];
 
     /**
      * Marqueur indiquant si un pachinko a été joué
@@ -134,6 +141,7 @@ export class Client {
         this.copyPropertyFrom(source, "lastHeroIdle");
         this.battle = this.battle.concat(source.battle);
         this.reward = this.reward.concat(source.reward);
+        this.sells = this.sells.concat(source.sells);
         this.nbMissions += source.nbMissions;
 
         if ( !this._hero ) {
@@ -161,6 +169,7 @@ export class Client {
         delete this._hero;
         this.battle = [];
         this.reward = [];
+        this.sells = [];
         this.nbMissions = 0;
 
         return this;

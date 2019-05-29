@@ -15,6 +15,7 @@ import {MissionProcess} from "./exchange-process/MissionProcess";
 import {PachinkoNextRefreshProcess} from "./exchange-process/PachinkoNextRefreshProcess";
 import {PachinkoRewardProcess} from "./exchange-process/PachinkoRewardProcess";
 import {RechargeFightProcess} from "./exchange-process/RechargeFightProcess";
+import {SellProcess} from "./exchange-process/SellProcess";
 import {ShopProcess} from "./exchange-process/ShopProcess";
 import {UpgradeCaracProcess} from "./exchange-process/UpgradeCaracProcess";
 import {Proxy} from "./proxy/Proxy";
@@ -51,6 +52,7 @@ import {StorageManager} from "./storage-manager/StorageManager";
     rm.use(new PachinkoNextRefreshProcess());
     rm.use(new HomeProcess());
     rm.use(new UpgradeCaracProcess());
+    rm.use(new SellProcess());
 
     app.listen(process.env.PORT || 3000);
 

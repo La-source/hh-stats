@@ -8,6 +8,7 @@ import {EventEntity} from "../entities/EventEntity";
 import {FetchMoneyHaremEvent} from "../entities/FetchMoneyHaremEvent";
 import {MissionEvent} from "../entities/MissionEvent";
 import {PachinkoEvent} from "../entities/PachinkoEvent";
+import {SellEvent} from "../entities/SellEvent";
 import {UpgradeCaracEvent} from "../entities/UpgradeCaracEvent";
 import {User} from "../entities/User";
 import {ExchangeListener} from "../exchange-manager/ExchangeListener";
@@ -198,6 +199,10 @@ export class StorageManager implements ExchangeListener {
                 event = new UpgradeCaracEvent(client);
                 break;
 
+            case "sell":
+                event = new SellEvent(client);
+                break;
+
             case "none":
                 // nothing
                 break;
@@ -212,7 +217,6 @@ export class StorageManager implements ExchangeListener {
             const users = event.users();
 
             if ( users.length !== 0 ) {
-                console.log(users);
                 await this.db
                     .getRepository(User)
                     .createQueryBuilder()
