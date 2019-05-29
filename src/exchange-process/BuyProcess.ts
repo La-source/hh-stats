@@ -17,7 +17,15 @@ export class BuyProcess implements ExchangeProcess {
 
         const buy = new Buy();
         buy.item = parseInt(exchange.request.body.id_item, 10);
-        buy.newSoftCurrency = parseInt(exchange.response.json.changes.soft_currency, 10);
+
+        if ( exchange.response.json.changes.soft_currency ) {
+            buy.newSoftCurrency = parseInt(exchange.response.json.changes.soft_currency, 10);
+        }
+
+        if ( exchange.response.json.changes.hard_currency ) {
+            buy.newHardCurrency = parseInt(exchange.response.json.changes.hard_currency, 10);
+        }
+
         client.action = "buy";
         client.buys.push(buy);
     }

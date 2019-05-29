@@ -1,6 +1,9 @@
 <% if ( reward.softCurrency !== 0 ) { %>
     +<%= reward.softCurrency %>$<br />
 <% } %>
+<% if ( reward.hardCurrency !== 0 ) { %>
+    +<%= reward.hardCurrency %> koban<br />
+<% } %>
 <% if ( reward.leaguePoints !== 0 ) { %>
     +<%= reward.leaguePoints %> points de league<br />
 <% } %>

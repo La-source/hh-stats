@@ -9,6 +9,9 @@ export class BuyEvent extends EventEntity {
     public softCurrency: number = 0;
 
     @Column()
+    public hardCurrency: number = 0;
+
+    @Column()
     public nbItems: number;
 
     @Column("simple-array")
@@ -23,7 +26,9 @@ export class BuyEvent extends EventEntity {
             this.nbItems = client.buys.length;
             this.items = client.buys.map(buy => buy.item);
             this.softCurrency = Math.min(...client.buys.map(buy =>
-                buy.newSoftCurrency)) - client.lastHeroIdle.softCurrency;
+                buy.newSoftCurrency ? buy.newSoftCurrency : Infinity)) - client.lastHeroIdle.softCurrency;
+            this.hardCurrency = Math.min(...client.buys.map(buy =>
+                buy.newHardCurrency ? buy.newHardCurrency : Infinity)) - client.lastHeroIdle.hardCurrency;
         }
     }
 }
