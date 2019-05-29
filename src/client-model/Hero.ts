@@ -16,13 +16,19 @@ export class Hero {
 
     constructor(source?: any) {
         if ( source ) {
-            this.id = source.id;
-            this.softCurrency = source.soft_currency;
-            this.hardCurrency = source.hard_currency;
-            this.energyQuest = source.energy_quest;
-            this.xp = source.xp;
-            this.level = source.level;
-            this.name = source.Name;
+            this.copyProperty("id", "id", source);
+            this.copyProperty("softCurrency", "soft_currency", source);
+            this.copyProperty("hardCurrency", "hard_currency", source);
+            this.copyProperty("energyQuest", "energy_quest", source);
+            this.copyProperty("xp", "xp", source);
+            this.copyProperty("level", "level", source);
+            this.copyProperty("name", "Name", source);
+        }
+    }
+
+    private copyProperty(propertyTarget: string, propertySource: string, source: any) {
+        if ( source[propertySource] ) {
+            this[propertyTarget] = source[propertySource];
         }
     }
 }
