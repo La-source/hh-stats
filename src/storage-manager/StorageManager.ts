@@ -129,8 +129,6 @@ export class StorageManager implements ExchangeListener {
      * @param memberGuid
      */
     private async activityExpire(memberGuid: string) {
-        console.log("timeout activity", memberGuid, new Date());
-
         const client = new Client(await this.redisAsync.get(memberGuid));
         await this.persist(client);
         await this.registerClient(client.clear());

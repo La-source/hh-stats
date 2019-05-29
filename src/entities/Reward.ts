@@ -6,6 +6,9 @@ export class Reward {
     public softCurrency: number = 0;
 
     @Column()
+    public hardCurrency: number = 0;
+
+    @Column()
     public victoryPoints: number = 0;
 
     @Column()
@@ -33,6 +36,10 @@ export class Reward {
         if ( reward.hero ) {
             if ( reward.hero.softCurrency ) {
                 this.softCurrency += reward.hero.softCurrency;
+            }
+
+            if ( reward.hero.hardCurrency ) {
+                this.hardCurrency += reward.hero.hardCurrency;
             }
 
             if ( reward.hero.victoryPoints ) {

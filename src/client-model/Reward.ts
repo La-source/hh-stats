@@ -1,6 +1,7 @@
 
 interface HeroReward {
     softCurrency?: number;
+    hardCurrency?: number;
     victoryPoints?: number;
     xp?: number;
     leaguePoints?: number;
@@ -85,6 +86,10 @@ export class Reward {
 
         if ( hero.soft_currency ) {
             this.hero.softCurrency = hero.soft_currency;
+        }
+
+        if ( hero.hard_currency ) {
+            this.hero.hardCurrency = hero.hard_currency;
         }
 
         if ( hero.victory_points ) {
