@@ -12,7 +12,7 @@ export class BuyEvent extends EventEntity {
     public nbItems: number;
 
     @Column("simple-array")
-    public items: number[] = [];
+    public items: number[];
 
     constructor(client?: Client) {
         super();
@@ -21,14 +21,9 @@ export class BuyEvent extends EventEntity {
             this.event = new Event();
             this.event.type = TypeEvent.buy;
             this.nbItems = client.buys.length;
-            let currentSoftCurrency: number;
-
-            for ( const buy of client.buys ) {
-                currentSoftCurrency = buy.newSoftCurrency;
-                this.items.push(buy.item);
-            }
-
-            this.softCurrency = currentSoftCurrency - client.lastHeroIdle.softCurrency;
+            this.items = client.buys.map(buy => buy.item);
+            this.softCurrency = Math.min(...client.buys.map(buy =>
+                buy.newSoftCurrency)) - client.lastHeroIdle.softCurrency;
         }
     }
 }
