@@ -58,9 +58,9 @@ export class Client {
     public isPachinko?: boolean;
 
     /**
-     * Marqueur indiquant si une mission a été réalisée
+     * Nombre de mission réalisée
      */
-    public isMission?: boolean;
+    public nbMissions?: number = 0;
 
     /**
      * Marqueur indiquant si une amélioration de caractérisitque du joueur a été réalisé
@@ -134,6 +134,7 @@ export class Client {
         this.copyPropertyFrom(source, "lastHeroIdle");
         this.battle = this.battle.concat(source.battle);
         this.reward = this.reward.concat(source.reward);
+        this.nbMissions += source.nbMissions;
 
         if ( !this._hero ) {
             this._hero = source._hero;
@@ -153,10 +154,10 @@ export class Client {
     public clear(): this {
         this.action = "none";
         this.haremMoneyFetch = 0;
-        this.lastHeroIdle = this._hero;
         delete this._hero;
         this.battle = [];
         this.reward = [];
+        this.nbMissions = 0;
 
         return this;
     }

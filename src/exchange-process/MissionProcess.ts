@@ -17,6 +17,6 @@ export class MissionProcess implements ExchangeProcess {
 
         client.action = "mission";
         client.reward.push(new Reward({drops: exchange.response.json}));
-        client.isMission = true;
+        client.nbMissions++;
     }
 }

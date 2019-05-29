@@ -9,6 +9,9 @@ export class MissionEvent {
     @JoinColumn()
     public event: Event;
 
+    @Column()
+    public nbMissions: number;
+
     @Column(() => Reward)
     public reward: Reward = new Reward();
 
@@ -16,6 +19,7 @@ export class MissionEvent {
         if ( client ) {
             this.event = new Event();
             this.event.type = TypeEvent.mission;
+            this.nbMissions = client.nbMissions;
             client.reward.map(reward => this.reward.formClient(reward));
         }
     }
