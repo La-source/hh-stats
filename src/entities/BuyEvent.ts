@@ -40,6 +40,10 @@ export class BuyEvent extends EventEntity {
             }
         }
 
+        if ( numbers.length === 0 ) {
+            return 0;
+        }
+
         return Math.min(...numbers);
     }
 }
