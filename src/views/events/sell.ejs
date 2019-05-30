@@ -1,0 +1,5 @@
+Vente sur le marché<br />
++<%= event.sell.softCurrency %>$ pour <%= event.sell.nbItems %> objets vendu<br />
+<% event.sell.items.forEach(item => { %>
+    -<%= item %> (item)<br />
+<% }); %>

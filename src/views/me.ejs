@@ -44,6 +44,14 @@
             <%- include("events/leagueBattle", {event}) -%>
         <% } else if ( event.type === "mission" ) { %>
             <%- include("events/mission", {event}) -%>
+        <% } else if ( event.type === "pachinko" ) { %>
+            <%- include("events/pachinko", {event}) -%>
+        <% } else if ( event.type === "sell" ) { %>
+            <%- include("events/sell", {event}) -%>
+        <% } else if ( event.type === "buy" ) { %>
+            <%- include("events/buy", {event}) -%>
+        <% } else if ( event.type === "quest" ) { %>
+            <%- include("events/quest", {event}) -%>
         <% } else { %>
             <%= event.type %>
         <% } %>

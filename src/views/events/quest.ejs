@@ -1,0 +1,16 @@
+Avancée dans l'histoire - <%= event.quest.nbQuests %> étape(s)<br />
+<% if ( event.quest.softCurrency ) { %>
+    <%= event.quest.softCurrency %>$<br />
+<% } %>
+<% if ( event.quest.hardCurrency) { %>
+    <%= event.quest.hardCurrency %> koban<br />
+<% } %>
+<% if ( event.quest.energyQuest ) { %>
+    <%= event.quest.energyQuest %> énergie d'aventure<br />
+<% } %>
+<% if ( event.quest.xp !== 0 ) { %>
+    +<%= event.quest.xp %> XP<br />
+<% } %>
+<% if ( event.quest.girl ) { %>
+    +<%= event.quest.girl %> (fille)<br />
+<% } %>

@@ -1,0 +1,5 @@
+Achat sur le marché<br />
+<%= event.buy.softCurrency %>$ pour <%= event.buy.nbItems %> objets acheté<br />
+<% event.buy.items.forEach(item => { %>
+    +<%= item %> (item)<br />
+<% }); %>
