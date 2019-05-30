@@ -1,5 +1,6 @@
 import {Column, Entity, Index, ManyToOne, OneToOne, PrimaryGeneratedColumn} from "typeorm";
 import {BuyEvent} from "./BuyEvent";
+import {ContestEvent} from "./ContestEvent";
 import {FetchMoneyHaremEvent} from "./FetchMoneyHaremEvent";
 import {GirlUpgradeEvent} from "./GirlUpgradeEvent";
 import {MissionEvent} from "./MissionEvent";
@@ -23,6 +24,7 @@ export enum TypeEvent {
     buy = "buy",
     quest = "quest",
     girlUpgrade = "girlUpgrade",
+    contest = "contest",
 }
 
 @Entity()
@@ -69,4 +71,7 @@ export class Event {
 
     @OneToOne(() => SellEvent, sell => sell.event)
     public sell: SellEvent;
+
+    @OneToOne(() => ContestEvent, contest => contest.event)
+    public contest: ContestEvent;
 }

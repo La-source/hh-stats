@@ -7,6 +7,7 @@ import {ArenaProcess} from "./exchange-process/ArenaProcess";
 import {BattleProcess} from "./exchange-process/BattleProcess";
 import {BuyProcess} from "./exchange-process/BuyProcess";
 import {ChangeProxyUrlProcess} from "./exchange-process/ChangeProxyUrlProcess";
+import {ContestProcess} from "./exchange-process/ContestProcess";
 import {FetchMemberGuidProcess} from "./exchange-process/FetchMemberGuidProcess";
 import {HaremFetchMoneyProcess} from "./exchange-process/HaremFetchMoneyProcess";
 import {HeroProcess} from "./exchange-process/HeroProcess";
@@ -63,6 +64,7 @@ process.on("uncaughtException", err => {
     rm.use(new BuyProcess());
     rm.use(new TrollProcess());
     rm.use(new QuestProcess());
+    rm.use(new ContestProcess());
 
     app.listen(process.env.PORT || 3000);
 

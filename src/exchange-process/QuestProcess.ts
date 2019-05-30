@@ -16,10 +16,6 @@ export class QuestProcess implements ExchangeProcess {
     public withJson = true;
 
     public execute(exchange: Exchange, client: Client): void {
-        if ( exchange.request.body.class !== "Quest" || exchange.request.body.action !== "next" ) {
-            return;
-        }
-
         if ( exchange.response.json.next_step
             && exchange.response.json.next_step.win
             && exchange.response.json.next_step.win.constructor === Array ) {

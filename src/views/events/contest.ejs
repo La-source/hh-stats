@@ -1,0 +1,7 @@
+<%= event.contest.nbContest %> Compét' réalisée<br />
+<% if ( event.contest.softCurrency !== 0 ) { %>
+    +<%= event.contest.softCurrency %>$<br />
+<% } %>
+<% if ( event.contest.hardCurrency !== 0 ) { %>
+    +<%= event.contest.hardCurrency %> koban<br />
+<% } %>

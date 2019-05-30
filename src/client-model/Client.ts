@@ -19,7 +19,8 @@ export type Action =
     "sell" |
     "buy" |
     "quest" |
-    "girlUpgrade"
+    "girlUpgrade" |
+    "contest"
 ;
 
 export class Client {
@@ -74,6 +75,11 @@ export class Client {
      * Quêtes réalisée
      */
     public quests?: Quest[] = [];
+
+    /**
+     * Competition réalisée
+     */
+    public nbContest: number = 0;
 
     /**
      * Amélioration de fille
@@ -196,6 +202,7 @@ export class Client {
         this.quests = this.quests.concat(source.quests);
         this.girlUpgrade = this.girlUpgrade.concat(source.girlUpgrade);
         this.nbMissions += source.nbMissions;
+        this.nbContest += source.nbContest;
 
         if ( !this._hero ) {
             this._hero = source._hero;
@@ -227,6 +234,7 @@ export class Client {
         this.quests = [];
         this.girlUpgrade = [];
         this.nbMissions = 0;
+        this.nbContest = 0;
         delete this.isGirlLootable;
 
         return this;

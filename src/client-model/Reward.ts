@@ -42,19 +42,23 @@ export class Reward {
      */
     private readonly drops: any;
 
-    constructor(reward: any) {
-        if ( reward.reward && reward.reward.data ) {
-            this.data = reward.reward.data;
-        } else if ( reward.rewards && reward.rewards.data ) {
-            this.data = reward.rewards.data;
+    constructor(source?: any) {
+        if ( !source ) {
+            return;
         }
 
-        if ( reward.drops ) {
-            this.drops = reward.drops;
+        if ( source.reward && source.reward.data ) {
+            this.data = source.reward.data;
+        } else if ( source.rewards && source.rewards.data ) {
+            this.data = source.rewards.data;
         }
 
-        if ( reward.rewards && reward.rewards.heroChangesUpdate ) {
-            const heroChangesUpdate = reward.rewards.heroChangesUpdate;
+        if ( source.drops ) {
+            this.drops = source.drops;
+        }
+
+        if ( source.rewards && source.rewards.heroChangesUpdate ) {
+            const heroChangesUpdate = source.rewards.heroChangesUpdate;
 
             if ( heroChangesUpdate.level ) {
                 this.hero = {

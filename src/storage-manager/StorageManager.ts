@@ -3,6 +3,7 @@ import {Connection} from "typeorm";
 import {promisify} from "util";
 import {Client} from "../client-model/Client";
 import {BuyEvent} from "../entities/BuyEvent";
+import {ContestEvent} from "../entities/ContestEvent";
 import {Event} from "../entities/Event";
 import {EventEntity} from "../entities/EventEntity";
 import {FetchMoneyHaremEvent} from "../entities/FetchMoneyHaremEvent";
@@ -125,6 +126,7 @@ export class StorageManager implements ExchangeListener {
             .leftJoinAndSelect("event.girlUpgrade", "girlUpgrade")
             .leftJoinAndSelect("event.quest", "quest")
             .leftJoinAndSelect("event.sell", "sell")
+            .leftJoinAndSelect("event.contest", "contest")
             .where("event.userId = :id", {id: client.hero.id})
             .take(StorageManager.NB_STATS_RESULT)
             .orderBy("event.date", "DESC")
@@ -224,6 +226,10 @@ export class StorageManager implements ExchangeListener {
 
             case "girlUpgrade":
                 event = new GirlUpgradeEvent(client);
+                break;
+
+            case "contest":
+                event = new ContestEvent(client);
                 break;
 
             case "none":
