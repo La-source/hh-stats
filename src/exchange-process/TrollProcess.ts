@@ -3,7 +3,7 @@ import {ExchangeProcess} from "../exchange-manager/ExchangeProcess";
 import {Exchange} from "../proxy/Exchange";
 
 export class TrollProcess implements ExchangeProcess {
-    public withUrlContains = "pvpBattle.html?id_troll=";
+    public withUrlContains = "battle.html?id_troll=";
 
     public withCheerio = true;
 

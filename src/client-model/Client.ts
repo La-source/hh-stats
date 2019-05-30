@@ -204,7 +204,7 @@ export class Client {
         this.quests = [];
         this.girlUpgrade = [];
         this.nbMissions = 0;
-        this.isGirlLootable = false;
+        delete this.isGirlLootable;
 
         return this;
     }
