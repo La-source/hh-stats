@@ -1,6 +1,7 @@
 import {Application} from "express";
 import {Request, Response} from "express-serve-static-core";
 import * as moment from "moment";
+import * as constant from "../game-constant.json";
 import {StorageManager} from "../storage-manager/StorageManager";
 
 export class StatsManager {
@@ -14,7 +15,7 @@ export class StatsManager {
                 return;
             }
 
-            res.render("me", {events, moment});
+            res.render("me", {events, moment, constant});
         });
     }
 }

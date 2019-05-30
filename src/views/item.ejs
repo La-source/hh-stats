@@ -1,0 +1,10 @@
+<% items.forEach(item => { %>
+    <% if ( !constant.items[item] ) { %>
+        +<%= item %> (item)
+    <% } else { %>
+        <div class="item <%= constant.items[item].rarity %>">
+            <img src="<%= constant.items[item].image %>" alt="<%= constant.items[item].name %>" />
+            <div class="name"><%= constant.items[item].name %></div>
+        </div>
+    <% } %>
+<% }); %>

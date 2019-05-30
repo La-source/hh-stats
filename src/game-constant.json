@@ -1,0 +1,292 @@
+{
+  "items": {
+    "16": {
+      "name": "Magazine",
+      "rarity": "common",
+      "type": "potion",
+      "image": "https://hh.hh-content.com/pictures/items/XP1.png"
+    },
+    "46": {
+      "name": "Livre",
+      "rarity": "common",
+      "type": "potion",
+      "image": "https://hh.hh-content.com/pictures/items/XP2.png"
+    },
+    "49": {
+      "name": "Encyclopédie",
+      "rarity": "common",
+      "type": "potion",
+      "image": "https://hh.hh-content.com/pictures/items/XP3.png"
+    },
+    "52": {
+      "name": "Grimoire",
+      "rarity": "common",
+      "type": "potion",
+      "image": "https://hh.hh-content.com/pictures/items/XP4.png"
+    },
+    "17": {
+      "name": "Magazine",
+      "rarity": "rare",
+      "type": "potion",
+      "image": "https://hh.hh-content.com/pictures/items/XP1.png"
+    },
+    "47": {
+      "name": "Livre",
+      "rarity": "rare",
+      "type": "potion",
+      "image": "https://hh.hh-content.com/pictures/items/XP2.png"
+    },
+    "50": {
+      "name": "Encyclopédie",
+      "rarity": "rare",
+      "type": "potion",
+      "image": "https://hh.hh-content.com/pictures/items/XP3.png"
+    },
+    "53": {
+      "name": "Grimoire",
+      "rarity": "rare",
+      "type": "potion",
+      "image": "https://hh.hh-content.com/pictures/items/XP4.png"
+    },
+    "18": {
+      "name": "Magazine",
+      "rarity": "epic",
+      "type": "potion",
+      "image": "https://hh.hh-content.com/pictures/items/XP1.png"
+    },
+    "48": {
+      "name": "Livre",
+      "rarity": "epic",
+      "type": "potion",
+      "image": "https://hh.hh-content.com/pictures/items/XP2.png"
+    },
+    "51": {
+      "name": "Encyclopédie",
+      "rarity": "epic",
+      "type": "potion",
+      "image": "https://hh.hh-content.com/pictures/items/XP3.png"
+    },
+    "54": {
+      "name": "Grimoire",
+      "rarity": "epic",
+      "type": "potion",
+      "image": "https://hh.hh-content.com/pictures/items/XP4.png"
+    },
+    "320": {
+      "name": "Magazine",
+      "rarity": "legendary",
+      "type": "potion",
+      "image": "https://hh.hh-content.com/pictures/items/XP1.png"
+    },
+    "321": {
+      "name": "Livre",
+      "rarity": "legendary",
+      "type": "potion",
+      "image": "https://hh.hh-content.com/pictures/items/XP2.png"
+    },
+    "322": {
+      "name": "Encyclopédie",
+      "rarity": "legendary",
+      "type": "potion",
+      "image": "https://hh.hh-content.com/pictures/items/XP3.png"
+    },
+    "323": {
+      "name": "Grimoire",
+      "rarity": "legendary",
+      "type": "potion",
+      "image": "https://hh.hh-content.com/pictures/items/XP4.png"
+    },
+    "13": {
+      "name": "Fleur",
+      "rarity": "common",
+      "type": "gift",
+      "image": "https://hh.hh-content.com/pictures/items/K1.png"
+    },
+    "19": {
+      "name": "Chocolat",
+      "rarity": "common",
+      "type": "gift",
+      "image": "https://hh.hh-content.com/pictures/items/K2.png"
+    },
+    "22": {
+      "name": "Bracelet",
+      "rarity": "common",
+      "type": "gift",
+      "image": "https://hh.hh-content.com/pictures/items/K3.png"
+    },
+    "25": {
+      "name": "Lingerie",
+      "rarity": "common",
+      "type": "gift",
+      "image": "https://hh.hh-content.com/pictures/items/K4.png"
+    },
+    "14": {
+      "name": "Fleur",
+      "rarity": "rare",
+      "type": "gift",
+      "image": "https://hh.hh-content.com/pictures/items/K1.png"
+    },
+    "20": {
+      "name": "Chocolat",
+      "rarity": "rare",
+      "type": "gift",
+      "image": "https://hh.hh-content.com/pictures/items/K2.png"
+    },
+    "23": {
+      "name": "Bracelet",
+      "rarity": "rare",
+      "type": "gift",
+      "image": "https://hh.hh-content.com/pictures/items/K3.png"
+    },
+    "26": {
+      "name": "Lingerie",
+      "rarity": "rare",
+      "type": "gift",
+      "image": "https://hh.hh-content.com/pictures/items/K4.png"
+    },
+    "15": {
+      "name": "Fleur",
+      "rarity": "epic",
+      "type": "gift",
+      "image": "https://hh.hh-content.com/pictures/items/K1.png"
+    },
+    "21": {
+      "name": "Chocolat",
+      "rarity": "epic",
+      "type": "gift",
+      "image": "https://hh.hh-content.com/pictures/items/K2.png"
+    },
+    "24": {
+      "name": "Bracelet",
+      "rarity": "epic",
+      "type": "gift",
+      "image": "https://hh.hh-content.com/pictures/items/K3.png"
+    },
+    "27": {
+      "name": "Lingerie",
+      "rarity": "epic",
+      "type": "gift",
+      "image": "https://hh.hh-content.com/pictures/items/K4.png"
+    },
+    "181": {
+      "name": "Fleur",
+      "rarity": "legendary",
+      "type": "gift",
+      "image": "https://hh.hh-content.com/pictures/items/K1.png"
+    },
+    "182": {
+      "name": "Chocolat",
+      "rarity": "legendary",
+      "type": "gift",
+      "image": "https://hh.hh-content.com/pictures/items/K2.png"
+    },
+    "183": {
+      "name": "Bracelet",
+      "rarity": "legendary",
+      "type": "gift",
+      "image": "https://hh.hh-content.com/pictures/items/K3.png"
+    },
+    "184": {
+      "name": "Lingerie",
+      "rarity": "legendary",
+      "type": "gift",
+      "image": "https://hh.hh-content.com/pictures/items/K4.png"
+    },
+    "7": {
+      "name": "Racine de Ginseng",
+      "rarity": "common",
+      "type": "booster",
+      "image": "https://hh.hh-content.com/pictures/items/B1.png"
+    },
+    "10": {
+      "name": "Jujubes",
+      "rarity": "common",
+      "type": "booster",
+      "image": "https://hh.hh-content.com/pictures/items/B2.png"
+    },
+    "28": {
+      "name": "Chlorella",
+      "rarity": "common",
+      "type": "booster",
+      "image": "https://hh.hh-content.com/pictures/items/B3.png"
+    },
+    "31": {
+      "name": "Cordyceps",
+      "rarity": "common",
+      "type": "booster",
+      "image": "https://hh.hh-content.com/pictures/items/B4.png"
+    },
+    "8": {
+      "name": "Racine de Ginseng",
+      "rarity": "rare",
+      "type": "booster",
+      "image": "https://hh.hh-content.com/pictures/items/B1.png"
+    },
+    "11": {
+      "name": "Jujubes",
+      "rarity": "rare",
+      "type": "booster",
+      "image": "https://hh.hh-content.com/pictures/items/B2.png"
+    },
+    "29": {
+      "name": "Chlorella",
+      "rarity": "rare",
+      "type": "booster",
+      "image": "https://hh.hh-content.com/pictures/items/B3.png"
+    },
+    "32": {
+      "name": "Cordyceps",
+      "rarity": "rare",
+      "type": "booster",
+      "image": "https://hh.hh-content.com/pictures/items/B4.png"
+    },
+    "9": {
+      "name": "Racine de Ginseng",
+      "rarity": "epic",
+      "type": "booster",
+      "image": "https://hh.hh-content.com/pictures/items/B1.png"
+    },
+    "12": {
+      "name": "Jujubes",
+      "rarity": "epic",
+      "type": "booster",
+      "image": "https://hh.hh-content.com/pictures/items/B2.png"
+    },
+    "30": {
+      "name": "Chlorella",
+      "rarity": "epic",
+      "type": "booster",
+      "image": "https://hh.hh-content.com/pictures/items/B3.png"
+    },
+    "33": {
+      "name": "Cordyceps",
+      "rarity": "epic",
+      "type": "booster",
+      "image": "https://hh.hh-content.com/pictures/items/B4.png"
+    },
+    "316": {
+      "name": "Racine de Ginseng",
+      "rarity": "legendary",
+      "type": "booster",
+      "image": "https://hh.hh-content.com/pictures/items/B1.png"
+    },
+    "317": {
+      "name": "Jujubes",
+      "rarity": "legendary",
+      "type": "booster",
+      "image": "https://hh.hh-content.com/pictures/items/B2.png"
+    },
+    "318": {
+      "name": "Chlorella",
+      "rarity": "legendary",
+      "type": "booster",
+      "image": "https://hh.hh-content.com/pictures/items/B3.png"
+    },
+    "319": {
+      "name": "Cordyceps",
+      "rarity": "legendary",
+      "type": "booster",
+      "image": "https://hh.hh-content.com/pictures/items/B4.png"
+    }
+  }
+}

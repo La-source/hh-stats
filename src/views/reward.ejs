@@ -13,12 +13,8 @@
 <% if ( reward.xp !== 0 ) { %>
     +<%= reward.xp %> XP<br />
 <% } %>
-<% reward.girlShards.forEach(girlShards => { %>
-    <%= girlShards.idGirl %> +<%= girlShards.shards%> affection<br />
-<% }); %>
+<%- include("girl-shards", {girls: reward.girlShards}) -%>
 <% reward.girls.forEach(girl => { %>
     +<%= girl %> (fille)<br />
 <% }); %>
-<% reward.items.forEach(item => { %>
-    +<%= item %> (item)<br />
-<% }); %>
+<%- include("item", {items: reward.items}) -%>

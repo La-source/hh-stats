@@ -5,11 +5,12 @@
     <title>Statistiques personnelle</title>
     <style type="text/css">
         .event {
-            width: 300px;
+            width: 400px;
             margin: auto;
             padding: 3px;
             border: 1px solid black;
             text-align: center;
+            overflow: auto;
         }
 
         .separator {
@@ -28,6 +29,53 @@
             font-size: 0.8em;
             padding-top: 5px;
             color: gray;
+            clear: both;
+        }
+
+        .item, .girl {
+            width: 80px;
+            height: 100px;
+            margin: 5px;
+            float: left;
+        }
+
+        .item img, .girl img {
+            width: 80px;
+            height: 80px;
+        }
+
+        .item.common img {
+            background-color: #8d8e9f;
+        }
+
+        .item.rare img {
+            background-color: #23b56b;
+        }
+
+        .item.epic img {
+            background-color: #ffb244;
+        }
+
+        .item.legendary img {
+            background-color: #9150bf;
+            background-image: url(https://hh.hh-content.com/legendary.png);
+            background-size: contain;
+        }
+
+        .girl .shard {
+            float: left;
+            background-image: url(https://hh.hh-content.com/shards_s.png);
+            background-size: 40px;
+            background-repeat: no-repeat;
+            position: absolute;
+            width: 80px;
+            height: 40px;
+            padding-top: 5px;
+            font-size: 20px;
+            font-family: "Carter One", "Alegreya Sans", sans-serif;
+            font-weight: bold;
+            color: #80058b;
+            text-shadow: 1px 1px 0 #fff, -1px 1px 0 #fff, -1px -1px 0 #fff, 1px -1px 0 #fff;
         }
     </style>
 </head>
