@@ -4,7 +4,8 @@
   "description": "HentaiHeroes +",
   "main": "index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "npm run clean && gulp",
+    "clean": "rimraf dist && rimraf coverage",
     "start": "node index.js",
     "test": "tape -r ts-node/register **/*.spec.ts",
     "test:ci": "npm test | tap-junit > junit.xml",
@@ -32,7 +33,11 @@
     "@types/http-proxy": "^1.17.0",
     "@types/node": "^11.13.10",
     "@types/redis": "^2.8.12",
+    "gulp": "^4.0.2",
+    "gulp-sourcemaps": "^2.6.5",
+    "gulp-typescript": "^5.0.1",
     "nyc": "^14.1.1",
+    "rimraf": "^2.6.3",
     "ts-node": "^8.1.0",
     "tslint": "^5.16.0",
     "typescript": "^3.4.5"
