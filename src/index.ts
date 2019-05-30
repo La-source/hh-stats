@@ -41,7 +41,7 @@ process.on("uncaughtException", err => {
 
     const storage = new StorageManager(process.env.REDIS, await createConnection());
     new StatsManager(app, storage);
-    const proxy = new Proxy(app, "https://www.hentaiheroes.com/");
+    const proxy = new Proxy(app, process.env.TARGET);
     const rm = new ExchangeManager(proxy);
 
     rm.register(storage);

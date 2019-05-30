@@ -6,9 +6,8 @@ import {Exchange} from "../proxy/Exchange";
  */
 export class ChangeProxyUrlProcess implements ExchangeProcess {
     public execute(exchange: Exchange): void {
-        // TODO c'est une constante qui devrai remonter
-        exchange.response.text = exchange.response.text.replace(RegExp("https://www.hentaiheroes.com", "gi"),
-            `http://${exchange.request.req.headers.host}`,
+        exchange.response.text = exchange.response.text.replace(RegExp(process.env.TARGET, "gi"),
+            `${process.env.PROTOCOL_PROXY}://${exchange.request.req.headers.host}`,
         );
     }
 }

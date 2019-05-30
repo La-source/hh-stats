@@ -12,6 +12,8 @@ services:
       - .:/app
     environment:
       - REDIS=redis://redis
+      - TARGET=https://www.hentaiheroes.com
+      - PROTOCOL_PROXY=http
       - TZ=Europe/Paris
       - NODE_ENV=development
       - TYPEORM_CONNECTION=mysql
