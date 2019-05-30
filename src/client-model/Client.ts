@@ -151,6 +151,29 @@ export class Client {
             return false;
         }
 
+        // Vérifie qu'en cas de combat de troll, on ai pas changé de troll
+        if ( this.battle && source.battle ) {
+            let lastTroll: number;
+
+            function compare(battles: Battle[]): boolean {
+                for ( const battle of battles ) {
+                    if ( battle.idTroll ) {
+                        if ( !lastTroll ) {
+                            lastTroll = battle.idTroll;
+                        } else if ( battle.idTroll !== lastTroll ) {
+                            return false;
+                        }
+                    }
+                }
+
+                return true;
+            }
+
+            if ( !compare(this.battle) || !compare(source.battle) ) {
+                return false;
+            }
+        }
+
         if ( source.action !== "none" ) {
             this.action = source.action;
         }
