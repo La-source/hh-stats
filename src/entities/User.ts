@@ -12,16 +12,16 @@ export class User {
     @Column("datetime", {nullable: true, default: null})
     public lastActivity: Date;
 
-    @Column({nullable: true, default: true})
+    @Column("integer", {nullable: true, default: true})
     public softCurrency: number;
 
-    @Column({nullable: true, default: true})
+    @Column("mediumint", {nullable: true, default: true})
     public hardCurrency: number;
 
-    @Column({nullable: true, default: true})
+    @Column("integer", {nullable: true, default: true})
     public xp: number;
 
-    @Column({nullable: true, default: true})
+    @Column("smallint", {nullable: true, default: true})
     public level: number;
 
     constructor(hero?: Hero) {

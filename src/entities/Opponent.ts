@@ -11,34 +11,34 @@ export class Opponent {
     @ManyToOne(() => User)
     public user: User;
 
-    @Column()
+    @Column("smallint")
     public level: number;
 
-    @Column()
+    @Column("mediumint")
     public victoryPoints: number;
 
-    @Column()
+    @Column("tinyint")
     public class: 1 | 2 | 3;
 
-    @Column()
+    @Column("mediumint")
     public carac1: number;
 
-    @Column()
+    @Column("mediumint")
     public carac2: number;
 
-    @Column()
+    @Column("mediumint")
     public carac3: number;
 
-    @Column()
+    @Column("mediumint")
     public ego: number;
 
-    @Column()
+    @Column("tinyint")
     public luck: number;
 
-    @Column()
+    @Column("mediumint")
     public damage: number;
 
-    @Column()
+    @Column("boolean")
     public isWin: boolean;
 
     @ManyToOne(() => PvpBattleEvent, battle => battle.opponents)

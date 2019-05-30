@@ -5,10 +5,10 @@ import {EventEntity} from "./EventEntity";
 
 @Entity()
 export class SellEvent extends EventEntity {
-    @Column()
+    @Column("integer")
     public softCurrency: number = 0;
 
-    @Column()
+    @Column("smallint")
     public nbItems: number;
 
     @Column("simple-array")

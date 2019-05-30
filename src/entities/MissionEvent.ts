@@ -6,7 +6,7 @@ import {Reward} from "./Reward";
 
 @Entity()
 export class MissionEvent extends EventEntity {
-    @Column()
+    @Column("tinyint")
     public nbMissions: number;
 
     @Column(() => Reward)

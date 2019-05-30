@@ -2,22 +2,22 @@ import {Column} from "typeorm";
 import {Reward as RewardClient} from "../client-model/Reward";
 
 export class Reward {
-    @Column()
+    @Column("integer")
     public softCurrency: number = 0;
 
-    @Column()
+    @Column("smallint")
     public hardCurrency: number = 0;
 
-    @Column()
+    @Column("smallint")
     public victoryPoints: number = 0;
 
-    @Column()
+    @Column("smallint")
     public xp: number = 0;
 
-    @Column()
+    @Column("smallint")
     public leaguePoints: number = 0;
 
-    @Column()
+    @Column("tinyint")
     public level: number = 0;
 
     @Column("simple-array")

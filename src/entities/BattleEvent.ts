@@ -5,7 +5,7 @@ import {EventEntity} from "./EventEntity";
 import {Reward} from "./Reward";
 
 export abstract class BattleEvent extends EventEntity {
-    @Column()
+    @Column("smallint")
     public nbBattle: number;
 
     @Column(() => Reward)

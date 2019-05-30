@@ -4,10 +4,10 @@ import {BattleEvent} from "./BattleEvent";
 
 @Entity()
 export class TrollBattleEvent extends BattleEvent {
-    @Column({nullable: true, default: null})
+    @Column("tinyint", {nullable: true, default: null})
     public idTroll: number;
 
-    @Column()
+    @Column("boolean")
     public isGirlLootable: boolean = false;
 
     constructor(client?: Client) {

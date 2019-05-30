@@ -5,13 +5,13 @@ import {EventEntity} from "./EventEntity";
 
 @Entity()
 export class ContestEvent extends EventEntity {
-    @Column()
+    @Column("mediumint")
     public softCurrency: number = 0;
 
-    @Column()
+    @Column("smallint")
     public hardCurrency: number = 0;
 
-    @Column()
+    @Column("tinyint")
     public nbContest: number;
 
     constructor(client?: Client) {

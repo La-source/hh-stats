@@ -7,25 +7,25 @@ import {EventEntity} from "./EventEntity";
 
 @Entity()
 export class QuestEvent extends EventEntity {
-    @Column({nullable: true, default: null})
+    @Column("integer", {nullable: true, default: null})
     public softCurrency: number;
 
-    @Column({nullable: true, default: null})
+    @Column("smallint", {nullable: true, default: null})
     public hardCurrency: number;
 
-    @Column({nullable: true, default: null})
+    @Column("smallint", {nullable: true, default: null})
     public energyQuest: number;
 
-    @Column({nullable: true, default: null})
+    @Column("smallint", {nullable: true, default: null})
     public xp: number;
 
-    @Column({nullable: true, default: null})
+    @Column("tinyint", {nullable: true, default: null})
     public level: number;
 
-    @Column({nullable: true, default: null})
+    @Column("integer", {nullable: true, default: null})
     public girl: number;
 
-    @Column()
+    @Column("tinyint")
     public nbQuests: number;
 
     constructor(client?: Client) {

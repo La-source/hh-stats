@@ -5,13 +5,13 @@ import {EventEntity} from "./EventEntity";
 
 @Entity()
 export class BuyEvent extends EventEntity {
-    @Column()
+    @Column("integer")
     public softCurrency: number = 0;
 
-    @Column()
+    @Column("smallint")
     public hardCurrency: number = 0;
 
-    @Column()
+    @Column("tinyint")
     public nbItems: number;
 
     @Column("simple-array")

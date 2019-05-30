@@ -5,7 +5,7 @@ import {EventEntity} from "./EventEntity";
 
 @Entity()
 export class FetchMoneyHaremEvent extends EventEntity {
-    @Column()
+    @Column("mediumint")
     public softCurrency: number;
 
     constructor(client?: Client) {
