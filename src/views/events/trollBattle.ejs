@@ -1,2 +1,2 @@
-<%= event.trollBattle.nbBattle %> combat(s) vs troll <%= event.trollBattle.idTroll %><br />
+<%= event.trollBattle.nbBattle %> combat(s) vs <b><%= constant.trolls[event.trollBattle.idTroll].name %></b><br />
 <%- include("../reward", {reward: event.trollBattle.reward}) -%>

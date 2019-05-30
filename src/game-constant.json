@@ -288,5 +288,40 @@
       "type": "booster",
       "image": "https://hh.hh-content.com/pictures/items/B4.png"
     }
+  },
+  "trolls": {
+    "1": {
+      "name": "Dark Lord"
+    },
+    "2": {
+      "name": "Espion Ninja"
+    },
+    "3": {
+      "name": "Gruntt"
+    },
+    "4": {
+      "name": "Edwarda"
+    },
+    "5": {
+      "name": "Donation"
+    },
+    "6": {
+      "name": "Silvanus"
+    },
+    "7": {
+      "name": "Bremen"
+    },
+    "8": {
+      "name": "Finalmecia"
+    },
+    "9": {
+      "name": "Fredy Sih Roko Seneï"
+    },
+    "10": {
+      "name": "Karole"
+    },
+    "11": {
+      "name": "Equipage de Jackson"
+    }
   }
 }
