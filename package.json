@@ -1,10 +1,11 @@
 {
   "name": "hh-stats",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.0.1",
+  "description": "HentaiHeroes +",
   "main": "index.js",
   "scripts": {
     "build": "tsc",
+    "start": "node index.js",
     "test": "tape -r ts-node/register **/*.spec.ts",
     "test:ci": "npm test | tap-junit > junit.xml",
     "coverage": "nyc npm test",
@@ -22,7 +23,8 @@
       ".ts"
     ]
   },
-  "author": "",
+  "author": "La source <la-source@hotmail.be>",
+  "repository": "github:La-source/hh-stats",
   "license": "ISC",
   "devDependencies": {
     "@types/cheerio": "^0.22.11",

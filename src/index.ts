@@ -25,6 +25,10 @@ import {Proxy} from "./proxy/Proxy";
 import {StatsManager} from "./stats-manager/StatsManager";
 import {StorageManager} from "./storage-manager/StorageManager";
 
+process.on("uncaughtException", err => {
+    console.error("uncaughtException", err);
+});
+
 (async () => {
     // TODO wait mysql ready (docker-compose production)
 

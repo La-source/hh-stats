@@ -162,14 +162,18 @@ export class StorageManager implements ExchangeListener {
         const user = new User(client.hero);
         user.lastActivity = new Date();
 
-        await this.db
-            .getRepository(User)
-            .createQueryBuilder()
-            .insert()
-            .into(User)
-            .values(user)
-            .orUpdate({overwrite: user.overwrite()})
-            .execute();
+        try {
+            await this.db
+                .getRepository(User)
+                .createQueryBuilder()
+                .insert()
+                .into(User)
+                .values(user)
+                .orUpdate({overwrite: user.overwrite()})
+                .execute();
+        } catch (e) {
+            console.error("error persis user", e);
+        }
 
         let event: EventEntity;
 
@@ -236,24 +240,32 @@ export class StorageManager implements ExchangeListener {
             const users = event.users();
 
             if ( users.length !== 0 ) {
-                await this.db
-                    .getRepository(User)
-                    .createQueryBuilder()
-                    .insert()
-                    .into(User)
-                    .values(users)
-                    .orUpdate({
-                        overwrite: [
-                            "name",
-                            "level",
-                        ],
-                    })
-                    .execute();
+                try {
+                    await this.db
+                        .getRepository(User)
+                        .createQueryBuilder()
+                        .insert()
+                        .into(User)
+                        .values(users)
+                        .orUpdate({
+                            overwrite: [
+                                "name",
+                                "level",
+                            ],
+                        })
+                        .execute();
+                } catch (e) {
+                    console.error("error when persists users", e);
+                }
             }
 
-            await this.db
-                .manager
-                .save(event);
+            try {
+                await this.db
+                    .manager
+                    .save(event);
+            } catch (e) {
+                console.error("error when persist event", e);
+            }
         }
     }
 }

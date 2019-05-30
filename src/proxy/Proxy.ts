@@ -94,6 +94,13 @@ export class Proxy {
                         req.exchange.request = new Request(req, body);
                     });
             },
+            onError: (err, _req, res) => {
+                console.error("Erreur requête", err);
+                res.writeHead(500, {
+                    "Content-Type": "text/plain",
+                });
+                res.end("Error sur la requête");
+            },
             logLevel: "silent",
         }));
     }
