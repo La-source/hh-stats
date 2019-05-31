@@ -37,7 +37,7 @@ export class Quest {
             this.level = source.changes.level;
         }
 
-        if ( source.next_step && source.next_step.girls ) {
+        if ( source.next_step && source.next_step.win && source.next_step.win.girls ) {
             this.girl = source.next_step.girls[0].id_girl;
         }
     }
