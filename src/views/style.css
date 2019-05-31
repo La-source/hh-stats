@@ -1,0 +1,212 @@
+.event {
+    width: 550px;
+    margin: auto;
+    padding: 3px;
+    border: 1px solid black;
+    text-align: center;
+    overflow: auto;
+}
+
+.separator {
+    width: 1px;
+    height: 10px;
+    background-color: black;
+    margin: auto;
+}
+
+.separator:last-child {
+    display: none;
+}
+
+.event .date {
+    text-align: right;
+    font-size: 0.8em;
+    padding-top: 5px;
+    color: gray;
+    clear: both;
+}
+
+.item, .girl-shards {
+    width: 80px;
+    height: 100px;
+    margin: 5px;
+    float: left;
+    position: relative;
+}
+
+.item img, .girl-shards img {
+    width: 80px;
+    height: 80px;
+}
+
+.item.common img {
+    background-color: #8d8e9f;
+}
+
+.item.rare img {
+    background-color: #23b56b;
+}
+
+.item.epic img {
+    background-color: #ffb244;
+}
+
+.item.legendary img {
+    background-color: #9150bf;
+    background-image: url(https://hh.hh-content.com/legendary.png);
+    background-size: contain;
+}
+
+.girl-shards .shard {
+    float: left;
+    background-image: url(https://hh.hh-content.com/shards_s.png);
+    background-size: 40px;
+    background-repeat: no-repeat;
+    position: absolute;
+    width: 80px;
+    height: 40px;
+    padding-top: 5px;
+    font-size: 20px;
+    font-family: "Carter One", "Alegreya Sans", sans-serif;
+    font-weight: bold;
+    color: #80058b;
+    text-shadow: 1px 1px 0 #fff, -1px 1px 0 #fff, -1px -1px 0 #fff, 1px -1px 0 #fff;
+}
+
+.item .quantity {
+    width: 24px;
+    height: 24px;
+    position: absolute;
+    top: 55px;
+    background-color: #580;
+    color: white;
+    font-size: 16px;
+    font-family: "Carter One", "Alegreya Sans", sans-serif;
+    font-weight: bold;
+    border-radius: 5px;
+}
+
+.girl {
+    height: 300px;
+}
+
+.girl img {
+    height: 100%;
+}
+
+.clear {
+    clear: both;
+}
+
+.opponent {
+    width: 160px;
+    margin: 5px;
+    float: left;
+    position: relative;
+}
+
+.opponent img {
+    width: 100%;
+    border-radius: 5px;
+}
+
+.opponent .ego {
+    height: 24px;
+    padding-top: 3px;
+    padding-left: 10px;
+    background-image: linear-gradient(to right, #057, #0af);
+    position: relative;
+    top: -8px;
+    border-radius: 0px 0px 5px 5px;
+    text-align: left;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.carac {
+    width: 40px;
+    margin: 0px 6px;
+    padding-top: 30px;
+    float: left;
+    background-size: 25px;
+    background-repeat: no-repeat;
+    background-position: top center;
+    text-align: center;
+}
+
+.carac1 {
+    background-image: url(https://hh.hh-content.com/caracs/hardcore.png);
+}
+
+.carac2 {
+    background-image: url(https://hh.hh-content.com/caracs/charm.png);
+}
+
+.carac3 {
+    background-image: url(https://hh.hh-content.com/caracs/knowhow.png);
+}
+
+.class {
+    width: 25px;
+    height: 25px;
+    float: right;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.level {
+    width: 25px;
+    height: 25px;
+    padding: 2px;
+    float: left;
+    background-color: #b14;
+    border: 1px solid white;
+    border-radius: 50%;
+}
+
+.level div {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 3px solid #f70;
+    position: relative;
+    top: -2px;
+    left: -2px;
+    color: white;
+    font-weight: bold;
+}
+
+.opponent .result {
+    width: 140px;
+    position: absolute;
+    top: 90px;
+    left: 10px;
+    text-align: center;
+    font-size: 26px;
+    font-weight: bold;
+    border-radius: 10px;
+    transform: rotate(-15deg);
+    box-shadow: 0 0 7px 4px #000;
+    z-index: 3;
+}
+
+.opponent .result.success {
+    border: 2px solid #6a1;
+    color: #6a1;
+}
+
+.opponent .result.lost {
+    border: 2px solid #a00;
+    color: #a00;
+}
+
+.opponent .player {
+    width: 100%;
+    height: 180px;
+    position: absolute;
+    top: 33px;
+    background: rgba(0,0,0,.7);
+    z-index: 2;
+    border-radius: 5px;
+}
