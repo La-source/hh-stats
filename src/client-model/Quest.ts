@@ -38,7 +38,7 @@ export class Quest {
         }
 
         if ( source.next_step && source.next_step.win && source.next_step.win.girls ) {
-            this.girl = source.next_step.girls[0].id_girl;
+            this.girl = source.next_step.win.girls[0].id_girl;
         }
     }
 }
