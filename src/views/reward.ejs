@@ -1,3 +1,4 @@
+<%- include("girl", {girls: reward.girls}) -%>
 <% if ( reward.softCurrency ) { %>
     +<%= reward.softCurrency %>$<br />
 <% } %>
@@ -13,8 +14,5 @@
 <% if ( reward.xp ) { %>
     +<%= reward.xp %> XP<br />
 <% } %>
-<%- include("girl-shards", {girls: reward.girlShards}) -%>
-<% reward.getShards().forEach(girl => { %>
-    +<%= girl %> (fille)<br />
-<% }); %>
+<%- include("girl-shards", {source: reward}) -%>
 <%- include("item", {source: reward}) -%>

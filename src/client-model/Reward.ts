@@ -164,5 +164,12 @@ export class Reward {
         this.girls = this.data.girls
             .map(girl => parseInt(girl.id_girl, 10));
 
+        for ( const girl of this.data.girls ) {
+            if ( girl.value > 100 ) {
+                for ( let i = 100; i < girl.value; i++ ) {
+                    this.items.push(15);
+                }
+            }
+        }
     }
 }
