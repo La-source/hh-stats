@@ -1,10 +1,11 @@
-<% items.forEach(item => { %>
-    <% if ( !constant.items[item] ) { %>
-        +<%= item %> (item)
+<% source.getItems().forEach(item => { %>
+    <% if ( !constant.items[item.item] ) { %>
+        +<%= item %> (item.item)
     <% } else { %>
-        <div class="item <%= constant.items[item].rarity %>">
-            <img src="<%= constant.items[item].image %>" alt="<%= constant.items[item].name %>" />
-            <div class="name"><%= constant.items[item].name %></div>
+        <div class="item <%= constant.items[item.item].rarity %>">
+            <div class="quantity"><%= item.quantity %></div>
+            <img src="<%= constant.items[item.item].image %>" alt="<%= constant.items[item.item].name %>" />
+            <div class="name"><%= constant.items[item.item].name %></div>
         </div>
     <% } %>
 <% }); %>

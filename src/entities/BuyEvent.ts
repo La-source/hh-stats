@@ -1,5 +1,6 @@
 import {Column, Entity} from "typeorm";
 import {Client} from "../client-model/Client";
+import {getItems, items} from "../common/getItems";
 import {Event, TypeEvent} from "./Event";
 import {EventEntity} from "./EventEntity";
 
@@ -29,5 +30,9 @@ export class BuyEvent extends EventEntity {
             this.softCurrency = this.diff("newSoftCurrency", client.buys, client.lastHeroIdle.softCurrency);
             this.hardCurrency = this.diff("newHardCurrency", client.buys, client.lastHeroIdle.hardCurrency);
         }
+    }
+
+    public getItems(): items {
+        return getItems(this.items);
     }
 }

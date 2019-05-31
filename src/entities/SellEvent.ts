@@ -1,5 +1,6 @@
 import {Column, Entity} from "typeorm";
 import {Client} from "../client-model/Client";
+import {getItems, items} from "../common/getItems";
 import {Event, TypeEvent} from "./Event";
 import {EventEntity} from "./EventEntity";
 
@@ -27,5 +28,9 @@ export class SellEvent extends EventEntity {
                 this.items.push(sell.item);
             }
         }
+    }
+
+    public getItems(): items {
+        return getItems(this.items);
     }
 }

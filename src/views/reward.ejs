@@ -14,7 +14,7 @@
     +<%= reward.xp %> XP<br />
 <% } %>
 <%- include("girl-shards", {girls: reward.girlShards}) -%>
-<% reward.girls.forEach(girl => { %>
+<% reward.getShards().forEach(girl => { %>
     +<%= girl %> (fille)<br />
 <% }); %>
-<%- include("item", {items: reward.items}) -%>
+<%- include("item", {source: reward}) -%>

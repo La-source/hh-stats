@@ -22,7 +22,7 @@ export class StorageManager implements ExchangeListener {
     /**
      * Nombre de résultats retourné de statistiques pour un joueur
      */
-    public static NB_STATS_RESULT = 50;
+    public static NB_STATS_RESULT = 200;
 
     /**
      * Ensemble des queues de requêtes en cour de traitement

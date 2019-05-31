@@ -1,5 +1,11 @@
 import {Column} from "typeorm";
 import {Reward as RewardClient} from "../client-model/Reward";
+import {getItems, items} from "../common/getItems";
+
+export type shards = Array<{
+    idGirl: number;
+    shards: number;
+}>;
 
 export class Reward {
     @Column("integer")
@@ -27,10 +33,7 @@ export class Reward {
     public girls: number[] = [];
 
     @Column("simple-json")
-    public girlShards: Array<{
-        idGirl: number;
-        shards: number;
-    }> = [];
+    public girlShards: shards = [];
 
     public formClient(reward: RewardClient) {
         if ( reward.hero ) {
@@ -70,5 +73,28 @@ export class Reward {
         if ( reward.girlShards ) {
             this.girlShards = this.girlShards.concat(reward.girlShards);
         }
+    }
+
+    public getItems(): items {
+        return getItems(this.items);
+    }
+
+    public getShards(): shards {
+        const result: shards = [];
+
+        for ( const shard of this.girlShards ) {
+            const shardStore = result.find(_shard => _shard.idGirl === shard.idGirl);
+
+            if ( shardStore )  {
+                shardStore.shards += shard.shards;
+            } else {
+                result.push({
+                    idGirl: shard.idGirl,
+                    shards: shard.shards,
+                });
+            }
+        }
+
+        return result;
     }
 }
