@@ -53,6 +53,7 @@ export class Opponent {
         this.user.id = battle.opponent.idMember;
         this.user.name = battle.opponent.name;
         this.user.level = battle.opponent.level;
+        this.user.ico = battle.opponent.ico;
         this.isWin = battle.isWin;
         Object.assign(this, battle.opponent);
     }

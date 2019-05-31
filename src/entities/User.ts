@@ -9,6 +9,9 @@ export class User {
     @Column("varchar", {length: 60})
     public name: string;
 
+    @Column("smallint", {nullable: true, default: null})
+    public ico: number;
+
     @Column("datetime", {nullable: true, default: null})
     public lastActivity: Date;
 
@@ -35,6 +38,7 @@ export class User {
         this.copyProperty("hardCurrency", hero);
         this.copyProperty("xp", hero);
         this.copyProperty("level", hero);
+        this.copyProperty("ico", hero);
     }
 
     public overwrite(): string[] {
@@ -45,6 +49,7 @@ export class User {
             "xp",
             "level",
             "lastActivity",
+            "ico",
         ];
     }
 

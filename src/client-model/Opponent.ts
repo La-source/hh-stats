@@ -4,6 +4,8 @@ export class Opponent {
 
     public name: string;
 
+    public ico: number;
+
     public level: number;
 
     public victoryPoints: number;
@@ -29,6 +31,7 @@ export class Opponent {
 
         this.idMember = source.id_member;
         this.name = source.Name;
+        this.ico = parseInt(source.ico.match(new RegExp(`/ico/(\\d+)\\.`))[1], 10);
         this.level = source.level;
         this.victoryPoints = source.victory_points;
         this.class = source.class;
