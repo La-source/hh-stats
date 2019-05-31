@@ -102,6 +102,8 @@
             <%- include("events/quest", {event}) -%>
         <% } else if ( event.type === "contest" ) { %>
             <%- include("events/contest", {event}) -%>
+        <% } else if ( event.type === "girlUpgrade" ) { %>
+            <%- include("events/girlUpgrade", {event}) -%>
         <% } else { %>
             <%= event.type %>
         <% } %>

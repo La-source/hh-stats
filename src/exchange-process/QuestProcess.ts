@@ -18,7 +18,8 @@ export class QuestProcess implements ExchangeProcess {
     public execute(exchange: Exchange, client: Client): void {
         if ( exchange.response.json.next_step
             && exchange.response.json.next_step.win
-            && exchange.response.json.next_step.win.constructor === Array ) {
+            && exchange.response.json.next_step.win.constructor === Array
+            && exchange.response.json.next_step.win[0][0] === "grade" ) {
 
             client.action = "girlUpgrade";
             client.girlUpgrade.push(new GirlUpgrade(exchange.response.json));
