@@ -1,4 +1,5 @@
 import {Client} from "../client-model/Client";
+import {UpgradeCarac} from "../client-model/UpgradeCarac";
 import {ExchangeProcess} from "../exchange-manager/ExchangeProcess";
 import {Exchange} from "../proxy/Exchange";
 
@@ -13,8 +14,8 @@ export class UpgradeCaracProcess implements ExchangeProcess {
 
     public withJson = true;
 
-    public execute(_exchange: Exchange, client: Client): void {
+    public execute(exchange: Exchange, client: Client): void {
         client.action = "upgradeCarac";
-        client.isUpgradeCarac = true;
+        client.upgradeCarac.push(new UpgradeCarac(exchange.response.json));
     }
 }

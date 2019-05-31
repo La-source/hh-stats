@@ -5,6 +5,7 @@ import {Hero} from "./Hero";
 import {Quest} from "./Quest";
 import {Reward} from "./Reward";
 import {Sell} from "./Sell";
+import {UpgradeCarac} from "./UpgradeCarac";
 
 export type Action =
     "none" |
@@ -97,9 +98,9 @@ export class Client {
     public nbMissions?: number = 0;
 
     /**
-     * Marqueur indiquant si une amélioration de caractérisitque du joueur a été réalisé
+     * Ensemble des amélioration des caractéristiques réalisée
      */
-    public isUpgradeCarac?: boolean;
+    public upgradeCarac?: UpgradeCarac[] = [];
 
     /**
      * Gain suite aux missions quotidienne
@@ -201,6 +202,7 @@ export class Client {
         this.buys = this.buys.concat(source.buys);
         this.quests = this.quests.concat(source.quests);
         this.girlUpgrade = this.girlUpgrade.concat(source.girlUpgrade);
+        this.upgradeCarac = this.upgradeCarac.concat(source.upgradeCarac);
         this.nbMissions += source.nbMissions;
         this.nbContest += source.nbContest;
 
@@ -233,6 +235,7 @@ export class Client {
         this.buys = [];
         this.quests = [];
         this.girlUpgrade = [];
+        this.upgradeCarac = [];
         this.nbMissions = 0;
         this.nbContest = 0;
         delete this.isGirlLootable;

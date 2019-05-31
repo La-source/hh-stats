@@ -104,6 +104,8 @@
             <%- include("events/contest", {event}) -%>
         <% } else if ( event.type === "girlUpgrade" ) { %>
             <%- include("events/girlUpgrade", {event}) -%>
+        <% } else if ( event.type === "upgradeCarac" ) { %>
+            <%- include("events/upgradeCarac", {event}) -%>
         <% } else { %>
             <%= event.type %>
         <% } %>
