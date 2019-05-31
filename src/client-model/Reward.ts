@@ -33,6 +33,16 @@ export class Reward {
     public girls?: number[];
 
     /**
+     * Nouveau niveau d'argent
+     */
+    public newSoftCurrency?: number ;
+
+    /**
+     * Nouveau niveau de koban
+     */
+    public newHardCurrency?: number;
+
+    /**
      * Données brute de la récompense
      */
     private readonly data: any;
@@ -64,6 +74,14 @@ export class Reward {
                 this.hero = {
                     level: 1,
                 };
+            }
+
+            if ( heroChangesUpdate.soft_currency ) {
+                this.newSoftCurrency = heroChangesUpdate.soft_currency;
+            }
+
+            if ( heroChangesUpdate.hard_currency ) {
+                this.newHardCurrency = heroChangesUpdate.hard_currency;
             }
         }
 

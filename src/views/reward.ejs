@@ -1,16 +1,16 @@
-<% if ( reward.softCurrency !== 0 ) { %>
+<% if ( reward.softCurrency ) { %>
     +<%= reward.softCurrency %>$<br />
 <% } %>
-<% if ( reward.hardCurrency !== 0 ) { %>
+<% if ( reward.hardCurrency ) { %>
     +<%= reward.hardCurrency %> koban<br />
 <% } %>
-<% if ( reward.leaguePoints !== 0 ) { %>
+<% if ( reward.leaguePoints ) { %>
     +<%= reward.leaguePoints %> points de league<br />
 <% } %>
-<% if ( reward.victoryPoints !== 0 ) { %>
+<% if ( reward.victoryPoints ) { %>
     +<%= reward.victoryPoints %> mojo<br />
 <% } %>
-<% if ( reward.xp !== 0 ) { %>
+<% if ( reward.xp ) { %>
     +<%= reward.xp %> XP<br />
 <% } %>
 <%- include("girl-shards", {girls: reward.girlShards}) -%>
