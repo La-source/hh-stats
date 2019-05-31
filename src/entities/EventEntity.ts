@@ -1,4 +1,5 @@
 import {JoinColumn, OneToOne} from "typeorm";
+import {Client} from "../client-model/Client";
 import {Event} from "./Event";
 import {User} from "./User";
 
@@ -8,6 +9,8 @@ export class EventEntity {
     @OneToOne(() => Event, {cascade: true, primary: true})
     @JoinColumn()
     public event: Event;
+
+    constructor(_client?: Client) {}
 
     public users(): User[] {
         return [];

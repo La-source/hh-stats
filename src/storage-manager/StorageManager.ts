@@ -1,20 +1,9 @@
 import {createClient, RedisClient} from "redis";
 import {Connection} from "typeorm";
 import {promisify} from "util";
-import {Client} from "../client-model/Client";
-import {BuyEvent} from "../entities/BuyEvent";
-import {ContestEvent} from "../entities/ContestEvent";
+import {Action, Client} from "../client-model/Client";
 import {Event} from "../entities/Event";
 import {EventEntity} from "../entities/EventEntity";
-import {FetchMoneyHaremEvent} from "../entities/FetchMoneyHaremEvent";
-import {GirlUpgradeEvent} from "../entities/GirlUpgradeEvent";
-import {MissionEvent} from "../entities/MissionEvent";
-import {PachinkoEvent} from "../entities/PachinkoEvent";
-import {PvpBattleEvent} from "../entities/PvpBattleEvent";
-import {QuestEvent} from "../entities/QuestEvent";
-import {SellEvent} from "../entities/SellEvent";
-import {TrollBattleEvent} from "../entities/TrollBattleEvent";
-import {UpgradeCaracEvent} from "../entities/UpgradeCaracEvent";
 import {User} from "../entities/User";
 import {ExchangeListener} from "../exchange-manager/ExchangeListener";
 import {Queue} from "./Queue";
@@ -49,6 +38,11 @@ export class StorageManager implements ExchangeListener {
         send_command: (command: string, args?: any[]) => Promise<boolean>,
     };
 
+    /**
+     * Liste des executeur d'évènements
+     */
+    private eventsExecutor: Array<{event: new (client?: Client) => EventEntity, action: Action}> = [];
+
     constructor(readonly redisHost: string, private readonly db: Connection) {
         this.redis = createClient(redisHost);
         this.redisAsync = {
@@ -69,6 +63,13 @@ export class StorageManager implements ExchangeListener {
                         }
                     }));
             });
+    }
+
+    public use(event: new (client?: Client) => EventEntity, action: Action) {
+        this.eventsExecutor.push({
+            event,
+            action,
+        });
     }
 
     /**
@@ -179,65 +180,12 @@ export class StorageManager implements ExchangeListener {
 
         let event: EventEntity;
 
-        switch ( client.action ) {
-            case "fetchHaremMoney":
-                event = new FetchMoneyHaremEvent(client);
-                break;
+        const eventExecutor = this.eventsExecutor.find(elt => elt.action === client.action);
 
-            case "arenaBattle":
-                event = new PvpBattleEvent(client);
-                break;
-
-            case "trollBattle":
-                event = new TrollBattleEvent(client);
-                break;
-
-            case "leagueBattle":
-                event = new PvpBattleEvent(client);
-                break;
-
-            case "pachinko":
-                event = new PachinkoEvent(client);
-                break;
-
-            case "mission":
-                event = new MissionEvent(client);
-                break;
-
-            case "missionGiveGift":
-                // TODO
-                break;
-
-            case "upgradeCarac":
-                event = new UpgradeCaracEvent(client);
-                break;
-
-            case "buy":
-                event = new BuyEvent(client);
-                break;
-
-            case "sell":
-                event = new SellEvent(client);
-                break;
-
-            case "quest":
-                event = new QuestEvent(client);
-                break;
-
-            case "girlUpgrade":
-                event = new GirlUpgradeEvent(client);
-                break;
-
-            case "contest":
-                event = new ContestEvent(client);
-                break;
-
-            case "none":
-                // nothing
-                break;
-
-            default:
-                console.error(`Persist - Case "${client.action}" not supported`);
+        if ( !eventExecutor && client.action !== "none" ) {
+            console.error(`Persist - Case "${client.action}" not supported`);
+        } else if ( eventExecutor ) {
+            event = new eventExecutor.event(client);
         }
 
         if ( event ) {

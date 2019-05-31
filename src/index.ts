@@ -2,6 +2,17 @@ import * as cookieParser from "cookie-parser";
 import * as express from "express";
 import "reflect-metadata";
 import {createConnection} from "typeorm";
+import {BuyEvent} from "./entities/BuyEvent";
+import {ContestEvent} from "./entities/ContestEvent";
+import {FetchMoneyHaremEvent} from "./entities/FetchMoneyHaremEvent";
+import {GirlUpgradeEvent} from "./entities/GirlUpgradeEvent";
+import {MissionEvent} from "./entities/MissionEvent";
+import {PachinkoEvent} from "./entities/PachinkoEvent";
+import {PvpBattleEvent} from "./entities/PvpBattleEvent";
+import {QuestEvent} from "./entities/QuestEvent";
+import {SellEvent} from "./entities/SellEvent";
+import {TrollBattleEvent} from "./entities/TrollBattleEvent";
+import {UpgradeCaracEvent} from "./entities/UpgradeCaracEvent";
 import {ExchangeManager} from "./exchange-manager/ExchangeManager";
 import {ArenaProcess} from "./exchange-process/ArenaProcess";
 import {BattleProcess} from "./exchange-process/BattleProcess";
@@ -65,6 +76,21 @@ process.on("uncaughtException", err => {
     rm.use(new TrollProcess());
     rm.use(new QuestProcess());
     rm.use(new ContestProcess());
+
+    storage.use(FetchMoneyHaremEvent, "fetchHaremMoney");
+    storage.use(PvpBattleEvent, "arenaBattle");
+    storage.use(TrollBattleEvent, "trollBattle");
+    storage.use(PvpBattleEvent, "leagueBattle");
+    storage.use(PachinkoEvent, "pachinko");
+    storage.use(MissionEvent, "mission");
+    storage.use(UpgradeCaracEvent, "upgradeCarac");
+    storage.use(BuyEvent, "buy");
+    storage.use(SellEvent, "sell");
+    storage.use(QuestEvent, "quest");
+    storage.use(GirlUpgradeEvent, "girlUpgrade");
+    storage.use(ContestEvent, "contest");
+    // TODO
+    // storage.use( , "missionGiveGift");
 
     app.listen(process.env.PORT || 3000);
 
