@@ -26,24 +26,8 @@ export class BuyEvent extends EventEntity {
             this.nbItems = client.buys.length;
             this.items = client.buys.map(buy => buy.item);
 
-            this.softCurrency = this.min("newSoftCurrency", client.buys) - client.lastHeroIdle.softCurrency;
-            this.hardCurrency = this.min("newHardCurrency", client.buys) - client.lastHeroIdle.hardCurrency;
+            this.softCurrency = this.diff("newSoftCurrency", client.buys, client.lastHeroIdle.softCurrency);
+            this.hardCurrency = this.diff("newHardCurrency", client.buys, client.lastHeroIdle.hardCurrency);
         }
-    }
-
-    private min(property: string, source: any[]): number {
-        const numbers: number[] = [];
-
-        for ( const buy of source ) {
-            if ( buy[property] ) {
-                numbers.push(buy[property]);
-            }
-        }
-
-        if ( numbers.length === 0 ) {
-            return 0;
-        }
-
-        return Math.min(...numbers);
     }
 }

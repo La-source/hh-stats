@@ -23,24 +23,8 @@ export class PachinkoEvent extends EventEntity {
             this.event.type = TypeEvent.pachinko;
             client.reward.map(reward => this.reward.formClient(reward));
 
-            this.softCurrency = this.min("newSoftCurrency", client.reward) - client.lastHeroIdle.softCurrency;
-            this.hardCurrency = this.min("newHardCurrency", client.reward) - client.lastHeroIdle.hardCurrency;
+            this.softCurrency = this.diff("newSoftCurrency", client.reward, client.lastHeroIdle.softCurrency);
+            this.hardCurrency = this.diff("newHardCurrency", client.reward, client.lastHeroIdle.hardCurrency);
         }
-    }
-
-    private min(property: string, source: any[]): number {
-        const numbers: number[] = [];
-
-        for ( const reward of source ) {
-            if ( reward[property] ) {
-                numbers.push(reward[property]);
-            }
-        }
-
-        if ( numbers.length === 0 ) {
-            return 0;
-        }
-
-        return Math.min(...numbers);
     }
 }

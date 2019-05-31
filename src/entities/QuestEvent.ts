@@ -1,7 +1,5 @@
 import {Column, Entity} from "typeorm";
 import {Client} from "../client-model/Client";
-import {Hero} from "../client-model/Hero";
-import {Quest} from "../client-model/Quest";
 import {Event, TypeEvent} from "./Event";
 import {EventEntity} from "./EventEntity";
 
@@ -36,23 +34,17 @@ export class QuestEvent extends EventEntity {
             this.event.type = TypeEvent.quest;
             this.nbQuests = client.quests.length;
 
-            for ( const quest of client.quests ) {
-                this.upgradeProperty("softCurrency", quest, client.lastHeroIdle);
-                this.upgradeProperty("hardCurrency", quest, client.lastHeroIdle);
-                this.upgradeProperty("energyQuest", quest, client.lastHeroIdle);
-                this.upgradeProperty("xp", quest, client.lastHeroIdle);
-                this.upgradeProperty("level", quest, client.lastHeroIdle);
+            this.softCurrency = this.diff("softCurrency", client.quests, client.lastHeroIdle.softCurrency);
+            this.hardCurrency = this.diff("hardCurrency", client.quests, client.lastHeroIdle.hardCurrency);
+            this.energyQuest = this.diff("energyQuest", client.quests, client.lastHeroIdle.energyQuest);
+            this.xp = this.diff("xp", client.quests, client.lastHeroIdle.xp, Math.max);
+            this.level = this.diff("level", client.quests, client.lastHeroIdle.level, Math.max);
 
+            for ( const quest of client.quests ) {
                 if ( quest.girl ) {
                     this.girl = quest.girl;
                 }
             }
-        }
-    }
-
-    private upgradeProperty(property: string, quest: Quest, lastHeroIdle: Hero): void {
-        if ( quest[property] ) {
-            this[property] = quest[property] - lastHeroIdle[property];
         }
     }
 }
