@@ -128,6 +128,8 @@ export class StorageManager implements ExchangeListener {
             .leftJoinAndSelect("event.quest", "quest")
             .leftJoinAndSelect("event.sell", "sell")
             .leftJoinAndSelect("event.contest", "contest")
+            .leftJoinAndSelect("pvpBattle.opponents", "opponents")
+            .leftJoinAndSelect("opponents.user", "user")
             .where("event.userId = :id", {id: client.hero.id})
             .take(StorageManager.NB_STATS_RESULT)
             .orderBy("event.date", "DESC")

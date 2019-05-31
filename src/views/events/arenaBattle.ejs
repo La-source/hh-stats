@@ -1,2 +1,3 @@
 <%= event.pvpBattle.nbBattle %> combat(s) en pvp<br />
 <%- include("../reward", {reward: event.pvpBattle.reward}) -%>
+<%- include("../opponent", {opponents: event.pvpBattle.opponents}) -%>
