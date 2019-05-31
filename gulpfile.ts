@@ -8,6 +8,7 @@ gulp.task("default", () =>
         .pipe(createProject("tsconfig.json")())
         .pipe(gulp.src([
             "src/**/*.ejs",
+            "src/**/*.css",
             "package*.json",
             "src/game-constant.json",
         ]))
