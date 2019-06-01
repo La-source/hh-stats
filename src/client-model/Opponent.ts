@@ -29,9 +29,15 @@ export class Opponent {
             return;
         }
 
+        const ico = source.ico.match(new RegExp(`/ico/(\\d+)\\.`));
+
+        if ( ico ) {
+            this.ico = parseInt(ico[1], 10);
+        }
+
         this.idMember = source.id_member;
         this.name = source.Name;
-        this.ico = parseInt(source.ico.match(new RegExp(`/ico/(\\d+)\\.`))[1], 10);
+
         this.level = source.level;
         this.victoryPoints = source.victory_points;
         this.class = source.class;

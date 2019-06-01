@@ -1,7 +1,10 @@
-Amélioration d'une fille - <%= event.girlUpgrade.girl %> (id fille)<br />
+Amélioration d'une fille<br />
 <% if ( event.girlUpgrade.softCurrency ) { %>
     -<%= event.girlUpgrade.softCurrency %>$<br />
 <% } %>
 <% if ( event.girlUpgrade.hardCurrency) { %>
     -<%= event.girlUpgrade.hardCurrency %> koban<br />
 <% } %>
+<div class="girl-ico">
+    <img src="https://hh.hh-content.com/pictures/girls/<%= event.girlUpgrade.girl %>/ico0.png" />
+</div>
