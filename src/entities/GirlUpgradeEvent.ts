@@ -21,15 +21,10 @@ export class GirlUpgradeEvent extends EventEntity {
             this.event = new Event();
             this.event.type = TypeEvent.girlUpgrade;
 
+            this.softCurrency = this.diff("newSoftCurrency", client.girlUpgrade, client.lastHeroIdle.softCurrency);
+            this.hardCurrency = this.diff("newHardCurrency", client.girlUpgrade, client.lastHeroIdle.hardCurrency);
+
             for ( const girlUpgrade of client.girlUpgrade ) {
-                if ( girlUpgrade.softCurrency ) {
-                    this.softCurrency += girlUpgrade.softCurrency;
-                }
-
-                if ( girlUpgrade.hardCurrency ) {
-                    this.hardCurrency += girlUpgrade.hardCurrency;
-                }
-
                 if ( !this.girl.includes(girlUpgrade.girl) ) {
                     this.girl.push(girlUpgrade.girl);
                 }
