@@ -207,6 +207,7 @@ export class StorageManager implements ExchangeListener {
                             overwrite: [
                                 "name",
                                 "level",
+                                "ico",
                             ],
                         })
                         .execute();
