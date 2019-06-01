@@ -4,6 +4,7 @@ import {promisify} from "util";
 import {Action, Client} from "../client-model/Client";
 import {Event} from "../entities/Event";
 import {EventEntity} from "../entities/EventEntity";
+import {Opponent} from "../entities/Opponent";
 import {User} from "../entities/User";
 import {ExchangeListener} from "../exchange-manager/ExchangeListener";
 import {Queue} from "./Queue";
@@ -107,6 +108,10 @@ export class StorageManager implements ExchangeListener {
         this.queues.delete(memberGuid);
     }
 
+    /**
+     * Renvoie l'ensemble des évènements d'un joueur
+     * @param memberGuid
+     */
     public async getMemberEvents(memberGuid: string): Promise<Event[]> {
         const client = new Client(await this.redisAsync.get(memberGuid));
 
@@ -137,6 +142,40 @@ export class StorageManager implements ExchangeListener {
             .take(StorageManager.NB_STATS_RESULT)
             .orderBy("event.date", "DESC")
             .getMany();
+    }
+
+    /**
+     * Renvoie l'historique des combats contre un joueur
+     * @param memberGuid
+     * @param opponentId
+     */
+    public async getHistoryOpponent(memberGuid: string,
+                                    opponentId?: number,
+                                    opponentName?: string): Promise<Opponent[]> {
+        const client = new Client(await this.redisAsync.get(memberGuid));
+
+        if ( !client.hero ) {
+            return;
+        }
+
+        const qb = this.db
+            .getRepository(Opponent)
+            .createQueryBuilder("opponent")
+            .innerJoinAndSelect("opponent.battle", "battle")
+            .innerJoinAndSelect("battle.event", "event")
+            .innerJoin("opponent.user", "userOpponent")
+            .where("event.user = :id", {id: client.hero.id})
+            .orderBy("event.date", "DESC")
+            .take(20)
+        ;
+
+        if ( opponentId ) {
+            qb.andWhere("userOpponent.id = :opponentId", {opponentId});
+        } else if ( opponentName ) {
+            qb.andWhere("userOpponent.name = :opponentName", {opponentName});
+        }
+
+        return qb.getMany();
     }
 
     /**

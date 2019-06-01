@@ -6,9 +6,14 @@ import {StorageManager} from "../storage-manager/StorageManager";
 
 export class StatsManager {
 
-    constructor(app: Application, storage: StorageManager) {
-        app.get("/_me", async (req: Request, res: Response) => {
-            const events = await storage.getMemberEvents(req.cookies.member_guid);
+    constructor(private readonly app: Application, private readonly storage: StorageManager) {
+        this.me();
+        this.opponentHistory();
+    }
+
+    private me(): void {
+        this.app.get("/_me", async (req: Request, res: Response) => {
+            const events = await this.storage.getMemberEvents(req.cookies.member_guid);
 
             if ( !events ) {
                 res.end("no results");
@@ -16,6 +21,19 @@ export class StatsManager {
             }
 
             res.render("me", {events, moment, constant});
+        });
+    }
+
+    private opponentHistory(): void {
+        this.app.get("/_opponentHistory", async (req: Request, res: Response) => {
+            const opponents = await this.storage
+                .getHistoryOpponent(
+                    req.cookies.member_guid,
+                    parseInt(req.query.opponentId, 10),
+                    req.query.opponentName);
+
+            res.setHeader("Content-Type", "application/json");
+            res.end(JSON.stringify(opponents));
         });
     }
 }

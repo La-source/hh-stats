@@ -9,6 +9,7 @@ gulp.task("default", () =>
         .pipe(gulp.src([
             "src/**/*.ejs",
             "src/**/*.css",
+            "src/**/*.js",
             "package*.json",
             "src/game-constant.json",
         ]))

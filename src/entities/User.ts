@@ -1,4 +1,4 @@
-import {Column, Entity, PrimaryColumn} from "typeorm";
+import {Column, Entity, Index, PrimaryColumn} from "typeorm";
 import {Hero} from "../client-model/Hero";
 
 @Entity()
@@ -6,6 +6,7 @@ export class User {
     @PrimaryColumn()
     public id: number;
 
+    @Index()
     @Column("varchar", {length: 60})
     public name: string;
 

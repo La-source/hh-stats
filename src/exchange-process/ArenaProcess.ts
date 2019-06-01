@@ -1,9 +1,12 @@
+import {readFileSync} from "fs";
 import * as moment from "moment";
 import {Script} from "vm";
 import {Client} from "../client-model/Client";
 import {ExchangeProcess} from "../exchange-manager/ExchangeProcess";
 import {findScript} from "../exchange-manager/findScript";
 import {Exchange} from "../proxy/Exchange";
+
+const arenaJs = readFileSync(__dirname + "/../views/arena.js");
 
 export class ArenaProcess implements ExchangeProcess {
     public withUrlContains = "arena.html";
@@ -37,5 +40,10 @@ export class ArenaProcess implements ExchangeProcess {
             client.arenaNextRefresh = moment()
                 .add(parseInt(data.timer, 10), "s").toDate();
         } catch (e) {}
+
+        exchange.response.$("body").append(`<script src="https://unpkg.com/popper.js@1"></script>
+            <script src="https://unpkg.com/tippy.js@4"></script>
+            <script src="https://unpkg.com/moment@2"></script>
+            <script type="text/javascript">${arenaJs}</script>`);
     }
 }
