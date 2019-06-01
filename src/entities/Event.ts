@@ -4,6 +4,7 @@ import {ContestEvent} from "./ContestEvent";
 import {FetchMoneyHaremEvent} from "./FetchMoneyHaremEvent";
 import {GirlUpgradeEvent} from "./GirlUpgradeEvent";
 import {MissionEvent} from "./MissionEvent";
+import {MissionGiftEvent} from "./MissionGiftEvent";
 import {PachinkoEvent} from "./PachinkoEvent";
 import {PvpBattleEvent} from "./PvpBattleEvent";
 import {QuestEvent} from "./QuestEvent";
@@ -19,6 +20,7 @@ export enum TypeEvent {
     leagueBattle = "leagueBattle",
     pachinko = "pachinko",
     mission = "mission",
+    missionGift = "missionGift",
     upgradeCarac = "upgradeCarac",
     sell = "sell",
     buy = "buy",
@@ -53,6 +55,9 @@ export class Event {
 
     @OneToOne(() => MissionEvent, mission => mission.event)
     public mission: MissionEvent;
+
+    @OneToOne(() => MissionGiftEvent, missionGift => missionGift.event)
+    public missionGift: MissionGiftEvent;
 
     @OneToOne(() => PachinkoEvent, pachinko => pachinko.event)
     public pachinko: PachinkoEvent;

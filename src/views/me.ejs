@@ -34,6 +34,8 @@
             <%- include("events/girlUpgrade", {event}) -%>
         <% } else if ( event.type === "upgradeCarac" ) { %>
             <%- include("events/upgradeCarac", {event}) -%>
+        <% } else if ( event.type === "missionGift" ) { %>
+            <%- include("events/missionGift", {event}) -%>
         <% } else { %>
             <%= event.type %>
         <% } %>

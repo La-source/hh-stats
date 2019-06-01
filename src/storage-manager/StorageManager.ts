@@ -130,6 +130,7 @@ export class StorageManager implements ExchangeListener {
             .leftJoinAndSelect("event.quest", "quest")
             .leftJoinAndSelect("event.sell", "sell")
             .leftJoinAndSelect("event.contest", "contest")
+            .leftJoinAndSelect("event.missionGift", "missionGift")
             .leftJoinAndSelect("pvpBattle.opponents", "opponents")
             .leftJoinAndSelect("opponents.user", "user")
             .where("event.userId = :id", {id: client.hero.id})

@@ -7,6 +7,7 @@ import {ContestEvent} from "./entities/ContestEvent";
 import {FetchMoneyHaremEvent} from "./entities/FetchMoneyHaremEvent";
 import {GirlUpgradeEvent} from "./entities/GirlUpgradeEvent";
 import {MissionEvent} from "./entities/MissionEvent";
+import {MissionGiftEvent} from "./entities/MissionGiftEvent";
 import {PachinkoEvent} from "./entities/PachinkoEvent";
 import {PvpBattleEvent} from "./entities/PvpBattleEvent";
 import {QuestEvent} from "./entities/QuestEvent";
@@ -89,8 +90,7 @@ process.on("uncaughtException", err => {
     storage.use(QuestEvent, "quest");
     storage.use(GirlUpgradeEvent, "girlUpgrade");
     storage.use(ContestEvent, "contest");
-    // TODO
-    // storage.use( , "missionGiveGift");
+    storage.use(MissionGiftEvent, "missionGiveGift");
 
     app.listen(process.env.PORT || 3000);
 
