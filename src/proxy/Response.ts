@@ -76,6 +76,10 @@ export class Response {
      * Renvoie le résultat de la réponse après traitement
      */
     public get result(): string|Buffer {
+        if ( this._$ ) {
+            return this._$.html();
+        }
+
         if ( this._text ) {
             return this._text;
         }
