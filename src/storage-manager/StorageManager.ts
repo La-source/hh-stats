@@ -114,6 +114,8 @@ export class StorageManager implements ExchangeListener {
             return;
         }
 
+        await this.persist(client);
+
         return this.db
             .getRepository(Event)
             .createQueryBuilder("event")
