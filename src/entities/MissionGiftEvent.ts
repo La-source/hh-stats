@@ -6,7 +6,7 @@ import {EventEntity} from "./EventEntity";
 @Entity()
 export class MissionGiftEvent extends EventEntity {
     @Column("smallint")
-    public hardCurrency: number;
+    public hardCurrency: number = 0;
 
     constructor(client?: Client) {
         super();
@@ -14,7 +14,10 @@ export class MissionGiftEvent extends EventEntity {
         if ( client ) {
             this.event = new Event();
             this.event.type = TypeEvent.missionGift;
-            this.hardCurrency = client.gift;
+
+            if ( client.gift ) {
+                this.hardCurrency = client.gift;
+            }
         }
     }
 }
