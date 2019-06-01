@@ -114,7 +114,7 @@ export class StorageManager implements ExchangeListener {
             return;
         }
 
-        await this.persist(client);
+        await this.persistClear(client);
 
         return this.db
             .getRepository(Event)
@@ -143,8 +143,11 @@ export class StorageManager implements ExchangeListener {
      * Callback appelé lorsque le timeout de l'utilisateur est atteins
      * @param memberGuid
      */
-    private async activityExpire(memberGuid: string) {
-        const client = new Client(await this.redisAsync.get(memberGuid));
+    private async activityExpire(memberGuid: string): Promise<void> {
+        return this.persistClear(new Client(await this.redisAsync.get(memberGuid)));
+    }
+
+    private async persistClear(client: Client): Promise<void> {
         await this.persist(client);
         await this.registerClient(client.clear());
     }
