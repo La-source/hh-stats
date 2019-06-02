@@ -37,6 +37,6 @@ export class HomeProcess implements ExchangeProcess {
         } catch (e) {}
 
         exchange.response.$("body").append(`<style type="text/css">${homeCss}</style>`);
-        exchange.response.$("#homepage").append(`<a id="hhplus" href="/_me" class="hh_logo">HH+</a>`);
+        exchange.response.$("#homepage").append(`<a id="hhplus" href="/_history" class="hh_logo">HH+</a>`);
     }
 }

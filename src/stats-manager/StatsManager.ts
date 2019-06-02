@@ -8,12 +8,12 @@ import {StorageManager} from "../storage-manager/StorageManager";
 export class StatsManager {
 
     constructor(private readonly app: Application, private readonly storage: StorageManager) {
-        this.me();
+        this.historyPlayer();
         this.opponentHistory();
     }
 
-    private me(): void {
-        this.app.get("/_me", async (req: Request, res: Response) => {
+    private historyPlayer(): void {
+        this.app.get("/_history", async (req: Request, res: Response) => {
             const [events, sum, background] = await Promise.all([
                 this.storage.getMemberEvents(req.cookies.member_guid),
                 this.storage.getSum(req.cookies.member_guid),
@@ -26,7 +26,7 @@ export class StatsManager {
                 return;
             }
 
-            res.render("me", {
+            res.render("history", {
                 events,
                 sum: {today, yesterday, lastWeek},
                 moment,
