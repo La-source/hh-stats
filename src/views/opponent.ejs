@@ -12,10 +12,10 @@
         <span class="class carac<%= opponent.class %>"></span>
         <div class="player"></div>
         <img src="https://hh.hh-content.com/pictures/hero/ico/<%= !opponent.user.ico ? 34 : opponent.user.ico %>.jpg" />
-        <div class="ego">Ego <%= opponent.ego %></div>
-        <div class="carac carac1"><%= opponent.carac1 %></div>
-        <div class="carac carac2"><%= opponent.carac2 %></div>
-        <div class="carac carac3"><%= opponent.carac3 %></div>
+        <div class="ego">Ego <%= formatNumber(opponent.ego) %></div>
+        <div class="carac carac1"><%= formatNumber(opponent.carac1) %></div>
+        <div class="carac carac2"><%= formatNumber(opponent.carac2) %></div>
+        <div class="carac carac3"><%= formatNumber(opponent.carac3) %></div>
     </div>
     <% }); %>
 <% } %>

@@ -198,6 +198,7 @@ export class StorageManager implements ExchangeListener {
             result.profit = result.harem
                 + result.sell
                 + result.pvp
+                + result.troll
                 + result.mission
                 + result.contest;
             result.dispense = result.pachinko

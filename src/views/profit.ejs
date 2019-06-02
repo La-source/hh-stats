@@ -11,6 +11,10 @@
         <td>Gain en arène</td>
         <td><%= formatNumber(source.pvp) %></td>
     </tr><% } %>
+    <% if ( source.troll !== 0 ) { %><tr>
+        <td>Gain sur les boss</td>
+        <td><%= formatNumber(source.troll) %></td>
+    </tr><% } %>
     <% if ( source.mission !== 0 ) { %><tr>
         <td>Récompense de mission</td>
         <td><%= formatNumber(source.mission) %></td>
