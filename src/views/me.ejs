@@ -2,74 +2,81 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, minimum-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
     <title>Statistiques personnelle</title>
     <style type="text/css"><%- include("style.css") -%></style>
 </head>
 <body>
-    <a href="/home.html">Accueil</a>
+    <header>
+        <a class="hh_logo" href="/home.html">Accueil</a>
+    </header>
 
-    <table id="sum">
-        <tr>
-            <th></th>
-            <th>Gain</th>
-            <th>Dépense</th>
-            <th>Total</th>
-        </tr>
-        <tr class="today">
-            <th>Aujourd'hui</th>
-            <td class="profit"><%= formatNumber(sum.today.profit) %></td>
-            <td class="dispense"><%= formatNumber(sum.today.dispense) %></td>
-            <td><%= formatNumber(sum.today.profit + sum.today.dispense) %></td>
-        </tr>
-        <tr class="yesterday">
-            <th>Hier</th>
-            <td class="profit"><%= formatNumber(sum.yesterday.profit) %></td>
-            <td class="dispense"><%= formatNumber(sum.yesterday.dispense) %></td>
-            <td><%= formatNumber(sum.yesterday.profit + sum.yesterday.dispense) %></td>
-        </tr>
-        <tr class="lastWeek">
-            <th>Les 7 derniers jours</th>
-            <td class="profit"><%= formatNumber(sum.lastWeek.profit) %></td>
-            <td class="dispense"><%= formatNumber(sum.lastWeek.dispense) %></td>
-            <td><%= formatNumber(sum.lastWeek.profit + sum.lastWeek.dispense) %></td>
-        </tr>
-    </table>
+    <section id="main">
+        <table id="sum">
+            <tr>
+                <th></th>
+                <th>Gain</th>
+                <th>Dépense</th>
+                <th>Total</th>
+            </tr>
+            <tr class="today">
+                <th>Aujourd'hui</th>
+                <td class="profit"><%= formatNumber(sum.today.profit) %></td>
+                <td class="dispense"><%= formatNumber(sum.today.dispense) %></td>
+                <td><%= formatNumber(sum.today.profit + sum.today.dispense) %></td>
+            </tr>
+            <tr class="yesterday">
+                <th>Hier</th>
+                <td class="profit"><%= formatNumber(sum.yesterday.profit) %></td>
+                <td class="dispense"><%= formatNumber(sum.yesterday.dispense) %></td>
+                <td><%= formatNumber(sum.yesterday.profit + sum.yesterday.dispense) %></td>
+            </tr>
+            <tr class="lastWeek">
+                <th>Les 7 derniers jours</th>
+                <td class="profit"><%= formatNumber(sum.lastWeek.profit) %></td>
+                <td class="dispense"><%= formatNumber(sum.lastWeek.dispense) %></td>
+                <td><%= formatNumber(sum.lastWeek.profit + sum.lastWeek.dispense) %></td>
+            </tr>
+        </table>
 
-    <% events.forEach(event => {%>
-    <div class="event">
-        <% if ( event.type === "fetchHaremMoney" ) { %>
-            <%- include("events/fetchHaremMoney", {event}) -%>
-        <% } else if ( event.type === "arenaBattle" ) { %>
-            <%- include("events/arenaBattle", {event}) -%>
-        <% } else if ( event.type === "trollBattle" ) { %>
-            <%- include("events/trollBattle", {event}) -%>
-        <% } else if ( event.type === "leagueBattle" ) { %>
-            <%- include("events/leagueBattle", {event}) -%>
-        <% } else if ( event.type === "mission" ) { %>
-            <%- include("events/mission", {event}) -%>
-        <% } else if ( event.type === "pachinko" ) { %>
-            <%- include("events/pachinko", {event}) -%>
-        <% } else if ( event.type === "sell" ) { %>
-            <%- include("events/sell", {event}) -%>
-        <% } else if ( event.type === "buy" ) { %>
-            <%- include("events/buy", {event}) -%>
-        <% } else if ( event.type === "quest" ) { %>
-            <%- include("events/quest", {event}) -%>
-        <% } else if ( event.type === "contest" ) { %>
-            <%- include("events/contest", {event}) -%>
-        <% } else if ( event.type === "girlUpgrade" ) { %>
-            <%- include("events/girlUpgrade", {event}) -%>
-        <% } else if ( event.type === "upgradeCarac" ) { %>
-            <%- include("events/upgradeCarac", {event}) -%>
-        <% } else if ( event.type === "missionGift" ) { %>
-            <%- include("events/missionGift", {event}) -%>
-        <% } else { %>
-            <%= event.type %>
-        <% } %>
-        <div class="date"><%= moment(event.date).format("DD/MM - HH:mm") %></div>
-    </div>
-    <div class="separator"></div>
-    <% }); %>
+        <% events.forEach(event => {%>
+        <div class="event">
+            <% if ( event.type === "fetchHaremMoney" ) { %>
+                <%- include("events/fetchHaremMoney", {event}) -%>
+            <% } else if ( event.type === "arenaBattle" ) { %>
+                <%- include("events/arenaBattle", {event}) -%>
+            <% } else if ( event.type === "trollBattle" ) { %>
+                <%- include("events/trollBattle", {event}) -%>
+            <% } else if ( event.type === "leagueBattle" ) { %>
+                <%- include("events/leagueBattle", {event}) -%>
+            <% } else if ( event.type === "mission" ) { %>
+                <%- include("events/mission", {event}) -%>
+            <% } else if ( event.type === "pachinko" ) { %>
+                <%- include("events/pachinko", {event}) -%>
+            <% } else if ( event.type === "sell" ) { %>
+                <%- include("events/sell", {event}) -%>
+            <% } else if ( event.type === "buy" ) { %>
+                <%- include("events/buy", {event}) -%>
+            <% } else if ( event.type === "quest" ) { %>
+                <%- include("events/quest", {event}) -%>
+            <% } else if ( event.type === "contest" ) { %>
+                <%- include("events/contest", {event}) -%>
+            <% } else if ( event.type === "girlUpgrade" ) { %>
+                <%- include("events/girlUpgrade", {event}) -%>
+            <% } else if ( event.type === "upgradeCarac" ) { %>
+                <%- include("events/upgradeCarac", {event}) -%>
+            <% } else if ( event.type === "missionGift" ) { %>
+                <%- include("events/missionGift", {event}) -%>
+            <% } else { %>
+                <%= event.type %>
+            <% } %>
+            <div class="date"><%= moment(event.date).format("DD/MM - HH:mm") %></div>
+        </div>
+        <div class="separator"></div>
+        <% }); %>
+    </section>
 
     <script src="https://unpkg.com/popper.js@1"></script>
     <script src="https://unpkg.com/tippy.js@4"></script>
