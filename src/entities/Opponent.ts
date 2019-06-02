@@ -1,5 +1,6 @@
 import {Column, Entity, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
 import {Battle} from "../client-model/Battle";
+import {Club} from "./Club";
 import {PvpBattleEvent} from "./PvpBattleEvent";
 import {User} from "./User";
 
@@ -55,6 +56,13 @@ export class Opponent {
         this.user.level = battle.opponent.level;
         this.user.ico = battle.opponent.ico;
         this.isWin = battle.isWin;
+
+        if ( battle.opponent.idClub ) {
+            this.user.club = new Club();
+            this.user.club.id = battle.opponent.idClub;
+            this.user.club.name = battle.opponent.clubName;
+        }
+
         Object.assign(this, battle.opponent);
     }
 }

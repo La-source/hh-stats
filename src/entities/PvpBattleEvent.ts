@@ -1,6 +1,7 @@
 import {Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
 import {Client} from "../client-model/Client";
 import {BattleEvent} from "./BattleEvent";
+import {Club} from "./Club";
 import {Opponent} from "./Opponent";
 import {User} from "./User";
 
@@ -32,5 +33,15 @@ export class PvpBattleEvent extends BattleEvent {
         }
 
         return this.opponents.map(opponent => opponent.user);
+    }
+
+    public clubs(): Club[] {
+        if ( !this.opponents ) {
+            return [];
+        }
+
+        return this.opponents
+            .filter(opponent => opponent.user.club)
+            .map(opponent => opponent.user.club);
     }
 }

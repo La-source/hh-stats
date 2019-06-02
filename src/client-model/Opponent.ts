@@ -2,6 +2,10 @@
 export class Opponent {
     public idMember: number;
 
+    public idClub: number;
+
+    public clubName: string;
+
     public name: string;
 
     public ico: number;
@@ -37,6 +41,9 @@ export class Opponent {
 
         this.idMember = source.id_member;
         this.name = source.Name;
+
+        this.idClub = source.club.id_club;
+        this.clubName = source.club.name;
 
         this.level = source.level;
         this.victoryPoints = source.victory_points;

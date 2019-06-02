@@ -26,6 +26,10 @@ export class HeroProcess implements ExchangeProcess {
             ;
 
             client.hero = new Hero(data.Hero.infos);
+
+            if ( data.Chat_vars.CLUB_ID ) {
+                client.clubId = data.Chat_vars.CLUB_ID;
+            }
         } catch (e) {
             console.error(e);
         }

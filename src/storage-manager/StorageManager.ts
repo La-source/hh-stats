@@ -3,6 +3,7 @@ import {createClient, RedisClient} from "redis";
 import {Connection} from "typeorm";
 import {promisify} from "util";
 import {Action, Client} from "../client-model/Client";
+import {Club} from "../entities/Club";
 import {Event} from "../entities/Event";
 import {EventEntity} from "../entities/EventEntity";
 import {Opponent} from "../entities/Opponent";
@@ -312,6 +313,21 @@ export class StorageManager implements ExchangeListener {
         const user = new User(client.hero);
         user.lastActivity = new Date();
 
+        if ( client.clubId ) {
+            const club = new Club();
+            club.id = client.clubId;
+
+            await this.db
+                .getRepository(Club)
+                .createQueryBuilder()
+                .insert()
+                .values(club)
+                .orIgnore()
+                .execute();
+
+            user.club = club;
+        }
+
         try {
             await this.db
                 .getRepository(User)
@@ -337,6 +353,23 @@ export class StorageManager implements ExchangeListener {
 
         if ( event ) {
             event.event.user = user;
+
+            const clubs = event.clubs();
+
+            if ( clubs.length !== 0 ) {
+                try {
+                    await this.db
+                        .getRepository(Club)
+                        .createQueryBuilder()
+                        .insert()
+                        .into(Club)
+                        .values(clubs)
+                        .orUpdate({overwrite: ["name"]})
+                        .execute();
+                } catch (e) {
+                    console.error("error when persists clubs", e);
+                }
+            }
 
             const users = event.users();
 

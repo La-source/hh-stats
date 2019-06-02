@@ -1,5 +1,6 @@
-import {Column, Entity, Index, PrimaryColumn} from "typeorm";
+import {Column, Entity, Index, ManyToOne, PrimaryColumn} from "typeorm";
 import {Hero} from "../client-model/Hero";
+import {Club} from "./Club";
 
 @Entity()
 export class User {
@@ -28,6 +29,9 @@ export class User {
     @Column("smallint", {nullable: true, default: true})
     public level: number;
 
+    @ManyToOne(() => Club, club => club.users)
+    public club: Club;
+
     constructor(hero?: Hero) {
         if ( !hero ) {
             return;
@@ -51,6 +55,7 @@ export class User {
             "level",
             "lastActivity",
             "ico",
+            "clubId",
         ];
     }
 

@@ -128,6 +128,11 @@ export class Client {
     public background?: string;
 
     /**
+     * Identifiant du club du joueur
+     */
+    public clubId: number;
+
+    /**
      * Ensemble des caractéristique du joueur
      */
     private _hero?: Hero;
@@ -244,6 +249,7 @@ export class Client {
         this.nbMissions = 0;
         this.nbContest = 0;
         delete this.isGirlLootable;
+        delete this.clubId;
 
         return this;
     }

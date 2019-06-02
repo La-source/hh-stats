@@ -1,4 +1,5 @@
 import {JoinColumn, OneToOne} from "typeorm";
+import {Club} from "./Club";
 import {Event} from "./Event";
 import {User} from "./User";
 
@@ -10,6 +11,10 @@ export class EventEntity {
     public event: Event;
 
     public users(): User[] {
+        return [];
+    }
+
+    public clubs(): Club[] {
         return [];
     }
 
