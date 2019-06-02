@@ -1,2 +1,8 @@
 <%= event.pachinko.nbPachinko %> Pachinko<br />
+<% if ( event.pachinko.softCurrency ) { %>
+    <%= formatNumber(event.pachinko.softCurrency) %>$<br />
+<% } %>
+<% if ( event.pachinko.hardCurrency) { %>
+    <%= formatNumber(event.pachinko.hardCurrency) %> koban<br />
+<% } %>
 <%- include("../reward", {reward: event.pachinko.reward}) -%>

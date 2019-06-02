@@ -17,21 +17,21 @@
         </tr>
         <tr class="today">
             <th>Aujourd'hui</th>
-            <td class="profit"><%= sum.today.profit %></td>
-            <td class="dispense"><%= sum.today.dispense %></td>
-            <td><%= sum.today.profit + sum.today.dispense %></td>
+            <td class="profit"><%= formatNumber(sum.today.profit) %></td>
+            <td class="dispense"><%= formatNumber(sum.today.dispense) %></td>
+            <td><%= formatNumber(sum.today.profit + sum.today.dispense) %></td>
         </tr>
         <tr class="yesterday">
             <th>Hier</th>
-            <td class="profit"><%= sum.yesterday.profit %></td>
-            <td class="dispense"><%= sum.yesterday.dispense %></td>
-            <td><%= sum.yesterday.profit + sum.yesterday.dispense %></td>
+            <td class="profit"><%= formatNumber(sum.yesterday.profit) %></td>
+            <td class="dispense"><%= formatNumber(sum.yesterday.dispense) %></td>
+            <td><%= formatNumber(sum.yesterday.profit + sum.yesterday.dispense) %></td>
         </tr>
         <tr class="lastWeek">
             <th>Les 7 derniers jours</th>
-            <td class="profit"><%= sum.lastWeek.profit %></td>
-            <td class="dispense"><%= sum.lastWeek.dispense %></td>
-            <td><%= sum.lastWeek.profit + sum.lastWeek.dispense %></td>
+            <td class="profit"><%= formatNumber(sum.lastWeek.profit) %></td>
+            <td class="dispense"><%= formatNumber(sum.lastWeek.dispense) %></td>
+            <td><%= formatNumber(sum.lastWeek.profit + sum.lastWeek.dispense) %></td>
         </tr>
     </table>
 

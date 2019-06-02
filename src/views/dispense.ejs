@@ -1,22 +1,22 @@
 <table>
     <% if ( source.pachinko !== 0 ) { %><tr>
         <td>Pachinko</td>
-        <td><%= source.pachinko %></td>
+        <td><%= formatNumber(source.pachinko) %></td>
     </tr><% } %>
     <% if ( source.upgradeCarac !== 0 ) { %><tr>
         <td>Amélioration caract. de combat</td>
-        <td><%= source.upgradeCarac %></td>
+        <td><%= formatNumber(source.upgradeCarac) %></td>
     </tr><% } %>
     <% if ( source.quest !== 0 ) { %><tr>
         <td>Dépense de quête</td>
-        <td><%= source.quest %></td>
+        <td><%= formatNumber(source.quest) %></td>
     </tr><% } %>
     <% if ( source.buy !== 0 ) { %><tr>
         <td>Achat au marché</td>
-        <td><%= source.buy %></td>
+        <td><%= formatNumber(source.buy) %></td>
     </tr><% } %>
     <% if ( source.girlUpgrade !== 0 ) { %><tr>
         <td>Upgrade des fille</td>
-        <td><%= source.girlUpgrade %></td>
+        <td><%= formatNumber(source.girlUpgrade) %></td>
     </tr><% } %>
 </table>

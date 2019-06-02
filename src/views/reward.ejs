@@ -1,9 +1,9 @@
 <%- include("girl", {girls: reward.girls}) -%>
 <% if ( reward.softCurrency ) { %>
-    +<%= reward.softCurrency %>$<br />
+    +<%= formatNumber(reward.softCurrency) %>$<br />
 <% } %>
 <% if ( reward.hardCurrency ) { %>
-    +<%= reward.hardCurrency %> koban<br />
+    +<%= formatNumber(reward.hardCurrency) %> koban<br />
 <% } %>
 <% if ( reward.leaguePoints ) { %>
     +<%= reward.leaguePoints %> points de league<br />

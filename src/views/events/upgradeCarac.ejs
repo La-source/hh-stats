@@ -1,6 +1,6 @@
 Amélioration des caractéristiques de combat<br />
 <% if ( event.upgradeCarac.softCurrency ) { %>
-    <%= event.upgradeCarac.softCurrency %>$<br />
+    <%= formatNumber(event.upgradeCarac.softCurrency) %>$<br />
 <% } %>
 <% if ( event.upgradeCarac.carac1 ) { %>
     +<%= event.upgradeCarac.carac1 %> HardCore<br />

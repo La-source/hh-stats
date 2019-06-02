@@ -1,10 +1,10 @@
 Avancée dans l'histoire - <%= event.quest.nbQuests %> étape(s)<br />
 <% if ( event.quest.girl ) { %><%- include("../girl", {girls: [event.quest.girl]}) -%><% } %>
 <% if ( event.quest.softCurrency ) { %>
-    <%= event.quest.softCurrency %>$<br />
+    <%= formatNumber(event.quest.softCurrency) %>$<br />
 <% } %>
 <% if ( event.quest.hardCurrency) { %>
-    <%= event.quest.hardCurrency %> koban<br />
+    <%= formatNumber(event.quest.hardCurrency) %> koban<br />
 <% } %>
 <% if ( event.quest.energyQuest ) { %>
     <%= event.quest.energyQuest %> énergie d'aventure<br />

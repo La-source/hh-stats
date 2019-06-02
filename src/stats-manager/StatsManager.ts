@@ -1,6 +1,7 @@
 import {Application} from "express";
 import {Request, Response} from "express-serve-static-core";
 import * as moment from "moment";
+import {formatNumber} from "../common/formatNumber";
 import * as constant from "../game-constant.json";
 import {StorageManager} from "../storage-manager/StorageManager";
 
@@ -24,7 +25,7 @@ export class StatsManager {
                 return;
             }
 
-            res.render("me", {events, sum: {today, yesterday, lastWeek}, moment, constant});
+            res.render("me", {events, sum: {today, yesterday, lastWeek}, moment, constant, formatNumber});
         });
     }
 
