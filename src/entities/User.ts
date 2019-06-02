@@ -11,19 +11,19 @@ export class User {
     public name: string;
 
     @Column("smallint", {nullable: true, default: null})
-    public ico: number;
+    public ico: number = null;
 
     @Column("datetime", {nullable: true, default: null})
     public lastActivity: Date;
 
     @Column("integer", {nullable: true, default: true})
-    public softCurrency: number;
+    public softCurrency: number = null;
 
     @Column("mediumint", {nullable: true, default: true})
-    public hardCurrency: number;
+    public hardCurrency: number = null;
 
     @Column("integer", {nullable: true, default: true})
-    public xp: number;
+    public xp: number = null;
 
     @Column("smallint", {nullable: true, default: true})
     public level: number;
