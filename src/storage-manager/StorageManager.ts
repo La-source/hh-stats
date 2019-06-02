@@ -62,7 +62,7 @@ export class StorageManager implements ExchangeListener {
                 sub.subscribe("__keyevent@0__:expired", () =>
                     sub.on("message", (_channel, key) => {
                         if ( key.startsWith("activity_") ) {
-                            return this.activityExpire(key.split("_")[1]);
+                            return this.storeClient(key.split("_")[1]);
                         }
                     }));
             });
@@ -114,17 +114,9 @@ export class StorageManager implements ExchangeListener {
 
     /**
      * Renvoie l'ensemble des évènements d'un joueur
-     * @param memberGuid
+     * @param idPlayer
      */
-    public async getMemberEvents(memberGuid: string): Promise<Event[]> {
-        const client = new Client(await this.redisAsync.get(memberGuid));
-
-        if ( !client.hero ) {
-            return;
-        }
-
-        await this.persistClear(client);
-
+    public async getMemberEvents(idPlayer: number): Promise<Event[]> {
         return this.db
             .getRepository(Event)
             .createQueryBuilder("event")
@@ -142,19 +134,33 @@ export class StorageManager implements ExchangeListener {
             .leftJoinAndSelect("event.missionGift", "missionGift")
             .leftJoinAndSelect("pvpBattle.opponents", "opponents")
             .leftJoinAndSelect("opponents.user", "user")
-            .where("event.userId = :id", {id: client.hero.id})
+            .where("event.userId = :id", {id: idPlayer})
             .take(StorageManager.NB_STATS_RESULT)
             .orderBy("event.date", "DESC")
             .getMany();
     }
 
-    public async getSum(memberGuid: string): Promise<any> {
+    /**
+     * Enregistre et clear le client
+     * @param memberGuid
+     */
+    public async storeClient(memberGuid: string): Promise<number> {
         const client = new Client(await this.redisAsync.get(memberGuid));
+        let idPlayer;
 
-        if ( !client.hero ) {
-            return;
+        if ( client.hero ) {
+            idPlayer = client.hero.id;
         }
 
+        await this.persistClear(client);
+        return idPlayer;
+    }
+
+    /**
+     * Renvoie les totaux consolidé d'un joueur donné
+     * @param idPlayer
+     */
+    public async getSum(idPlayer: number): Promise<any> {
         const getQb = () => this.db
             .getRepository(Event)
             .createQueryBuilder("event")
@@ -180,7 +186,7 @@ export class StorageManager implements ExchangeListener {
             .leftJoin("event.girlUpgrade", "girlUpgrade")
             .leftJoin("event.quest", "quest")
             .leftJoin("event.contest", "contest")
-            .where("event.userId = :id", {id: client.hero.id})
+            .where("event.userId = :id", {id: idPlayer})
         ;
 
         const convert = data => {
@@ -234,6 +240,44 @@ export class StorageManager implements ExchangeListener {
     }
 
     /**
+     * Vérifie si un utilisateur peu accéder aux donnée d'un autre utilisateur
+     * @param idPlayer
+     * @param idTarget
+     */
+    public async isAccessPlayer(idPlayer: number, idTarget: number): Promise<boolean> {
+        const [player, target] = await Promise.all([
+            this.db.getRepository(User).findOne(idPlayer),
+            this.db.getRepository(User).findOne(idTarget),
+        ]);
+
+        if ( !player.club ) {
+            return false;
+        }
+
+        if ( !target.club ) {
+            return false;
+        }
+
+        return player.club.id === target.club.id;
+    }
+
+    public getMembersClub(idPlayer: number): Promise<User[]> {
+        const qb = this.db
+            .getRepository(User)
+            .createQueryBuilder("user");
+
+        return qb
+            .where("user.club = " + qb
+                .subQuery()
+                .select("user.club")
+                .from(User, "user")
+                .where("user.id = :idPlayer", {idPlayer})
+                .getQuery(),
+            )
+            .getMany();
+    }
+
+    /**
      * Renvoie l'historique des combats contre un joueur
      * @param memberGuid
      * @param opponentId
@@ -277,14 +321,6 @@ export class StorageManager implements ExchangeListener {
         }
 
         this.redisAsync.set("background", client.background);
-    }
-
-    /**
-     * Callback appelé lorsque le timeout de l'utilisateur est atteins
-     * @param memberGuid
-     */
-    private async activityExpire(memberGuid: string): Promise<void> {
-        return this.persistClear(new Client(await this.redisAsync.get(memberGuid)));
     }
 
     private async persistClear(client: Client): Promise<void> {

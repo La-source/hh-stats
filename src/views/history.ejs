@@ -11,6 +11,7 @@
 <body style="background-image: url(<%= background %>)">
     <header>
         <a class="hh_logo" href="/home.html">Accueil</a>
+        <img id="share" src="https://hh.hh-content.com/pictures/design/clubs/clubs-avatar.png" />
     </header>
 
     <section id="main">
@@ -92,6 +93,12 @@
                 placement: "bottom",
             });
         <% } %>
+
+        tippy("#share", {
+            content: `<%- include("membersClub") %>`,
+            interactive: true,
+            placement: "bottom",
+        });
     </script>
 </body>
 </html>

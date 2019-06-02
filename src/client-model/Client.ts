@@ -206,6 +206,7 @@ export class Client {
         this.copyPropertyFrom(source, "pachinkoNextRefresh");
         this.copyPropertyFrom(source, "lastHeroIdle");
         this.copyPropertyFrom(source, "isGirlLootable");
+        this.copyPropertyFrom(source, "clubId");
         this.battle = this.battle.concat(source.battle);
         this.reward = this.reward.concat(source.reward);
         this.sells = this.sells.concat(source.sells);
@@ -249,7 +250,6 @@ export class Client {
         this.nbMissions = 0;
         this.nbContest = 0;
         delete this.isGirlLootable;
-        delete this.clubId;
 
         return this;
     }

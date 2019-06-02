@@ -41,6 +41,7 @@ header {
     height: 36px;
     margin: 0 auto;
     padding-top: 4px;
+    position: relative;
 }
 
 .hh_logo {
@@ -49,6 +50,7 @@ header {
     display: block;
     width: 36px;
     height: 36px;
+    float: left;
 }
 
 .event {
@@ -287,4 +289,16 @@ header {
 
 .sum_detail td:last-child {
     text-align: right;
+}
+
+#membersClub a, #membersClub:visited {
+    color: white;
+}
+
+#share {
+    display: block;
+    width: 36px;
+    height: 36px;
+    float: left;
+    margin-left: 15px;
 }

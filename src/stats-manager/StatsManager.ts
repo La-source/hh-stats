@@ -14,10 +14,25 @@ export class StatsManager {
 
     private historyPlayer(): void {
         this.app.get("/_history", async (req: Request, res: Response) => {
-            const [events, sum, background] = await Promise.all([
-                this.storage.getMemberEvents(req.cookies.member_guid),
-                this.storage.getSum(req.cookies.member_guid),
+            const idPlayer = await this.storage.storeClient(req.cookies.member_guid);
+            let idPlayerShow: number;
+
+            if ( req.query.playerId ) {
+                idPlayerShow = parseInt(req.query.playerId, 10);
+
+                if ( !await this.storage.isAccessPlayer(idPlayer, idPlayerShow) ) {
+                    res.end("403");
+                    return;
+                }
+            } else {
+                idPlayerShow = idPlayer;
+            }
+
+            const [events, sum, background, membersClub] = await Promise.all([
+                this.storage.getMemberEvents(idPlayerShow),
+                this.storage.getSum(idPlayerShow),
                 this.storage.getBackground(),
+                this.storage.getMembersClub(idPlayer),
             ]);
             const [today, yesterday, lastWeek] = sum;
 
@@ -33,6 +48,7 @@ export class StatsManager {
                 constant,
                 formatNumber,
                 background,
+                membersClub,
             });
         });
     }

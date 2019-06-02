@@ -29,7 +29,7 @@ export class User {
     @Column("smallint", {nullable: true, default: true})
     public level: number;
 
-    @ManyToOne(() => Club, club => club.users)
+    @ManyToOne(() => Club, club => club.users, {eager: true})
     public club: Club;
 
     constructor(hero?: Hero) {
