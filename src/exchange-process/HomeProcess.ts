@@ -14,6 +14,12 @@ export class HomeProcess implements ExchangeProcess {
     public withCheerio = true;
 
     public execute(exchange: Exchange, client: Client): void {
+        const background = exchange.response.$("#bg_all img").attr("src");
+
+        if ( background ) {
+            client.background = background;
+        }
+
         const data: any = {};
         const script = findScript(exchange.response.$, `var arena_data`);
 

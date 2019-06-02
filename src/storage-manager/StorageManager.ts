@@ -93,6 +93,8 @@ export class StorageManager implements ExchangeListener {
     }
 
     public async execute(client: Client): Promise<void> {
+        this.updateBackground(client);
+
         const value = await this.redisAsync.get(client.memberGuid);
         const past = new Client(value);
 
@@ -262,6 +264,18 @@ export class StorageManager implements ExchangeListener {
         }
 
         return qb.getMany();
+    }
+
+    public getBackground(): Promise<string> {
+        return this.redisAsync.get("background");
+    }
+
+    private updateBackground(client: Client): void {
+        if ( !client.background ) {
+            return;
+        }
+
+        this.redisAsync.set("background", client.background);
     }
 
     /**

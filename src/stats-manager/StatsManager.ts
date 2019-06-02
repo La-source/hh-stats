@@ -14,9 +14,10 @@ export class StatsManager {
 
     private me(): void {
         this.app.get("/_me", async (req: Request, res: Response) => {
-            const [events, sum] = await Promise.all([
+            const [events, sum, background] = await Promise.all([
                 this.storage.getMemberEvents(req.cookies.member_guid),
                 this.storage.getSum(req.cookies.member_guid),
+                this.storage.getBackground(),
             ]);
             const [today, yesterday, lastWeek] = sum;
 
@@ -25,7 +26,14 @@ export class StatsManager {
                 return;
             }
 
-            res.render("me", {events, sum: {today, yesterday, lastWeek}, moment, constant, formatNumber});
+            res.render("me", {
+                events,
+                sum: {today, yesterday, lastWeek},
+                moment,
+                constant,
+                formatNumber,
+                background,
+            });
         });
     }
 

@@ -123,6 +123,11 @@ export class Client {
     public isGirlLootable?: boolean;
 
     /**
+     * Lien du background du jeu
+     */
+    public background?: string;
+
+    /**
      * Ensemble des caractéristique du joueur
      */
     private _hero?: Hero;
