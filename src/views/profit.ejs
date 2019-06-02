@@ -1,0 +1,22 @@
+<table>
+    <% if ( source.harem !== 0 ) { %><tr>
+        <td>Harem</td>
+        <td><%= source.harem %></td>
+    </tr><% } %>
+    <% if ( source.sell !== 0 ) { %><tr>
+        <td>Vente au marché</td>
+        <td><%= source.sell %></td>
+    </tr><% } %>
+    <% if ( source.pvp !== 0 ) { %><tr>
+        <td>Gain en arène</td>
+        <td><%= source.pvp %></td>
+    </tr><% } %>
+    <% if ( source.mission !== 0 ) { %><tr>
+        <td>Récompense de mission</td>
+        <td><%= source.mission %></td>
+    </tr><% } %>
+    <% if ( source.contest !== 0 ) { %><tr>
+        <td>Compet'</td>
+        <td><%= source.contest %></td>
+    </tr><% } %>
+</table>

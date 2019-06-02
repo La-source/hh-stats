@@ -13,14 +13,18 @@ export class StatsManager {
 
     private me(): void {
         this.app.get("/_me", async (req: Request, res: Response) => {
-            const events = await this.storage.getMemberEvents(req.cookies.member_guid);
+            const [events, sum] = await Promise.all([
+                this.storage.getMemberEvents(req.cookies.member_guid),
+                this.storage.getSum(req.cookies.member_guid),
+            ]);
+            const [today, yesterday, lastWeek] = sum;
 
             if ( !events ) {
                 res.end("no results");
                 return;
             }
 
-            res.render("me", {events, moment, constant});
+            res.render("me", {events, sum: {today, yesterday, lastWeek}, moment, constant});
         });
     }
 

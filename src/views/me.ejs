@@ -3,12 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <title>Statistiques personnelle</title>
-    <style type="text/css">
-    <%- include("style.css") -%>
-    </style>
+    <style type="text/css"><%- include("style.css") -%></style>
 </head>
 <body>
     <a href="/home.html">Accueil</a>
+
+    <table id="sum">
+        <tr>
+            <th></th>
+            <th>Gain</th>
+            <th>Dépense</th>
+            <th>Total</th>
+        </tr>
+        <tr class="today">
+            <th>Aujourd'hui</th>
+            <td class="profit"><%= sum.today.profit %></td>
+            <td class="dispense"><%= sum.today.dispense %></td>
+            <td><%= sum.today.profit + sum.today.dispense %></td>
+        </tr>
+        <tr class="yesterday">
+            <th>Hier</th>
+            <td class="profit"><%= sum.yesterday.profit %></td>
+            <td class="dispense"><%= sum.yesterday.dispense %></td>
+            <td><%= sum.yesterday.profit + sum.yesterday.dispense %></td>
+        </tr>
+        <tr class="lastWeek">
+            <th>Les 7 derniers jours</th>
+            <td class="profit"><%= sum.lastWeek.profit %></td>
+            <td class="dispense"><%= sum.lastWeek.dispense %></td>
+            <td><%= sum.lastWeek.profit + sum.lastWeek.dispense %></td>
+        </tr>
+    </table>
 
     <% events.forEach(event => {%>
     <div class="event">
@@ -45,5 +70,21 @@
     </div>
     <div class="separator"></div>
     <% }); %>
+
+    <script src="https://unpkg.com/popper.js@1"></script>
+    <script src="https://unpkg.com/tippy.js@4"></script>
+    <script type="text/javascript">
+        <% for ( const period in sum ) { %>
+            <% if ( !sum.hasOwnProperty(period) ) { continue; } %>
+            tippy("#sum .<%= period %> .profit", {
+                content: `<%- include("profit", {source: sum[period]}) %>`,
+                placement: "bottom",
+            });
+            tippy("#sum .<%= period %> .dispense", {
+                content: `<%- include("dispense", {source: sum[period]}) %>`,
+                placement: "bottom",
+            });
+        <% } %>
+    </script>
 </body>
 </html>

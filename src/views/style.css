@@ -210,3 +210,14 @@
     z-index: 2;
     border-radius: 5px;
 }
+
+#sum {
+    width: 557px;
+    margin: 0 auto 10px;
+    padding: 3px;
+    border: 1px solid grey;
+}
+
+#sum td {
+    text-align: right;
+}
