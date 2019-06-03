@@ -61,6 +61,7 @@
     "other": "%s combats contre"
   },
   "event_upgradeCarac": "Amélioration des caractéristiques de combat",
+  "event_weeklyReward": "Récompense hebdomadaire",
 
   "buy_result": {
     "one": "pour %s objet acheté",
@@ -73,6 +74,16 @@
   "carac1": "HardCore",
   "carac2": "Charme",
   "carac3": "Savoir-Faire",
+
+  "ranking_softCurrency": "Classement Argent dépensé",
+  "ranking_victoryPoints": "Classement Mojo",
+  "ranking_arena": "Classement arène",
+  "ranking_troll": "Classement vs boss",
+  "ranking_xp": "Classement Expérience",
+  "ranking_girl": "Classement Filles",
+  "ranking_carac": "Classement Stats améliorées",
+  "ranking_affection": "Classement Affection offerte",
+  "rankin_levelHarem": "Classement Niveau du harem",
 
   "dateFormat": "DD/MM - HH:mm"
 }

@@ -1,0 +1,19 @@
+<h2><%= __("event_weeklyReward") %></h2>
+<% if ( event.weeklyReward.softCurrency ) { %>
+    +<%= formatNumber(event.weeklyReward.softCurrency) %><%= __("unit_softCurrency") %><br />
+<% } %>
+<% if ( event.weeklyReward.hardCurrency ) { %>
+    +<%= formatNumber(event.weeklyReward.hardCurrency) %> <%= __("unit_hardCurrency") %><br />
+<% } %>
+<% if ( event.weeklyReward.xp ) { %>
+    +<%= event.weeklyReward.xp %> <%= __("unit_xp") %><br />
+<% } %>
+<%= __("ranking_victoryPoints") %>: <%= event.weeklyReward.rankingVictoryPoints %><br />
+<%= __("ranking_arena") %>: <%= event.weeklyReward.rankingArena %><br />
+<%= __("ranking_troll") %>: <%= event.weeklyReward.rankingTroll %><br />
+<%= __("ranking_softCurrency") %>: <%= event.weeklyReward.rankingSoftCurrency %><br />
+<%= __("ranking_xp") %>: <%= event.weeklyReward.rankingXp %><br />
+<%= __("ranking_girl") %>: <%= event.weeklyReward.rankingGirl %><br />
+<%= __("ranking_carac") %>: <%= event.weeklyReward.rankingCarac %><br />
+<%= __("ranking_affection") %>: <%= event.weeklyReward.rankingAffection %><br />
+<%= __("rankin_levelHarem") %>: <%= event.weeklyReward.rankingLevelHarem %><br />

@@ -6,6 +6,7 @@ import {Quest} from "./Quest";
 import {Reward} from "./Reward";
 import {Sell} from "./Sell";
 import {UpgradeCarac} from "./UpgradeCarac";
+import {WeeklyReward} from "./WeeklyReward";
 
 export type Action =
     "none" |
@@ -21,7 +22,8 @@ export type Action =
     "buy" |
     "quest" |
     "girlUpgrade" |
-    "contest"
+    "contest" |
+    "weeklyReward"
 ;
 
 export class Client {
@@ -131,6 +133,11 @@ export class Client {
      * Identifiant du club du joueur
      */
     public clubId: number;
+
+    /**
+     * Récompenses hebdomadaire
+     */
+    public weeklyReward?: WeeklyReward;
 
     /**
      * Ensemble des caractéristique du joueur

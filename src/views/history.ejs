@@ -70,6 +70,8 @@
                 <%- include("events/upgradeCarac", {event}) -%>
             <% } else if ( event.type === "missionGift" ) { %>
                 <%- include("events/missionGift", {event}) -%>
+            <% } else if ( event.type === "weeklyReward" ) { %>
+                <%- include("events/weeklyReward", {event}) -%>
             <% } else { %>
                 <%= event.type %>
             <% } %>

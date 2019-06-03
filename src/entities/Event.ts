@@ -12,6 +12,7 @@ import {SellEvent} from "./SellEvent";
 import {TrollBattleEvent} from "./TrollBattleEvent";
 import {UpgradeCaracEvent} from "./UpgradeCaracEvent";
 import {User} from "./User";
+import {WeeklyRewardEvent} from "./WeeklyRewardEvent";
 
 export enum TypeEvent {
     fetchHaremMoney = "fetchHaremMoney",
@@ -27,6 +28,7 @@ export enum TypeEvent {
     quest = "quest",
     girlUpgrade = "girlUpgrade",
     contest = "contest",
+    weeklyReward = "weeklyReward",
 }
 
 @Entity()
@@ -79,4 +81,7 @@ export class Event {
 
     @OneToOne(() => ContestEvent, contest => contest.event)
     public contest: ContestEvent;
+
+    @OneToOne(() => WeeklyRewardEvent, reward => reward.event)
+    public weeklyReward: WeeklyRewardEvent;
 }

@@ -44,7 +44,11 @@ export class StorageManager implements ExchangeListener {
     /**
      * Liste des executeur d'évènements
      */
-    private eventsExecutor: Array<{event: new (client?: Client) => EventEntity, action: Action}> = [];
+    private eventsExecutor: Array<{
+        event: new (client?: Client) => EventEntity,
+        action: Action,
+        join: keyof Event,
+    }> = [];
 
     constructor(readonly redisHost: string, private readonly db: Connection) {
         this.redis = createClient(redisHost);
@@ -68,10 +72,11 @@ export class StorageManager implements ExchangeListener {
             });
     }
 
-    public use(event: new (client?: Client) => EventEntity, action: Action) {
+    public use(event: new (client?: Client) => EventEntity, action: Action, join?: keyof Event) {
         this.eventsExecutor.push({
             event,
             action,
+            join,
         });
     }
 
@@ -117,21 +122,19 @@ export class StorageManager implements ExchangeListener {
      * @param idPlayer
      */
     public async getMemberEvents(idPlayer: number): Promise<Event[]> {
-        return this.db
+        const qb = this.db
             .getRepository(Event)
-            .createQueryBuilder("event")
-            .leftJoinAndSelect("event.pvpBattle", "pvpBattle")
-            .leftJoinAndSelect("event.trollBattle", "trollBattle")
-            .leftJoinAndSelect("event.fetchMoneyHarem", "fetchMoneyHarem")
-            .leftJoinAndSelect("event.mission", "mission")
-            .leftJoinAndSelect("event.pachinko", "pachinko")
-            .leftJoinAndSelect("event.upgradeCarac", "upgradeCarac")
-            .leftJoinAndSelect("event.buy", "buy")
-            .leftJoinAndSelect("event.girlUpgrade", "girlUpgrade")
-            .leftJoinAndSelect("event.quest", "quest")
-            .leftJoinAndSelect("event.sell", "sell")
-            .leftJoinAndSelect("event.contest", "contest")
-            .leftJoinAndSelect("event.missionGift", "missionGift")
+            .createQueryBuilder("event");
+
+        for ( const executor of this.eventsExecutor ) {
+            if ( !executor.join ) {
+                continue;
+            }
+
+            qb.leftJoinAndSelect(`event.${executor.join}`, executor.join);
+        }
+
+        return qb
             .leftJoinAndSelect("pvpBattle.opponents", "opponents")
             .leftJoinAndSelect("opponents.user", "user")
             .where("event.userId = :id", {id: idPlayer})
