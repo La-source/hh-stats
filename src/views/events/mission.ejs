@@ -1,3 +1,2 @@
-Récompense mission quotidienne<br />
-<%= event.mission.nbMissions %> missions réalisée<br />
+<h2><%= __n("event_mission", event.mission.nbMissions) %></h2>
 <%- include("../reward", {reward: event.mission.reward}) -%>

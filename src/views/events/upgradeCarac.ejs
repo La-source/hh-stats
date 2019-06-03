@@ -1,13 +1,13 @@
-Amélioration des caractéristiques de combat<br />
+<h2><%= __("event_upgradeCarac") %></h2>
 <% if ( event.upgradeCarac.softCurrency ) { %>
-    <%= formatNumber(event.upgradeCarac.softCurrency) %>$<br />
+    <%= formatNumber(event.upgradeCarac.softCurrency) %><%= __("unit_softCurrency") %><br />
 <% } %>
 <% if ( event.upgradeCarac.carac1 ) { %>
-    +<%= event.upgradeCarac.carac1 %> HardCore<br />
+    +<%= event.upgradeCarac.carac1 %> <%= __("carac1") %><br />
 <% } %>
 <% if ( event.upgradeCarac.carac2 ) { %>
-    +<%= event.upgradeCarac.carac2 %> Charme<br />
+    +<%= event.upgradeCarac.carac2 %> <%= __("carac1") %><br />
 <% } %>
 <% if ( event.upgradeCarac.carac3 ) { %>
-    +<%= event.upgradeCarac.carac3 %> Savoir-Faire<br />
+    +<%= event.upgradeCarac.carac3 %> <%= __("carac1") %><br />
 <% } %>

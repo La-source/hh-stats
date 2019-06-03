@@ -65,6 +65,11 @@ header {
     border: 1px solid #dc659c;
 }
 
+.event h2 {
+    font-size: 16px;
+    margin: 5px 0;
+}
+
 .separator {
     width: 1px;
     height: 10px;

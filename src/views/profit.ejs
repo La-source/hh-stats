@@ -1,26 +1,26 @@
 <table class="sum_detail">
     <% if ( source.harem !== 0 ) { %><tr>
-        <td>Harem</td>
+        <td><%= __("sum_harem") %></td>
         <td><%= formatNumber(source.harem) %></td>
     </tr><% } %>
     <% if ( source.sell !== 0 ) { %><tr>
-        <td>Vente au marché</td>
+        <td><%= __("sum_sell") %></td>
         <td><%= formatNumber(source.sell) %></td>
     </tr><% } %>
     <% if ( source.pvp !== 0 ) { %><tr>
-        <td>Gain en arène</td>
+        <td><%= __("sum_arena") %></td>
         <td><%= formatNumber(source.pvp) %></td>
     </tr><% } %>
     <% if ( source.troll !== 0 ) { %><tr>
-        <td>Gain sur les boss</td>
+        <td><%= __("sum_troll") %></td>
         <td><%= formatNumber(source.troll) %></td>
     </tr><% } %>
     <% if ( source.mission !== 0 ) { %><tr>
-        <td>Récompense de mission</td>
+        <td><%= __("sum_mission") %></td>
         <td><%= formatNumber(source.mission) %></td>
     </tr><% } %>
     <% if ( source.contest !== 0 ) { %><tr>
-        <td>Compet'</td>
+        <td><%= __("sum_contest") %></td>
         <td><%= formatNumber(source.contest) %></td>
     </tr><% } %>
 </table>

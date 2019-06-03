@@ -3,16 +3,16 @@
     <% opponents.forEach(opponent => { %>
     <div class="opponent">
         <% if ( opponent.isWin ) { %>
-            <div class="result success">Victoire</div>
+            <div class="result success"><%= __("battle_victory") %></div>
         <% } else { %>
-            <div class="result lost">Perdu</div>
+            <div class="result lost"><%= __("battle_lost") %></div>
         <% } %>
         <div class="level"><div><%= opponent.level %></div></div>
         <span class="name"><%= opponent.user.name %></span>
         <span class="class carac<%= opponent.class %>"></span>
         <div class="player"></div>
         <img src="https://hh.hh-content.com/pictures/hero/ico/<%= !opponent.user.ico ? 34 : opponent.user.ico %>.jpg" />
-        <div class="ego">Ego <%= formatNumber(opponent.ego) %></div>
+        <div class="ego"><%= __("battle_ego") %> <%= formatNumber(opponent.ego) %></div>
         <div class="carac carac1"><%= formatNumber(opponent.carac1) %></div>
         <div class="carac carac2"><%= formatNumber(opponent.carac2) %></div>
         <div class="carac carac3"><%= formatNumber(opponent.carac3) %></div>

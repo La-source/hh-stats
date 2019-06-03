@@ -10,7 +10,7 @@
 </head>
 <body style="background-image: url(<%= background %>)">
     <header>
-        <a class="hh_logo" href="/home.html">Accueil</a>
+        <a class="hh_logo" href="/home.html"></a>
         <img id="share" src="https://hh.hh-content.com/pictures/design/clubs/clubs-avatar.png" />
     </header>
 
@@ -18,24 +18,24 @@
         <table id="sum">
             <tr>
                 <th></th>
-                <th>Gain</th>
-                <th>Dépense</th>
-                <th>Total</th>
+                <th><%= __("profit") %></th>
+                <th><%= __("dispense") %></th>
+                <th><%= __("total") %></th>
             </tr>
             <tr class="today">
-                <th>Aujourd'hui</th>
+                <th><%= __("today") %></th>
                 <td class="profit"><%= formatNumber(sum.today.profit) %></td>
                 <td class="dispense"><%= formatNumber(sum.today.dispense) %></td>
                 <td><%= formatNumber(sum.today.profit + sum.today.dispense) %></td>
             </tr>
             <tr class="yesterday">
-                <th>Hier</th>
+                <th><%= __("yesterday") %></th>
                 <td class="profit"><%= formatNumber(sum.yesterday.profit) %></td>
                 <td class="dispense"><%= formatNumber(sum.yesterday.dispense) %></td>
                 <td><%= formatNumber(sum.yesterday.profit + sum.yesterday.dispense) %></td>
             </tr>
             <tr class="lastWeek">
-                <th>Les 7 derniers jours</th>
+                <th><%= __("lastWeek") %></th>
                 <td class="profit"><%= formatNumber(sum.lastWeek.profit) %></td>
                 <td class="dispense"><%= formatNumber(sum.lastWeek.dispense) %></td>
                 <td><%= formatNumber(sum.lastWeek.profit + sum.lastWeek.dispense) %></td>
@@ -73,7 +73,7 @@
             <% } else { %>
                 <%= event.type %>
             <% } %>
-            <div class="date"><%= moment(event.date).format("DD/MM - HH:mm") %></div>
+            <div class="date"><%= moment(event.date).format(__("dateFormat")) %></div>
         </div>
         <div class="separator"></div>
         <% }); %>

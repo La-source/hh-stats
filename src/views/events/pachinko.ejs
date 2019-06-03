@@ -1,8 +1,8 @@
-<%= event.pachinko.nbPachinko %> Pachinko<br />
+<h2><%= __("event_pachinko", event.pachinko.nbPachinko) %></h2>
 <% if ( event.pachinko.softCurrency ) { %>
-    <%= formatNumber(event.pachinko.softCurrency) %>$<br />
+    <%= formatNumber(event.pachinko.softCurrency) %><%= __("unit_softCurrency") %><br />
 <% } %>
 <% if ( event.pachinko.hardCurrency) { %>
-    <%= formatNumber(event.pachinko.hardCurrency) %> koban<br />
+    <%= formatNumber(event.pachinko.hardCurrency) %> <%= __("unit_hardCurrency") %><br />
 <% } %>
 <%- include("../reward", {reward: event.pachinko.reward}) -%>

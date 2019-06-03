@@ -1,9 +1,9 @@
-Amélioration d'une fille<br />
+<h2><%= __("event_girlUpgrade") %></h2>
 <% if ( event.girlUpgrade.softCurrency ) { %>
-    <%= formatNumber(event.girlUpgrade.softCurrency) %>$<br />
+    <%= formatNumber(event.girlUpgrade.softCurrency) %><%= __("unit_softCurrency") %><br />
 <% } %>
 <% if ( event.girlUpgrade.hardCurrency) { %>
-    <%= formatNumber(event.girlUpgrade.hardCurrency) %> koban<br />
+    <%= formatNumber(event.girlUpgrade.hardCurrency) %> <%= __("unit_hardCurrency") %><br />
 <% } %>
 <div class="girl-ico">
     <img src="https://hh.hh-content.com/pictures/girls/<%= event.girlUpgrade.girl %>/ico0.png" />

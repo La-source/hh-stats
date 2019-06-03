@@ -1,18 +1,18 @@
 <%- include("girl", {girls: reward.girls}) -%>
 <% if ( reward.softCurrency ) { %>
-    +<%= formatNumber(reward.softCurrency) %>$<br />
+    +<%= formatNumber(reward.softCurrency) %><%= __("unit_softCurrency") %><br />
 <% } %>
 <% if ( reward.hardCurrency ) { %>
-    +<%= formatNumber(reward.hardCurrency) %> koban<br />
+    +<%= formatNumber(reward.hardCurrency) %> <%= __("unit_hardCurrency") %><br />
 <% } %>
 <% if ( reward.leaguePoints ) { %>
-    +<%= reward.leaguePoints %> points de league<br />
+    +<%= reward.leaguePoints %> <%= __("unit_leaguePoints") %><br />
 <% } %>
 <% if ( reward.victoryPoints ) { %>
-    +<%= reward.victoryPoints %> mojo<br />
+    +<%= reward.victoryPoints %> <%= __("unit_mojo") %><br />
 <% } %>
 <% if ( reward.xp ) { %>
-    +<%= reward.xp %> XP<br />
+    +<%= reward.xp %> <%= __("unit_xp") %><br />
 <% } %>
 <%- include("girl-shards", {source: reward}) -%>
 <%- include("item", {source: reward}) -%>

@@ -1,5 +1,6 @@
 import * as cookieParser from "cookie-parser";
 import * as express from "express";
+import {configure, init} from "i18n";
 import "reflect-metadata";
 import {createConnection} from "typeorm";
 import {BuyEvent} from "./entities/BuyEvent";
@@ -46,12 +47,15 @@ process.on("uncaughtException", err => {
 (async () => {
     // TODO wait mysql ready (docker-compose production)
 
+    configure({directory: __dirname + "/locales"});
+
     const app = express();
+
+    app.use(cookieParser());
+    app.use(init);
 
     app.set("view engine", "ejs");
     app.set("views", __dirname + "/views");
-
-    app.use(cookieParser());
 
     const storage = new StorageManager(process.env.REDIS, await createConnection());
     new StatsManager(app, storage);

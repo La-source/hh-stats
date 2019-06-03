@@ -1,7 +1,7 @@
-<%= event.contest.nbContest %> Compét' réalisée<br />
+<h2><%= __n("event_contest", event.contest.nbContest) %></h2>
 <% if ( event.contest.softCurrency !== 0 ) { %>
-    +<%= formatNumber(event.contest.softCurrency) %>$<br />
+    +<%= formatNumber(event.contest.softCurrency) %><%= __("unit_softCurrency") %><br />
 <% } %>
 <% if ( event.contest.hardCurrency !== 0 ) { %>
-    +<%= formatNumber(event.contest.hardCurrency) %> koban<br />
+    +<%= formatNumber(event.contest.hardCurrency) %> <%= __("unit_hardCurrency") %><br />
 <% } %>

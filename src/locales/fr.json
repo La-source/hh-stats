@@ -1,0 +1,78 @@
+{
+  "today": "Aujourd'hui",
+  "yesterday": "Hier",
+  "lastWeek": "Les 7 derniers jours",
+  "profit": "Gain",
+  "dispense": "Dépense",
+  "total": "Total",
+
+  "sum_pachinko": "Pachinko",
+  "sum_upgradeCarac": "Amélioration caract. de combat",
+  "sum_quest": "Dépense de quête",
+  "sum_buy": "Achat au marché",
+  "sum_girlUpgrade": "Upgrade des filles",
+  "sum_harem": "Harem",
+  "sum_sell": "Vente au marché",
+  "sum_arena": "Gain en arène",
+  "sum_troll": "Gain sur les boss",
+  "sum_mission": "Récompense de mission",
+  "sum_contest": "Compet'",
+
+  "battle_victory": "Victoire",
+  "battle_lost": "battle_lost",
+  "battle_defeat": "Perdu",
+  "battle_ego": "Ego",
+
+  "unit_softCurrency": "$",
+  "unit_hardCurrency": "koban",
+  "unit_leaguePoints": "Points de ligue",
+  "unit_mojo": "Mojo",
+  "unit_energyQuest": "énergie d'aventure",
+  "unit_xp": "XP",
+
+  "event_arena": {
+    "one": "%s combat en arène",
+    "other": "%s combats en arène"
+  },
+  "event_buy": "Achat sur le marché",
+  "event_contest": {
+    "one": "%s Compét' réalisée",
+    "other": "%s Compét' réalisées"
+  },
+  "event_harem": "Collecte Harem",
+  "event_girlUpgrade": "Amélioration d'une fille",
+  "event_league": {
+    "one": "%s combat en league",
+    "other": "%s combats en league"
+  },
+  "event_mission": {
+    "one": "%s mission quotidienne",
+    "other": "%s missions quotidienne"
+  },
+  "event_missionGift": "Bonus quotidien",
+  "event_pachinko": "%s Pachinko",
+  "event_quest": {
+    "one": "Avancée dans l'histoire de %s étape",
+    "other": "Avancée dans l'histoire de %s étapes"
+  },
+  "event_sell": "Vente sur le marché",
+  "event_troll": {
+    "one": "%s combat contre",
+    "other": "%s combats contre"
+  },
+  "event_upgradeCarac": "Amélioration des caractéristiques de combat",
+
+  "buy_result": {
+    "one": "pour %s objet acheté",
+    "other": "pour %s objets acheté"
+  },
+  "sell_result": {
+    "one": "pour %s objet vendu",
+    "other": "pour %s objets vendu"
+  },
+  "carac1": "HardCore",
+  "carac2": "Charme",
+  "carac3": "Savoir-Faire",
+
+  "dateFormat": "DD/MM - HH:mm"
+}

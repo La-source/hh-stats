@@ -1,22 +1,22 @@
 <table class="sum_detail">
     <% if ( source.pachinko !== 0 ) { %><tr>
-        <td>Pachinko</td>
+        <td><%= __("sum_pachinko") %></td>
         <td><%= formatNumber(source.pachinko) %></td>
     </tr><% } %>
     <% if ( source.upgradeCarac !== 0 ) { %><tr>
-        <td>Amélioration caract. de combat</td>
+        <td><%= __("sum_upgradeCarac") %></td>
         <td><%= formatNumber(source.upgradeCarac) %></td>
     </tr><% } %>
     <% if ( source.quest !== 0 ) { %><tr>
-        <td>Dépense de quête</td>
+        <td><%= __("sum_quest") %></td>
         <td><%= formatNumber(source.quest) %></td>
     </tr><% } %>
     <% if ( source.buy !== 0 ) { %><tr>
-        <td>Achat au marché</td>
+        <td><%= __("sum_buy") %></td>
         <td><%= formatNumber(source.buy) %></td>
     </tr><% } %>
     <% if ( source.girlUpgrade !== 0 ) { %><tr>
-        <td>Upgrade des fille</td>
+        <td><%= __("sum_girlUpgrade") %></td>
         <td><%= formatNumber(source.girlUpgrade) %></td>
     </tr><% } %>
 </table>
