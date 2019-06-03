@@ -5,6 +5,8 @@
 <% if ( event.girlUpgrade.hardCurrency) { %>
     <%= formatNumber(event.girlUpgrade.hardCurrency) %> <%= __("unit_hardCurrency") %><br />
 <% } %>
-<div class="girl-ico">
-    <img src="https://hh.hh-content.com/pictures/girls/<%= event.girlUpgrade.girl %>/ico0.png" />
-</div>
+<% for ( const girl of event.girlUpgrade.girl ) { %>
+    <div class="girl-ico">
+        <img src="https://hh.hh-content.com/pictures/girls/<%= girl %>/ico0.png" />
+    </div>
+<% } %>
