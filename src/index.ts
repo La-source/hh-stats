@@ -53,6 +53,7 @@ process.on("uncaughtException", err => {
 
     const app = express();
 
+    app.use(express.static(__dirname + "/assets"));
     app.use(cookieParser());
     app.use(init);
 

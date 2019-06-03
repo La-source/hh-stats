@@ -10,8 +10,8 @@ gulp.task("default", () =>
             "src/**/*.ejs",
             "src/**/*.css",
             "src/**/*.js",
+            "src/**/*.json",
             "package*.json",
-            "src/game-constant.json",
         ]))
         .pipe(write())
         .pipe(gulp.dest("dist")),

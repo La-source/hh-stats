@@ -6,6 +6,7 @@
   "scripts": {
     "build": "npm run clean && gulp",
     "clean": "rimraf dist && rimraf coverage",
+    "dev": "ts-node src/",
     "start": "node index.js",
     "test": "tape -r ts-node/register **/*.spec.ts",
     "test:ci": "npm test | tap-junit > junit.xml",
