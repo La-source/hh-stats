@@ -85,5 +85,12 @@
   "ranking_affection": "Classement Affection offerte",
   "rankin_levelHarem": "Classement Niveau du harem",
 
+  "notif_pachinko_title": "Pachinko quotidien gratuit",
+  "notif_pachinko_body": "Votre partie de pachinko quotidienne gratuite est disponible",
+  "notif_shop_title": "Le marché est plein",
+  "notif_shop_body": "Votre marché à fait le plein de nouveau article",
+  "notif_arena_title": "Vous avez de nouveaux adversaires",
+  "notif_arena_body": "L'arène à de nouveau combattant à vous proposer",
+
   "dateFormat": "DD/MM - HH:mm"
 }

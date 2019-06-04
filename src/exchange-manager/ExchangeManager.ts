@@ -4,6 +4,7 @@ import {Client} from "../client-model/Client";
 import {Exchange} from "../proxy/Exchange";
 import {Proxy} from "../proxy/Proxy";
 import {ProxyListener} from "../proxy/ProxyListener";
+import {StorageManager} from "../storage-manager/StorageManager";
 import {ExchangeListener} from "./ExchangeListener";
 import {ExchangeProcess} from "./ExchangeProcess";
 
@@ -18,7 +19,7 @@ export class ExchangeManager implements ProxyListener {
 
     private readonly listeners: ExchangeListener[] = [];
 
-    constructor(private proxy: Proxy) {
+    constructor(private readonly proxy: Proxy, private readonly storage: StorageManager) {
         this.proxy.register(this);
     }
 
@@ -111,7 +112,7 @@ export class ExchangeManager implements ProxyListener {
                 exchange.request.req.url,
                 process.constructor.name);
 
-            return process.execute(exchange, client);
+            return process.execute(exchange, client, this.storage);
         } catch (e) {
             console.error(e);
         }

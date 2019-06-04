@@ -1,6 +1,12 @@
-import {Column, Entity, Index, ManyToOne, PrimaryColumn} from "typeorm";
+import {Column, Entity, Index, ManyToOne, OneToMany, PrimaryColumn} from "typeorm";
 import {Hero} from "../client-model/Hero";
 import {Club} from "./Club";
+import {PushSubscription} from "./PushSubscription";
+
+export enum Locale {
+    fr = "fr",
+    en = "en",
+}
 
 @Entity()
 export class User {
@@ -29,8 +35,23 @@ export class User {
     @Column("smallint", {nullable: true, default: true})
     public level: number;
 
+    @Column("enum", {enum: Locale, default: Locale.fr})
+    public locale: Locale;
+
+    @Column("boolean", {default: false})
+    public notificationPachinko: boolean;
+
+    @Column("boolean", {default: false})
+    public notificationArena: boolean;
+
+    @Column("boolean", {default: false})
+    public notificationShop: boolean;
+
     @ManyToOne(() => Club, club => club.users, {eager: true})
     public club: Club;
+
+    @OneToMany(() => PushSubscription, subscription => subscription.user)
+    public pushSubscription: PushSubscription[];
 
     constructor(hero?: Hero) {
         if ( !hero ) {

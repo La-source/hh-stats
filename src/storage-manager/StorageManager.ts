@@ -3,12 +3,15 @@ import {createClient, RedisClient} from "redis";
 import {Connection} from "typeorm";
 import {promisify} from "util";
 import {Action, Client} from "../client-model/Client";
+import {SettingField} from "../client-model/Setting";
 import {Club} from "../entities/Club";
 import {Event} from "../entities/Event";
 import {EventEntity} from "../entities/EventEntity";
 import {Opponent} from "../entities/Opponent";
+import {PushSubscription as PushSubscriptionEntity} from "../entities/PushSubscription";
 import {User} from "../entities/User";
 import {ExchangeListener} from "../exchange-manager/ExchangeListener";
+import {NotificationManager} from "../notification-manager/NotificationManager";
 import {Queue} from "./Queue";
 
 export class StorageManager implements ExchangeListener {
@@ -42,13 +45,15 @@ export class StorageManager implements ExchangeListener {
     };
 
     /**
-     * Liste des executeur d'évènements
+     * Liste des executeurs d'évènements
      */
     private eventsExecutor: Array<{
         event: new (client?: Client) => EventEntity,
         action: Action,
         join: keyof Event,
     }> = [];
+
+    private notificationManager: NotificationManager;
 
     constructor(readonly redisHost: string, private readonly db: Connection) {
         this.redis = createClient(redisHost);
@@ -67,6 +72,8 @@ export class StorageManager implements ExchangeListener {
                     sub.on("message", (_channel, key) => {
                         if ( key.startsWith("activity_") ) {
                             return this.storeClient(key.split("_")[1]);
+                        } else if ( key.startsWith("timers_") ) {
+                            this.executeTimer(key);
                         }
                     }));
             });
@@ -78,6 +85,10 @@ export class StorageManager implements ExchangeListener {
             action,
             join,
         });
+    }
+
+    public registerNotificationManager(notificationManager: NotificationManager) {
+        this.notificationManager = notificationManager;
     }
 
     /**
@@ -99,10 +110,11 @@ export class StorageManager implements ExchangeListener {
     }
 
     public async execute(client: Client): Promise<void> {
-        this.updateBackground(client);
+        await this.updateBackground(client);
+        await this.manageTimers(client);
+        await this.saveSettingsNotification(client);
 
-        const value = await this.redisAsync.get(client.memberGuid);
-        const past = new Client(value);
+        const past = new Client(await this.redisAsync.get(client.memberGuid));
 
         if ( !client.mergeWith(past) ) {
             await this.persist(past);
@@ -284,6 +296,7 @@ export class StorageManager implements ExchangeListener {
      * Renvoie l'historique des combats contre un joueur
      * @param memberGuid
      * @param opponentId
+     * @param opponentName
      */
     public async getHistoryOpponent(memberGuid: string,
                                     opponentId?: number,
@@ -314,16 +327,146 @@ export class StorageManager implements ExchangeListener {
         return qb.getMany();
     }
 
+    /**
+     * Enregistre la souscription de l'utilisateur pour les future notification
+     * @param memberGuid
+     * @param pushSubscription
+     */
+    public async savePushSubscription(memberGuid: string,
+                                      pushSubscription: PushSubscription): Promise<void> {
+        const client = new Client(await this.redisAsync.get(memberGuid));
+
+        if ( !client.hero ) {
+            return;
+        }
+
+        const user = await this.db
+            .getRepository(User)
+            .findOne(client.hero.id, {
+                relations: ["pushSubscription"],
+            });
+
+        if ( user.pushSubscription.find(subscription =>
+            subscription.data.endpoint === pushSubscription.endpoint) ) {
+            return;
+        }
+
+        const notification = new PushSubscriptionEntity();
+        notification.data = pushSubscription;
+        notification.user = user;
+
+        await this.db
+            .getRepository(PushSubscriptionEntity)
+            .save(notification);
+    }
+
+    /**
+     * Renvoie l'ensemble des souscription de l'utilisateur
+     * @param userId
+     */
+    public getSubscriptionNotification(userId: number): Promise<PushSubscriptionEntity[]> {
+        return this.db
+            .getRepository(PushSubscriptionEntity)
+            .find({
+                where: {
+                    user: userId,
+                },
+            });
+    }
+
     public getBackground(): Promise<string> {
         return this.redisAsync.get("background");
     }
 
-    private updateBackground(client: Client): void {
+    public async getUser(memberGuid: string): Promise<User> {
+        const client = new Client(await this.redisAsync.get(memberGuid));
+
+        if ( !client.hero ) {
+            return;
+        }
+
+        return this.db.getRepository(User).findOne(client.hero.id);
+    }
+
+    private updateBackground(client: Client): Promise<void> {
         if ( !client.background ) {
             return;
         }
 
-        this.redisAsync.set("background", client.background);
+        return this.redisAsync.set("background", client.background);
+    }
+
+    private async manageTimers(client: Client): Promise<void> {
+        if ( !client.hero ) {
+            return;
+        }
+
+        const set = (key: string, next: Date) =>
+            this.redisAsync.set(
+                `timers_${key}_${client.hero.id}`,
+                "",
+                "EX",
+                Math.floor((next.getTime() - new Date().getTime()) / 1000))
+        ;
+
+        if ( client.pachinkoNextRefresh ) {
+            await set("pachinko", client.pachinkoNextRefresh);
+        }
+
+        if ( client.arenaNextRefresh ) {
+            await set("arena", client.arenaNextRefresh);
+        }
+
+        if ( client.shopNextRefresh ) {
+            await set("shop", client.shopNextRefresh);
+        }
+    }
+
+    private async saveSettingsNotification(client: Client): Promise<void> {
+        if ( client.action !== "saveField" ) {
+            return;
+        }
+
+        const user = await this.getUser(client.memberGuid);
+
+        if ( !user ) {
+            return;
+        }
+
+        switch ( client.setting.field ) {
+            case SettingField.notif_arena:
+                user.notificationArena = client.setting.value === "on";
+                break;
+
+            case SettingField.notif_pachinfo:
+                user.notificationPachinko = client.setting.value === "on";
+                break;
+
+            case SettingField.notif_shop:
+                user.notificationShop = client.setting.value === "on";
+                break;
+        }
+
+        await this.db.manager.save(user);
+    }
+
+    private async executeTimer(key: string) {
+        const [, type, userId] = key.split("_");
+        const user = await this.db.getRepository(User).findOne(userId);
+
+        switch ( type ) {
+            case "pachinko":
+                this.notificationManager.pachinko(user);
+                break;
+
+            case "arena":
+                this.notificationManager.arena(user);
+                break;
+
+            case "shop":
+                this.notificationManager.shop(user);
+                break;
+        }
     }
 
     private async persistClear(client: Client): Promise<void> {
@@ -384,7 +527,7 @@ export class StorageManager implements ExchangeListener {
 
         const eventExecutor = this.eventsExecutor.find(elt => elt.action === client.action);
 
-        if ( !eventExecutor && client.action !== "none" ) {
+        if ( !eventExecutor && client.action !== "none" && client.action !== "saveField" ) {
             console.error(`Persist - Case "${client.action}" not supported`);
         } else if ( eventExecutor ) {
             event = new eventExecutor.event(client);

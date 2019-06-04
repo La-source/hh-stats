@@ -24,6 +24,9 @@ services:
       - TYPEORM_PORT=3306
       - TYPEORM_SYNCHRONIZE=true
       - TYPEORM_ENTITIES=src/entities/**/*.ts
+      - VAPID_MAIL=postmaster@hentailheroesplus.com
+      - VAPID_PUBLIC_KEY=BOJTObQRR1EPF8-1FWxZx1pNMIPqa8QM5Lq6cXpwr31PGoP_X5nmO_QdnWJAXkGtOneXmU6owPajYC9XsJ4l7eE
+      - VAPID_PRIVATE_KEY=qb5OQV831KbtT6Pcb-2B9LFRbMpToK3FV-WxCTK8dP8
     depends_on:
       - redis
       - db

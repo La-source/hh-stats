@@ -1,0 +1,21 @@
+<div class="form-group notif_pachinfo">
+    <label class="head-label-form">Notification pachinko</label>
+    <select name="notif_pachinfo" class="notif">
+        <option value="on" <% if ( user.notificationPachinko ) { %>selected="selected"<% } %>>ON</option>
+        <option value="off" <% if ( !user.notificationPachinko ) { %>selected="selected"<% } %>>OFF</option>
+    </select>
+</div>
+<div class="form-group notif_shop">
+    <label class="head-label-form">Notification marché</label>
+    <select name="notif_shop" class="notif">
+        <option value="on" <% if ( user.notificationShop ) { %>selected="selected"<% } %>>ON</option>
+        <option value="off" <% if ( !user.notificationShop ) { %>selected="selected"<% } %>>OFF</option>
+    </select>
+</div>
+<div class="form-group notif_arena">
+    <label class="head-label-form">Notification arène</label>
+    <select name="notif_arena" class="notif">
+        <option value="on" <% if ( user.notificationArena ) { %>selected="selected"<% } %>>ON</option>
+        <option value="off" <% if ( !user.notificationArena ) { %>selected="selected"<% } %>>OFF</option>
+    </select>
+</div>

@@ -5,6 +5,7 @@ import {Hero} from "./Hero";
 import {Quest} from "./Quest";
 import {Reward} from "./Reward";
 import {Sell} from "./Sell";
+import {Setting} from "./Setting";
 import {UpgradeCarac} from "./UpgradeCarac";
 import {WeeklyReward} from "./WeeklyReward";
 
@@ -23,7 +24,8 @@ export type Action =
     "quest" |
     "girlUpgrade" |
     "contest" |
-    "weeklyReward"
+    "weeklyReward" |
+    "saveField"
 ;
 
 export class Client {
@@ -138,6 +140,11 @@ export class Client {
      * Récompenses hebdomadaire
      */
     public weeklyReward?: WeeklyReward;
+
+    /**
+     * Paramètre
+     */
+    public setting?: Setting;
 
     /**
      * Ensemble des caractéristique du joueur
