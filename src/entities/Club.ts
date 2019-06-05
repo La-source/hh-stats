@@ -6,7 +6,7 @@ export class Club {
     @PrimaryColumn()
     public id: number;
 
-    @Column("varchar", {length: 60, nullable: true, default: null})
+    @Column("varchar", {length: 200, nullable: true, default: null})
     public name: string = null;
 
     @OneToMany(() => User, user => user.club)
