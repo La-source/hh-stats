@@ -15,6 +15,6 @@ export class MissionGiveGiftProcess implements ExchangeProcess {
 
     public execute(exchange: Exchange, client: Client): void {
         client.action = "missionGiveGift";
-        client.gift = parseInt(exchange.response.json.rewards.data.rewards[0].value.match(/\b\d+\b/g)[0], 10);
+        client.gift = parseInt(exchange.response.json.rewards.data.rewards[0].value.match(/\d+/)[0], 10);
     }
 }
