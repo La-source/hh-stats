@@ -43,7 +43,7 @@ export class NotificationManager {
     }
 
     public arena(user: User): Promise<void> {
-        if ( user.notificationArena ) {
+        if ( !user.notificationArena ) {
             return;
         }
 
@@ -61,7 +61,7 @@ export class NotificationManager {
             try {
                 await sendNotification(subscription.data, JSON.stringify(notification));
             } catch (e) {
-                console.error("Unable send notification");
+                console.error("Unable send notification", e);
             }
         }
     }

@@ -26,6 +26,8 @@ export class PanelProcess implements ExchangeProcess {
             exchange.response
                 .$("#personal_forms .panels__settings-switch .subscription")
                 .after(result);
+            exchange.response.$("#personal_forms .footer")
+                .append(`<a href="#" id="notification" class="blue_button_L">Notification</a>`);
 
             resolve({});
         }));
