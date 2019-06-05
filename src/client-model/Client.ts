@@ -264,6 +264,7 @@ export class Client {
         this.nbMissions = 0;
         this.nbContest = 0;
         delete this.isGirlLootable;
+        delete this.setting;
 
         return this;
     }

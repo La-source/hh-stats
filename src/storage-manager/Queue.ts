@@ -32,9 +32,11 @@ export class Queue {
         this.onRun = true;
         this.sm
             .execute(this.games.shift())
+            .catch(e => console.error("error when execute storage", e))
             .then(() => {
                 this.onRun = false;
                 this.execute();
-            });
+            })
+        ;
     }
 }

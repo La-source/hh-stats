@@ -401,13 +401,19 @@ export class StorageManager implements ExchangeListener {
             return;
         }
 
-        const set = (key: string, next: Date) =>
-            this.redisAsync.set(
+        const set = (key: string, next: Date) => {
+            const timer = Math.floor((next.getTime() - new Date().getTime()) / 1000);
+
+            if ( timer < 1 ) {
+                return;
+            }
+
+            return this.redisAsync.set(
                 `timers_${key}_${client.hero.id}`,
                 "",
                 "EX",
-                Math.floor((next.getTime() - new Date().getTime()) / 1000))
-        ;
+                timer);
+        };
 
         if ( client.pachinkoNextRefresh ) {
             await set("pachinko", client.pachinkoNextRefresh);
