@@ -55,7 +55,7 @@ export class StorageManager implements ExchangeListener {
 
     private notificationManager: NotificationManager;
 
-    constructor(readonly redisHost: string, private readonly db: Connection) {
+    constructor(readonly redisHost: string, public readonly db: Connection) {
         this.redis = createClient(redisHost);
         this.redisAsync = {
             get: promisify(this.redis.get).bind(this.redis),

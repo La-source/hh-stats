@@ -25,7 +25,7 @@ export class NotificationManager {
             return;
         }
 
-        return this.sendNotification(user.id, {
+        return this.sendNotification(user, {
             title: __({phrase: "notif_pachinko_title", locale: user.locale}),
             body: __({phrase: "notif_pachinko_body", locale: user.locale}),
         });
@@ -36,7 +36,7 @@ export class NotificationManager {
             return;
         }
 
-        return this.sendNotification(user.id, {
+        return this.sendNotification(user, {
             title: __({phrase: "notif_shop_title", locale: user.locale}),
             body: __({phrase: "notif_shop_body", locale: user.locale}),
         });
@@ -47,21 +47,25 @@ export class NotificationManager {
             return;
         }
 
-        return this.sendNotification(user.id, {
+        return this.sendNotification(user, {
             title: __({phrase: "notif_arena_title", locale: user.locale}),
             body: __({phrase: "notif_arena_body", locale: user.locale}),
         });
     }
 
-    public async sendNotification(idUser: number, notification: Notification): Promise<void> {
-        const subscriptions = await this.storage.getSubscriptionNotification(idUser);
-        console.log(new Date(), `send notification to ${subscriptions.length} client for user ${idUser}`);
+    public async sendNotification(user: User, notification: Notification): Promise<void> {
+        const subscriptions = await this.storage.getSubscriptionNotification(user.id);
+        console.log(new Date(), `send notification to ${subscriptions.length} client for user ${user.id}`);
 
         for ( const subscription of subscriptions ) {
             try {
                 await sendNotification(subscription.data, JSON.stringify(notification));
             } catch (e) {
-                console.error("Unable send notification", e);
+                if ( e.statusCode === 410 ) {
+                    await this.storage.db.manager.remove(subscription);
+                } else {
+                    console.error("Unable send notification", e);
+                }
             }
         }
     }
