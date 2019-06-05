@@ -12,6 +12,7 @@ services:
       - .:/app
     environment:
       - REDIS=redis://redis
+      - HOST=http://localhost:3000
       - TARGET=https://www.hentaiheroes.com
       - PROTOCOL_PROXY=http
       - TZ=Europe/Paris

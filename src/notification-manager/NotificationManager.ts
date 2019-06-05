@@ -28,6 +28,10 @@ export class NotificationManager {
         return this.sendNotification(user, {
             title: __({phrase: "notif_pachinko_title", locale: user.locale}),
             body: __({phrase: "notif_pachinko_body", locale: user.locale}),
+            tag: new Date().toISOString(),
+            data: {
+                target: `${process.env.HOST}/pachinko.html`,
+            },
         });
     }
 
@@ -39,6 +43,10 @@ export class NotificationManager {
         return this.sendNotification(user, {
             title: __({phrase: "notif_shop_title", locale: user.locale}),
             body: __({phrase: "notif_shop_body", locale: user.locale}),
+            tag: new Date().toISOString(),
+            data: {
+                target: `${process.env.HOST}/shop.html`,
+            },
         });
     }
 
@@ -50,6 +58,10 @@ export class NotificationManager {
         return this.sendNotification(user, {
             title: __({phrase: "notif_arena_title", locale: user.locale}),
             body: __({phrase: "notif_arena_body", locale: user.locale}),
+            tag: new Date().toISOString(),
+            data: {
+                target: `${process.env.HOST}/arena.html`,
+            },
         });
     }
 

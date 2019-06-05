@@ -70,8 +70,6 @@
             return permission === "granted" ? Promise.resolve() : Promise.reject("no permission");
         }
 
-        alert(Notification.permission);
-
         if ( Notification.permission !== "default" ) {
             return resultPermission(Notification.permission);
         }

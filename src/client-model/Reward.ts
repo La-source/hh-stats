@@ -35,7 +35,7 @@ export class Reward {
     /**
      * Nouveau niveau d'argent
      */
-    public newSoftCurrency?: number ;
+    public newSoftCurrency?: number;
 
     /**
      * Nouveau niveau de koban
