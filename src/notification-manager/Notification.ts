@@ -7,5 +7,7 @@ export interface Notification {
 
     tag: string;
 
+    timestamp: number;
+
     data: NotificationData;
 }

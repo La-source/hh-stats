@@ -29,8 +29,9 @@ export class NotificationManager {
             title: __({phrase: "notif_pachinko_title", locale: user.locale}),
             body: __({phrase: "notif_pachinko_body", locale: user.locale}),
             tag: new Date().toISOString(),
+            timestamp: Date.now(),
             data: {
-                target: `${process.env.HOST}/pachinko.html`,
+                target: `/pachinko.html`,
             },
         });
     }
@@ -44,8 +45,9 @@ export class NotificationManager {
             title: __({phrase: "notif_shop_title", locale: user.locale}),
             body: __({phrase: "notif_shop_body", locale: user.locale}),
             tag: new Date().toISOString(),
+            timestamp: Date.now(),
             data: {
-                target: `${process.env.HOST}/shop.html`,
+                target: `/shop.html`,
             },
         });
     }
@@ -59,8 +61,9 @@ export class NotificationManager {
             title: __({phrase: "notif_arena_title", locale: user.locale}),
             body: __({phrase: "notif_arena_body", locale: user.locale}),
             tag: new Date().toISOString(),
+            timestamp: Date.now(),
             data: {
-                target: `${process.env.HOST}/arena.html`,
+                target: `/arena.html`,
             },
         });
     }

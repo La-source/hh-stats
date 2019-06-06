@@ -12,20 +12,17 @@ self.addEventListener("push", function(event) {
         return;
     }
 
-    const notification = JSON.parse(event.data.text());
+    const notification = event.data.json();
 
     event.waitUntil(
-        self.registration.showNotification(notification.title, {
-            body: notification.body,
-            data: notification.data,
-            tag: notification.tag,
+        self.registration.showNotification(notification.title, Object.assign({
+            badge: "/logo_monichrome.png",
             icon: "https://hh.hh-content.com/pictures/design/normal_circular_logo.png",
-        })
+        }, notification))
     );
 });
 
-self.onnotificationclick = function(event) {
-    console.log("click notif", event.notification);
+self.addEventListener("notificationclick", function(event) {
     event.notification.close();
 
     if ( !event.notification.data ) {
@@ -50,4 +47,4 @@ self.onnotificationclick = function(event) {
             })
             .catch(() => {})
     );
-};
+});
