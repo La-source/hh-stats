@@ -42,7 +42,7 @@ export class WeeklyReward {
 
         if ( source.rewards.list ) {
             for ( const [index, result] of source.rewards.list.entiers() ) {
-                const ranking = parseInt(result.match(/\d+/)[0], 10);
+                const ranking = parseInt(result.match(/\d+/g)[0], 10);
 
                 switch ( index ) {
                     case 0:

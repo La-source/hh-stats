@@ -11,7 +11,7 @@
         const onclick = $(this).find(".name").attr("onclick");
 
         if ( onclick ) {
-            const result = $(this).find(".name").attr("onclick").match(/\d+/);
+            const result = $(this).find(".name").attr("onclick").match(/\d+/g);
 
             if ( !result ) {
                 return;

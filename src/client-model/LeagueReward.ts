@@ -25,7 +25,7 @@ export class LeagueReward {
 
         if ( source.rewards.list instanceof Array && source.rewards.list.length > 0 ) {
             const data = source.rewards.list[0];
-            this.ranking = parseInt(data.rank.match(/\d+/)[0], 10);
+            this.ranking = parseInt(data.rank.match(/\d+/g)[0], 10);
         }
     }
 }
