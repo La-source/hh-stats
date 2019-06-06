@@ -16,7 +16,7 @@ self.addEventListener("push", function(event) {
 
     event.waitUntil(
         self.registration.showNotification(notification.title, Object.assign({
-            badge: "/logo_monichrome.png",
+            badge: "logo_monochrome.png",
             icon: "https://hh.hh-content.com/pictures/design/normal_circular_logo.png",
         }, notification))
     );
