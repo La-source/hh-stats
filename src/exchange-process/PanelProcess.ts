@@ -20,6 +20,7 @@ export class PanelProcess implements ExchangeProcess {
             const user = await storage.getUser(client.memberGuid);
 
             const result = await render(__dirname + "/../views/panel.ejs", {
+                __: (exchange.request.req as any).__,
                 user,
             });
 

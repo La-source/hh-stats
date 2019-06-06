@@ -39,13 +39,16 @@ export class User {
     public locale: Locale;
 
     @Column("boolean", {default: false})
-    public notificationPachinko: boolean;
+    public notificationPachinko: boolean = false;
 
     @Column("boolean", {default: false})
-    public notificationArena: boolean;
+    public notificationArena: boolean = false;
 
     @Column("boolean", {default: false})
-    public notificationShop: boolean;
+    public notificationShop: boolean = false;
+
+    @Column("boolean", {default: true})
+    public notificationEnergyFull: boolean = true;
 
     @ManyToOne(() => Club, club => club.users, {eager: true})
     public club: Club;

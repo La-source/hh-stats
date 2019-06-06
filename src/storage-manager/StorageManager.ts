@@ -426,6 +426,18 @@ export class StorageManager implements ExchangeListener {
         if ( client.shopNextRefresh ) {
             await set("shop", client.shopNextRefresh);
         }
+
+        if ( client.hero.finishQuestRecharge ) {
+            await set("finishQuest", client.hero.finishQuestRecharge);
+        }
+
+        if ( client.hero.finishFightRecharge ) {
+            await set("finishFight", client.hero.finishFightRecharge);
+        }
+
+        if ( client.hero.finishLeagueRecharge ) {
+            await set("finishLeague", client.hero.finishLeagueRecharge);
+        }
     }
 
     private async saveSettingsNotification(client: Client): Promise<void> {
@@ -451,6 +463,10 @@ export class StorageManager implements ExchangeListener {
             case SettingField.notif_shop:
                 user.notificationShop = client.setting.value === "on";
                 break;
+
+            case SettingField.notif_energy_full:
+                user.notificationEnergyFull = client.setting.value === "on";
+                break;
         }
 
         await this.db.manager.save(user);
@@ -471,6 +487,18 @@ export class StorageManager implements ExchangeListener {
 
             case "shop":
                 this.notificationManager.shop(user);
+                break;
+
+            case "finishQuest":
+                this.notificationManager.finishQuest(user);
+                break;
+
+            case "finishFight":
+                this.notificationManager.finishFight(user);
+                break;
+
+            case "finishLeague":
+                this.notificationManager.finishLeague(user);
                 break;
         }
     }

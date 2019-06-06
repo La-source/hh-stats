@@ -68,6 +68,54 @@ export class NotificationManager {
         });
     }
 
+    public finishQuest(user: User): Promise<void> {
+        if ( !user.notificationEnergyFull ) {
+            return;
+        }
+
+        return this.sendNotification(user, {
+            title: __({phrase: "notif_quest_full_title", locale: user.locale}),
+            body: __({phrase: "notif_quest_full_body", locale: user.locale}),
+            tag: new Date().toISOString(),
+            timestamp: Date.now(),
+            data: {
+                target: `/`,
+            },
+        });
+    }
+
+    public finishFight(user: User): Promise<void> {
+        if ( !user.notificationEnergyFull ) {
+            return;
+        }
+
+        return this.sendNotification(user, {
+            title: __({phrase: "notif_fight_full_title", locale: user.locale}),
+            body: __({phrase: "notif_fight_full_body", locale: user.locale}),
+            tag: new Date().toISOString(),
+            timestamp: Date.now(),
+            data: {
+                target: `/`,
+            },
+        });
+    }
+
+    public finishLeague(user: User): Promise<void> {
+        if ( !user.notificationEnergyFull ) {
+            return;
+        }
+
+        return this.sendNotification(user, {
+            title: __({phrase: "notif_league_full_title", locale: user.locale}),
+            body: __({phrase: "notif_league_full_title", locale: user.locale}),
+            tag: new Date().toISOString(),
+            timestamp: Date.now(),
+            data: {
+                target: `/`,
+            },
+        });
+    }
+
     public async sendNotification(user: User, notification: Notification): Promise<void> {
         const subscriptions = await this.storage.getSubscriptionNotification(user.id);
         console.log(new Date(), `send notification to ${subscriptions.length} client for user ${user.id}`);

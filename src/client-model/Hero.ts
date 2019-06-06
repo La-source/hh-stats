@@ -14,6 +14,12 @@ export class Hero {
 
     public name: string;
 
+    public finishQuestRecharge: Date;
+
+    public finishFightRecharge: Date;
+
+    public finishLeagueRecharge: Date;
+
     constructor(source?: any) {
         if ( source ) {
             this.copyProperty("id", "id", source);
@@ -23,6 +29,15 @@ export class Hero {
             this.copyProperty("xp", "xp", source);
             this.copyProperty("level", "level", source);
             this.copyProperty("name", "Name", source);
+
+            if ( source.recharge_timers ) {
+                this.finishQuestRecharge = new Date(source.recharge_timers.calculation_timestamp
+                    + source.recharge_timers.quest_recharge_time * 1000);
+                this.finishFightRecharge = new Date(source.recharge_timers.calculation_timestamp
+                    + source.recharge_timers.fight_recharge_time * 1000);
+                this.finishLeagueRecharge = new Date(source.recharge_timers.calculation_timestamp
+                    + source.recharge_timers.challenge_recharge_time * 1000);
+            }
         }
     }
 

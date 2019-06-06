@@ -91,6 +91,17 @@
   "notif_shop_body": "Votre marché à fait le plein de nouveau article",
   "notif_arena_title": "Vous avez de nouveaux adversaires",
   "notif_arena_body": "L'arène à de nouveau combattant à vous proposer",
+  "notif_quest_full_title": "Vous êtes en pleine forme",
+  "notif_quest_full_body": "Votre barre d'énnergie de quête est pleine",
+  "notif_fight_full_title": "Les boss vous défie",
+  "notif_fight_full_body": "Votre barre d'énnergie de combat contre les boss est pleine",
+  "notif_league_full_title": "Les autres joueurs vous attendent",
+  "notif_league_full_body": "Votre barre d'énnergie de ligue est pleine",
+
+  "setting_full_energy": "Notification énergie pleine",
+  "setting_arena": "Notification arène",
+  "setting_shop": "Notification marché",
+  "setting_pachinko": "Notification pachinko",
 
   "dateFormat": "DD/MM - HH:mm"
 }

@@ -1,19 +1,27 @@
+<div class="form-group notif_energy_full">
+    <label class="head-label-form"><%= __("setting_full_energy") %></label>
+    <select name="notif_energy_full" class="notif">
+        <option value="on" <% if ( user.notificationEnergyFull ) { %>selected="selected"<% } %>>ON</option>
+        <option value="off" <% if ( !user.notificationEnergyFull ) { %>selected="selected"<% } %>>OFF</option>
+    </select>
+</div>
+
 <div class="form-group notif_pachinfo">
-    <label class="head-label-form">Notification pachinko</label>
+    <label class="head-label-form"><%= __("setting_arena") %></label>
     <select name="notif_pachinfo" class="notif">
         <option value="on" <% if ( user.notificationPachinko ) { %>selected="selected"<% } %>>ON</option>
         <option value="off" <% if ( !user.notificationPachinko ) { %>selected="selected"<% } %>>OFF</option>
     </select>
 </div>
 <div class="form-group notif_shop">
-    <label class="head-label-form">Notification marché</label>
+    <label class="head-label-form"><%= __("setting_shop") %></label>
     <select name="notif_shop" class="notif">
         <option value="on" <% if ( user.notificationShop ) { %>selected="selected"<% } %>>ON</option>
         <option value="off" <% if ( !user.notificationShop ) { %>selected="selected"<% } %>>OFF</option>
     </select>
 </div>
 <div class="form-group notif_arena">
-    <label class="head-label-form">Notification arène</label>
+    <label class="head-label-form"><%= __("setting_pachinko") %></label>
     <select name="notif_arena" class="notif">
         <option value="on" <% if ( user.notificationArena ) { %>selected="selected"<% } %>>ON</option>
         <option value="off" <% if ( !user.notificationArena ) { %>selected="selected"<% } %>>OFF</option>
