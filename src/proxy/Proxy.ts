@@ -48,9 +48,9 @@ export class Proxy {
                     let newHeader: string|string[];
 
                     if ( typeof oldHeader === "string" ) {
-                        newHeader = this.replaceHost(oldHeader);
+                        newHeader = this.removeCookieHost(oldHeader);
                     } else {
-                        newHeader = oldHeader.map(_header => this.replaceHost(_header));
+                        newHeader = oldHeader.map(_header => this.removeCookieHost(_header));
                     }
 
                     res.setHeader(header, newHeader);
@@ -141,7 +141,7 @@ export class Proxy {
         })(data);
     }
 
-    private replaceHost(content: string): string {
+    private removeCookieHost(content: string): string {
         const target = new URL(this.target);
         const targetArray = target.host.split(".");
 
@@ -152,6 +152,8 @@ export class Proxy {
         return content
             .replace(target.host, "")
             .replace(targetArray.join("."), "")
+            .replace("path=/;", "")
+            .replace("domain=", "")
         ;
     }
 }
