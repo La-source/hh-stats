@@ -1,0 +1,8 @@
+<h2><%= __("event_leagueReward") %></h2>
+<%= __("league_reward_ranking") %>: <%= event.leagueReward.ranking %><br />
+<% if ( event.leagueReward.softCurrency ) { %>
+    +<%= formatNumber(event.leagueReward.softCurrency) %><%= __("unit_softCurrency") %><br />
+<% } %>
+<% if ( event.leagueReward.hardCurrency ) { %>
+    +<%= formatNumber(event.leagueReward.hardCurrency) %> <%= __("unit_hardCurrency") %><br />
+<% } %>

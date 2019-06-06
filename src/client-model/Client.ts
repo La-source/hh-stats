@@ -2,6 +2,7 @@ import {Battle} from "./Battle";
 import {Buy} from "./Buy";
 import {GirlUpgrade} from "./GirlUpgrade";
 import {Hero} from "./Hero";
+import {LeagueReward} from "./LeagueReward";
 import {Quest} from "./Quest";
 import {Reward} from "./Reward";
 import {Sell} from "./Sell";
@@ -25,6 +26,7 @@ export type Action =
     "girlUpgrade" |
     "contest" |
     "weeklyReward" |
+    "leagueReward" |
     "saveField"
 ;
 
@@ -140,6 +142,11 @@ export class Client {
      * Récompenses hebdomadaire
      */
     public weeklyReward?: WeeklyReward;
+
+    /**
+     * Récompenses de ligue
+     */
+    public leagueReward?: LeagueReward;
 
     /**
      * Paramètre

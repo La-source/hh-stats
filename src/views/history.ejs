@@ -72,6 +72,8 @@
                 <%- include("events/missionGift", {event}) -%>
             <% } else if ( event.type === "weeklyReward" ) { %>
                 <%- include("events/weeklyReward", {event}) -%>
+            <% } else if ( event.type === "leagueReward" ) { %>
+                <%- include("events/leagueReward", {event}) -%>
             <% } else { %>
                 <%= event.type %>
             <% } %>

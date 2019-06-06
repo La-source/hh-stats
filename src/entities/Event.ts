@@ -3,6 +3,7 @@ import {BuyEvent} from "./BuyEvent";
 import {ContestEvent} from "./ContestEvent";
 import {FetchMoneyHaremEvent} from "./FetchMoneyHaremEvent";
 import {GirlUpgradeEvent} from "./GirlUpgradeEvent";
+import {LeagueRewardEvent} from "./LeagueRewardEvent";
 import {MissionEvent} from "./MissionEvent";
 import {MissionGiftEvent} from "./MissionGiftEvent";
 import {PachinkoEvent} from "./PachinkoEvent";
@@ -29,6 +30,7 @@ export enum TypeEvent {
     girlUpgrade = "girlUpgrade",
     contest = "contest",
     weeklyReward = "weeklyReward",
+    leagueReward = "leagueReward",
 }
 
 @Entity()
@@ -84,4 +86,7 @@ export class Event {
 
     @OneToOne(() => WeeklyRewardEvent, reward => reward.event)
     public weeklyReward: WeeklyRewardEvent;
+
+    @OneToOne(() => LeagueRewardEvent, reward => reward.event)
+    public leagueReward: LeagueRewardEvent;
 }

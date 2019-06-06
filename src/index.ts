@@ -8,6 +8,7 @@ import {BuyEvent} from "./entities/BuyEvent";
 import {ContestEvent} from "./entities/ContestEvent";
 import {FetchMoneyHaremEvent} from "./entities/FetchMoneyHaremEvent";
 import {GirlUpgradeEvent} from "./entities/GirlUpgradeEvent";
+import {LeagueRewardEvent} from "./entities/LeagueRewardEvent";
 import {MissionEvent} from "./entities/MissionEvent";
 import {MissionGiftEvent} from "./entities/MissionGiftEvent";
 import {PachinkoEvent} from "./entities/PachinkoEvent";
@@ -22,6 +23,7 @@ import {ArenaProcess} from "./exchange-process/ArenaProcess";
 import {BattleProcess} from "./exchange-process/BattleProcess";
 import {BuyProcess} from "./exchange-process/BuyProcess";
 import {ChangeProxyUrlProcess} from "./exchange-process/ChangeProxyUrlProcess";
+import {ClaimLeagueRewardProcess} from "./exchange-process/ClaimLeagueRewardProcess";
 import {ContestProcess} from "./exchange-process/ContestProcess";
 import {FetchMemberGuidProcess} from "./exchange-process/FetchMemberGuidProcess";
 import {HaremFetchMoneyProcess} from "./exchange-process/HaremFetchMoneyProcess";
@@ -40,7 +42,7 @@ import {ShopProcess} from "./exchange-process/ShopProcess";
 import {TowerHofFameProcess} from "./exchange-process/TowerHofFameProcess";
 import {TrollProcess} from "./exchange-process/TrollProcess";
 import {UpgradeCaracProcess} from "./exchange-process/UpgradeCaracProcess";
-import {WeeklyRewardProcess} from "./exchange-process/WeeklyRewardProcess";
+import {ClaimWeeklyRewardProcess} from "./exchange-process/ClaimWeeklyRewardProcess";
 import {NotificationManager} from "./notification-manager/NotificationManager";
 import {Proxy} from "./proxy/Proxy";
 import {StatsManager} from "./stats-manager/StatsManager";
@@ -94,7 +96,8 @@ process.on("uncaughtException", err => {
     em.use(new QuestProcess());
     em.use(new ContestProcess());
     em.use(new TowerHofFameProcess());
-    em.use(new WeeklyRewardProcess());
+    em.use(new ClaimWeeklyRewardProcess());
+    em.use(new ClaimLeagueRewardProcess());
     em.use(new PanelProcess());
     em.use(new SaveFieldProcess());
 
@@ -112,6 +115,7 @@ process.on("uncaughtException", err => {
     storage.use(ContestEvent, "contest", "contest");
     storage.use(MissionGiftEvent, "missionGiveGift", "missionGift");
     storage.use(WeeklyRewardEvent, "weeklyReward", "weeklyReward");
+    storage.use(LeagueRewardEvent, "leagueReward", "leagueReward");
 
     app.listen(process.env.PORT || 3000);
 

@@ -62,6 +62,7 @@
   },
   "event_upgradeCarac": "Amélioration des caractéristiques de combat",
   "event_weeklyReward": "Récompense hebdomadaire",
+  "event_leagueReward": "Fin de ligue",
 
   "buy_result": {
     "one": "pour %s objet acheté",
@@ -102,6 +103,8 @@
   "setting_arena": "Notification arène",
   "setting_shop": "Notification marché",
   "setting_pachinko": "Notification pachinko",
+
+  "league_reward_ranking": "Classement de ligue",
 
   "dateFormat": "DD/MM - HH:mm"
 }
