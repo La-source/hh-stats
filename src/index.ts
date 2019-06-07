@@ -45,6 +45,7 @@ import {UpgradeCaracProcess} from "./exchange-process/UpgradeCaracProcess";
 import {ClaimWeeklyRewardProcess} from "./exchange-process/ClaimWeeklyRewardProcess";
 import {NotificationManager} from "./notification-manager/NotificationManager";
 import {Proxy} from "./proxy/Proxy";
+import {RankingManager} from "./ranking-manager/RankingManager";
 import {StatsManager} from "./stats-manager/StatsManager";
 import {StorageManager} from "./storage-manager/StorageManager";
 
@@ -72,6 +73,7 @@ process.on("uncaughtException", err => {
     const storage = new StorageManager(process.env.REDIS, await createConnection());
     new StatsManager(app, storage);
     new NotificationManager(app, storage);
+    new RankingManager(storage).run();
     const proxy = new Proxy(app, process.env.TARGET);
     const em = new ExchangeManager(proxy, storage);
 

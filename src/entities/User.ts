@@ -2,6 +2,7 @@ import {Column, Entity, Index, ManyToOne, OneToMany, PrimaryColumn} from "typeor
 import {Hero} from "../client-model/Hero";
 import {Club} from "./Club";
 import {PushSubscription} from "./PushSubscription";
+import {RankingUser} from "./RankingUser";
 
 export enum Locale {
     fr = "fr",
@@ -55,6 +56,12 @@ export class User {
 
     @OneToMany(() => PushSubscription, subscription => subscription.user)
     public pushSubscription: PushSubscription[];
+
+    @ManyToOne(() => RankingUser)
+    public lastRanking: RankingUser;
+
+    @Column("boolean", {default: true})
+    public isFirstRanking = true;
 
     constructor(hero?: Hero) {
         if ( !hero ) {

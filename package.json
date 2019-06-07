@@ -50,6 +50,7 @@
     "cheerio": "^1.0.0-rc.3",
     "cookie": "^0.4.0",
     "cookie-parser": "^1.4.4",
+    "cron": "^1.7.1",
     "ejs": "^2.6.1",
     "express": "^4.17.1",
     "http-proxy-middleware": "^0.19.1",

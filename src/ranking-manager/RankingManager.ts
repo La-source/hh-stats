@@ -1,16 +1,233 @@
 import {load} from "cheerio";
+import {CronJob} from "cron";
 import * as request from "request-promise-native";
+import {Ranking as RankingEntity} from "../entities/Ranking";
+import {RankingUser} from "../entities/RankingUser";
+import {User} from "../entities/User";
+import {StorageManager} from "../storage-manager/StorageManager";
 import {Ranking} from "./Ranking";
 import {RankingField} from "./RankingField";
 import {RankingPage} from "./RankingPage";
 
 export class RankingManager {
+    constructor(private readonly storage: StorageManager) {
+        /*this.storage.db
+            .getRepository(RankingEntity)
+            .findOne({
+                where: {
+                    build: true,
+                },
+            })
+            .then(ranking => {
+                if ( !ranking ) {
+                    return;
+                }
+
+                this.run(ranking.page, ranking.field);
+            })
+        ;*/
+
+        new CronJob("5 0-23/2 * * *", () => {
+            this.run();
+        }, null, null, "Europe/Paris");
+    }
+
+    /**
+     * Parcour l'ensemble du classement et enregistre celui-ci
+     */
+    public async run(_startPage: number = 1, _startField?: RankingField) {
+        console.log("start build ranking");
+
+        let nbPage = 50;
+        const ranking = new RankingEntity();
+        ranking.build = true;
+
+        await this.storage.db.manager.save(ranking);
+
+        for ( let page = 1; page <= nbPage; page++ ) {
+            for ( const field of Object.values(RankingField) ) {
+                console.log(new Date(), `execute page ${page}/${nbPage} ${field}`);
+                const rankingPage = await this.buildPage(page, field, ranking);
+
+                nbPage = rankingPage.maxPage;
+                nbPage = 10; // TODO remove
+
+                ranking.page = page;
+                ranking.field = field;
+                await this.storage.db.manager.save(ranking);
+            }
+        }
+
+        await this.reduce(ranking);
+
+        ranking.build = false;
+        await this.storage.db.manager.save(ranking);
+        console.log("end build ranking");
+    }
+
+    /**
+     * Réduis les résultats inutile
+     */
+    private async reduce(ranking: RankingEntity): Promise<void> {
+        console.log(new Date(), "start reduce");
+
+        const rankingRepository = this.storage.db.getRepository(RankingUser);
+
+        const rankingUsers = await rankingRepository
+            .createQueryBuilder("rankingUser")
+            .leftJoinAndSelect("rankingUser.user", "user")
+            .leftJoinAndSelect("user.lastRanking", "lastRanking")
+            .leftJoinAndSelect("rankingUser.ranking", "ranking")
+            .where("rankingUser.ranking = :ranking", {ranking: ranking.id})
+            .getMany()
+        ;
+
+        let nbRank = 0;
+        let nbRankRemove = 0;
+
+        for ( const rank of rankingUsers ) {
+            nbRank++;
+            let isRemove = true;
+            const lastRanking = rank.user.lastRanking;
+            const isEqual = rank.isEqual(lastRanking);
+
+            rank.user.lastRanking = rank;
+
+            if ( lastRanking && isEqual && rank.user.isFirstRanking ) {
+                rank.user.isFirstRanking = false;
+                isRemove = false;
+            }
+
+            await this.storage.db.manager.save(rank.user);
+
+            if ( isEqual && isRemove ) {
+                await this.storage.db.manager.remove(lastRanking);
+                nbRankRemove++;
+            }
+
+            console.log(new Date(), `build rank ${nbRank}/${rankingUsers.length}`);
+        }
+
+        console.log(new Date(), `end reduce - ${nbRankRemove} elements clear`);
+    }
+
+    /**
+     * Analyse une page de résultat et l'enregistre dans la base de données
+     * @param page
+     * @param field
+     * @param ranking
+     */
+    private async buildPage(page: number, field: RankingField, ranking: RankingEntity): Promise<RankingPage> {
+        const rankinPage = await this.fetchPage(page, field);
+        const users: User[] = [];
+        const ranks: RankingUser[] = [];
+        const overwrite = {
+            value: "",
+            rank: "",
+        };
+
+        switch (rankinPage.field) {
+            case RankingField.experience:
+                overwrite.value = "experience";
+                overwrite.rank = "experienceRanking";
+                break;
+
+            case RankingField.girls_affection:
+                overwrite.value = "girlsAffection";
+                overwrite.rank = "girlsAffectionRanking";
+                break;
+
+            case RankingField.girls_won:
+                overwrite.value = "girlsWon";
+                overwrite.rank = "girlsWonRanking";
+                break;
+
+            case RankingField.harem_level:
+                overwrite.value = "haremLevel";
+                overwrite.rank = "haremLevelRanking";
+                break;
+
+            case RankingField.pvp_wins:
+                overwrite.value = "pvpWins";
+                overwrite.rank = "pvpWinsRanking";
+                break;
+
+            case RankingField.soft_currency:
+                overwrite.value = "softCurrency";
+                overwrite.rank = "softCurrencyRanking";
+                break;
+
+            case RankingField.stats_upgrade:
+                overwrite.value = "statsUpgrade";
+                overwrite.rank = "statsUpgradeRanking";
+                break;
+
+            case RankingField.troll_wins:
+                overwrite.value = "trollWins";
+                overwrite.rank = "trollWinsRanking";
+                break;
+
+            case RankingField.victory_points:
+                overwrite.value = "victoryPoints";
+                overwrite.rank = "victoryPointsRanking";
+                break;
+        }
+
+        for ( const rank of rankinPage.ranking ) {
+            const user = new User();
+            user.id = rank.playerId;
+            user.name = rank.playerName;
+            user.ico = rank.playerIco;
+
+            const rankingUser = new RankingUser();
+            rankingUser.ranking = ranking;
+            rankingUser.user = user;
+            rankingUser[overwrite.value] = rank.value;
+            rankingUser[overwrite.rank] = rank.rank;
+
+            ranks.push(rankingUser);
+            users.push(user);
+        }
+
+        await this.storage.db
+            .getRepository(User)
+            .createQueryBuilder()
+            .insert()
+            .into(User)
+            .values(users)
+            .orUpdate({
+                overwrite: [
+                    "name",
+                    "ico",
+                ],
+            })
+            .execute()
+        ;
+
+        await this.storage.db
+            .getRepository(RankingUser)
+            .createQueryBuilder()
+            .insert()
+            .into(RankingUser)
+            .values(ranks)
+            .orUpdate({
+                overwrite: [
+                    overwrite.value,
+                    overwrite.rank,
+                ],
+            })
+            .execute()
+        ;
+
+        return rankinPage;
+    }
+
     /**
      * Récupère une page du classement
      * @param page
      * @param field
      */
-    public async fetchPage(page: number, field: RankingField): Promise<RankingPage> {
+    private async fetchPage(page: number, field: RankingField): Promise<RankingPage> {
         const $ = await request({
             url: `${process.env.TARGET}/ajax.php`,
             method: "POST",
@@ -51,7 +268,7 @@ export class RankingManager {
             rank.playerId = parseInt($(elt).attr("sorting_id"), 10);
             rank.rank = parseInt($(elt).attr("rank"), 10);
             rank.playerName = $(elt).find(".nickname").text().trim();
-            rank.value = parseInt($(elt).find("td:last-child").text(), 10);
+            rank.value = parseInt($(elt).find("td:last-child").text().replace(/\D+/g, ""), 10);
 
             if ( ico ) {
                 rank.playerIco = parseInt(ico[1], 10);
@@ -63,7 +280,3 @@ export class RankingManager {
         return rankinPage;
     }
 }
-
-const r = new RankingManager();
-r.fetchPage(14791, "victory_points")
-    .then(console.log);
