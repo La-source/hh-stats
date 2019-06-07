@@ -11,7 +11,7 @@ import {RankingPage} from "./RankingPage";
 
 export class RankingManager {
     constructor(private readonly storage: StorageManager) {
-        /*this.storage.db
+        this.storage.db
             .getRepository(RankingEntity)
             .findOne({
                 where: {
@@ -23,19 +23,21 @@ export class RankingManager {
                     return;
                 }
 
-                this.run(ranking.page, ranking.field);
+                return this.run(ranking.page, ranking.field);
             })
-        ;*/
+        ;
 
-        new CronJob("5 0-23/2 * * *", () => {
+        new CronJob("0 5 0-23/2 * * *", () => {
             this.run();
         }, null, null, "Europe/Paris");
     }
 
     /**
      * Parcour l'ensemble du classement et enregistre celui-ci
+     * @param startPage
+     * @param startField
      */
-    public async run(_startPage: number = 1, _startField?: RankingField) {
+    public async run(startPage: number = 1, startField?: RankingField) {
         console.log("start build ranking");
 
         let nbPage = 50;
@@ -44,13 +46,21 @@ export class RankingManager {
 
         await this.storage.db.manager.save(ranking);
 
-        for ( let page = 1; page <= nbPage; page++ ) {
+        for ( let page = startPage; page <= nbPage; page++ ) {
             for ( const field of Object.values(RankingField) ) {
+                if ( page === startPage && startField ) {
+                    if ( startField === field ) {
+                        startField = undefined;
+                    } else {
+                        continue;
+                    }
+                }
+
                 console.log(new Date(), `execute page ${page}/${nbPage} ${field}`);
                 const rankingPage = await this.buildPage(page, field, ranking);
 
                 nbPage = rankingPage.maxPage;
-                nbPage = 10; // TODO remove
+                nbPage = 50; // TODO remove
 
                 ranking.page = page;
                 ranking.field = field;
@@ -62,7 +72,7 @@ export class RankingManager {
 
         ranking.build = false;
         await this.storage.db.manager.save(ranking);
-        console.log("end build ranking");
+        console.log(new Date(), "end build ranking");
     }
 
     /**
@@ -83,7 +93,7 @@ export class RankingManager {
         ;
 
         let nbRank = 0;
-        let nbRankRemove = 0;
+        const toRemove: RankingUser[] = [];
 
         for ( const rank of rankingUsers ) {
             nbRank++;
@@ -101,14 +111,14 @@ export class RankingManager {
             await this.storage.db.manager.save(rank.user);
 
             if ( isEqual && isRemove ) {
-                await this.storage.db.manager.remove(lastRanking);
-                nbRankRemove++;
+                toRemove.push(lastRanking);
             }
 
             console.log(new Date(), `build rank ${nbRank}/${rankingUsers.length}`);
         }
 
-        console.log(new Date(), `end reduce - ${nbRankRemove} elements clear`);
+        await this.storage.db.manager.remove(toRemove);
+        console.log(new Date(), `end reduce - ${toRemove.length} elements clear`);
     }
 
     /**
