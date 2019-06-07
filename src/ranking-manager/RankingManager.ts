@@ -23,26 +23,36 @@ export class RankingManager {
                     return;
                 }
 
-                return this.run(ranking.page, ranking.field);
+                return this.run(ranking);
             })
         ;
 
-        new CronJob("0 5 0-23/2 * * *", () => {
+        if ( !process.env.ANALYSE_RANKING || process.env.ANALYSE_RANKING.toLowerCase() !== "true" ) {
+            return;
+        }
+
+        new CronJob("0 5 */2 * * *", () => {
             this.run();
-        }, null, null, "Europe/Paris");
+        }, null, null, "Europe/Paris").start();
     }
 
     /**
      * Parcour l'ensemble du classement et enregistre celui-ci
-     * @param startPage
-     * @param startField
+     * @param ranking
      */
-    public async run(startPage: number = 1, startField?: RankingField) {
+    public async run(ranking?: RankingEntity) {
         console.log("start build ranking");
 
         let nbPage = 50;
-        const ranking = new RankingEntity();
-        ranking.build = true;
+
+        if ( !ranking ) {
+            ranking = new RankingEntity();
+            ranking.build = true;
+            ranking.page = 1;
+        }
+
+        const startPage = ranking.page;
+        let startField = ranking.field;
 
         await this.storage.db.manager.save(ranking);
 
@@ -50,7 +60,7 @@ export class RankingManager {
             for ( const field of Object.values(RankingField) ) {
                 if ( page === startPage && startField ) {
                     if ( startField === field ) {
-                        startField = undefined;
+                        startField = null;
                     } else {
                         continue;
                     }
@@ -93,7 +103,7 @@ export class RankingManager {
         ;
 
         let nbRank = 0;
-        const toRemove: RankingUser[] = [];
+        let nbRemove = 0;
 
         for ( const rank of rankingUsers ) {
             nbRank++;
@@ -111,14 +121,14 @@ export class RankingManager {
             await this.storage.db.manager.save(rank.user);
 
             if ( isEqual && isRemove ) {
-                toRemove.push(lastRanking);
+                await this.storage.db.manager.remove(lastRanking);
+                nbRemove++;
             }
 
             console.log(new Date(), `build rank ${nbRank}/${rankingUsers.length}`);
         }
 
-        await this.storage.db.manager.remove(toRemove);
-        console.log(new Date(), `end reduce - ${toRemove.length} elements clear`);
+        console.log(new Date(), `end reduce - ${nbRemove} elements clear`);
     }
 
     /**
