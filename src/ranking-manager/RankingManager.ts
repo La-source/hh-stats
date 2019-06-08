@@ -92,38 +92,60 @@ export class RankingManager {
     private async reduce(ranking: RankingEntity): Promise<void> {
         console.log(new Date(), "start reduce");
 
-        const condRanking = (property: string) =>
-            `(ranking_user.${property} = r.${property}
-            OR (ranking_user.${property} IS NULL AND r.${property} IS NULL))`;
+        const where = () => {
+            const q = this.storage.db
+                .createQueryBuilder()
+                .from(RankingUser, "currentRank")
+                .addFrom(User, "user")
+                .addFrom(RankingUser, "previousRank")
+                .where("user.id = currentRank.userId")
+                .andWhere(`currentRank.rankingId = ${ranking.id}`)
+                .andWhere("previousRank.id = user.lastRankingId")
+            ;
 
-        const qbRanking = this.storage.db
+            const fields = [
+                "victoryPoints",
+                "pvpWins",
+                "trollWins",
+                "softCurrency",
+                "experience",
+                "girlsWon",
+                "statsUpgrade",
+                "girlsAffection",
+                "haremLevel",
+            ];
+
+            for ( const field of fields ) {
+                q.andWhere(`(currentRank.${field} = previousRank.${field}
+                    OR (currentRank.${field} IS NULL AND previousRank.${field} IS NULL))`);
+            }
+
+            return q;
+        };
+
+        await this.storage.db
             .getRepository(RankingUser)
             .createQueryBuilder("rankingUser")
-        ;
-        const whereRanking = qbRanking.subQuery()
-            .select("user.lastRanking")
-            .from(User, "user")
-            .addFrom(RankingUser, "r")
-            .where("r.user = user.id AND r.ranking = :ranking", {ranking: ranking.id})
-            .andWhere("2 < " + qbRanking.subQuery()
-                .select("COUNT(*)")
-                .from(RankingUser, "r2")
-                .where("r2.user.id = user.id").getQuery())
-            .andWhere(condRanking("victoryPoints"))
-            .andWhere(condRanking("pvpWins"))
-            .andWhere(condRanking("trollWins"))
-            .andWhere(condRanking("softCurrency"))
-            .andWhere(condRanking("experience"))
-            .andWhere(condRanking("girlsWon"))
-            .andWhere(condRanking("statsUpgrade"))
-            .andWhere(condRanking("girlsAffection"))
-            .andWhere(condRanking("haremLevel"))
+            .update()
+            .set({
+                isDifferentPrevious: false,
+            })
+            .where(`ranking_user.id IN(${where()
+                .select("currentRank.id")
+                .getQuery()})`)
+            .execute()
         ;
 
-        const del: DeleteResult = await qbRanking
+        const del: DeleteResult = await this.storage.db
+            .getRepository(RankingUser)
+            .createQueryBuilder("rankingUser")
             .delete()
-            .where(`ranking_user.id IN ${whereRanking.getQuery()}`)
-            .execute();
+            .where(`ranking_user.id IN(${where()
+                .select("previousRank.id")
+                .andWhere("previousRank.isDifferentPrevious = 0")
+                .getQuery()})`)
+            .execute()
+        ;
 
         await this.storage.db.query(`UPDATE user SET lastRankingId = (
             SELECT

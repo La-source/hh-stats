@@ -68,17 +68,6 @@ export class RankingUser {
     @Column("mediumint", {nullable: true, default: null})
     public haremLevelRanking: number;
 
-    public isEqual(rankingUser: RankingUser): boolean {
-        return rankingUser
-            && rankingUser.victoryPoints === this.victoryPoints
-            && rankingUser.pvpWins === this.pvpWins
-            && rankingUser.trollWins === this.trollWins
-            && rankingUser.softCurrency === this.softCurrency
-            && rankingUser.experience === this.experience
-            && rankingUser.girlsWon === this.girlsWon
-            && rankingUser.statsUpgrade === this.statsUpgrade
-            && rankingUser.girlsAffection === this.girlsAffection
-            && rankingUser.haremLevel === this.haremLevel
-        ;
-    }
+    @Column("boolean", {default: true})
+    public isDifferentPrevious: boolean;
 }
