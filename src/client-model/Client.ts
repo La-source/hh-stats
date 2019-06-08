@@ -293,7 +293,7 @@ export class Client {
      * Transforme les date sous forme de chaine en object Date
      * @param property
      */
-    private jsonToDate(property: keyof Client): void {
+    private jsonToDate(property: string): void {
         if ( typeof this[property] !== "string") {
             return;
         }
