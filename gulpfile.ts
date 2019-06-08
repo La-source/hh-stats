@@ -10,6 +10,7 @@ gulp.task("default", () =>
             "src/**/*.ejs",
             "src/**/*.css",
             "src/**/*.js",
+            "src/**/*.png",
             "src/**/*.json",
             "package*.json",
         ]))
