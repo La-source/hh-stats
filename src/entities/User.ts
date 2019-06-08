@@ -57,11 +57,8 @@ export class User {
     @OneToMany(() => PushSubscription, subscription => subscription.user)
     public pushSubscription: PushSubscription[];
 
-    @ManyToOne(() => RankingUser)
+    @ManyToOne(() => RankingUser, {onDelete: "SET NULL"})
     public lastRanking: RankingUser;
-
-    @Column("boolean", {default: true})
-    public isFirstRanking = true;
 
     constructor(hero?: Hero) {
         if ( !hero ) {

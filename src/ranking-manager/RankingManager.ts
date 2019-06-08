@@ -1,6 +1,7 @@
 import {load} from "cheerio";
 import {CronJob} from "cron";
 import * as request from "request-promise-native";
+import {DeleteResult} from "typeorm";
 import {Ranking as RankingEntity} from "../entities/Ranking";
 import {RankingUser} from "../entities/RankingUser";
 import {User} from "../entities/User";
@@ -41,9 +42,9 @@ export class RankingManager {
      * @param ranking
      */
     public async run(ranking?: RankingEntity) {
-        console.log("start build ranking");
+        console.log(new Date(), "start build ranking");
 
-        let nbPage = 50;
+        let nbPage = 1;
 
         if ( !ranking ) {
             ranking = new RankingEntity();
@@ -70,7 +71,7 @@ export class RankingManager {
                 const rankingPage = await this.buildPage(page, field, ranking);
 
                 nbPage = rankingPage.maxPage;
-                nbPage = 50; // TODO remove
+                nbPage = 100; // TODO remove
 
                 ranking.page = page;
                 ranking.field = field;
@@ -91,44 +92,50 @@ export class RankingManager {
     private async reduce(ranking: RankingEntity): Promise<void> {
         console.log(new Date(), "start reduce");
 
-        const rankingRepository = this.storage.db.getRepository(RankingUser);
+        const condRanking = (property: string) =>
+            `(ranking_user.${property} = r.${property}
+            OR (ranking_user.${property} IS NULL AND r.${property} IS NULL))`;
 
-        const rankingUsers = await rankingRepository
+        const qbRanking = this.storage.db
+            .getRepository(RankingUser)
             .createQueryBuilder("rankingUser")
-            .leftJoinAndSelect("rankingUser.user", "user")
-            .leftJoinAndSelect("user.lastRanking", "lastRanking")
-            .leftJoinAndSelect("rankingUser.ranking", "ranking")
-            .where("rankingUser.ranking = :ranking", {ranking: ranking.id})
-            .getMany()
+        ;
+        const whereRanking = qbRanking.subQuery()
+            .select("user.lastRanking")
+            .from(User, "user")
+            .addFrom(RankingUser, "r")
+            .where("r.user = user.id AND r.ranking = :ranking", {ranking: ranking.id})
+            .andWhere("2 < " + qbRanking.subQuery()
+                .select("COUNT(*)")
+                .from(RankingUser, "r2")
+                .where("r2.user.id = user.id").getQuery())
+            .andWhere(condRanking("victoryPoints"))
+            .andWhere(condRanking("pvpWins"))
+            .andWhere(condRanking("trollWins"))
+            .andWhere(condRanking("softCurrency"))
+            .andWhere(condRanking("experience"))
+            .andWhere(condRanking("girlsWon"))
+            .andWhere(condRanking("statsUpgrade"))
+            .andWhere(condRanking("girlsAffection"))
+            .andWhere(condRanking("haremLevel"))
         ;
 
-        let nbRank = 0;
-        let nbRemove = 0;
+        const del: DeleteResult = await qbRanking
+            .delete()
+            .where(`ranking_user.id IN ${whereRanking.getQuery()}`)
+            .execute();
 
-        for ( const rank of rankingUsers ) {
-            nbRank++;
-            let isRemove = true;
-            const lastRanking = rank.user.lastRanking;
-            const isEqual = rank.isEqual(lastRanking);
+        await this.storage.db.query(`UPDATE user SET lastRankingId = (
+            SELECT
+                ranking_user.id
+            FROM ranking_user
+            WHERE
+                ranking_user.userId = user.id
+                AND ranking_user.rankingId = ${ranking.id})
+        WHERE
+            user.id IN(SELECT ranking_user.userId FROM ranking_user WHERE ranking_user.rankingId = ${ranking.id})`);
 
-            rank.user.lastRanking = rank;
-
-            if ( lastRanking && isEqual && rank.user.isFirstRanking ) {
-                rank.user.isFirstRanking = false;
-                isRemove = false;
-            }
-
-            await this.storage.db.manager.save(rank.user);
-
-            if ( isEqual && isRemove ) {
-                await this.storage.db.manager.remove(lastRanking);
-                nbRemove++;
-            }
-
-            console.log(new Date(), `build rank ${nbRank}/${rankingUsers.length}`);
-        }
-
-        console.log(new Date(), `end reduce - ${nbRemove} elements clear`);
+        console.log(new Date(), `end reduce - ${del.affected} elements clear`);
     }
 
     /**
