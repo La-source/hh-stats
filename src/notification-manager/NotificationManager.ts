@@ -107,7 +107,7 @@ export class NotificationManager {
 
         return this.sendNotification(user, {
             title: __({phrase: "notif_league_full_title", locale: user.locale}),
-            body: __({phrase: "notif_league_full_title", locale: user.locale}),
+            body: __({phrase: "notif_league_full_body", locale: user.locale}),
             tag: new Date().toISOString(),
             timestamp: Date.now(),
             data: {
