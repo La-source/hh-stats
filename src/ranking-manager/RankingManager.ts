@@ -12,6 +12,10 @@ import {RankingPage} from "./RankingPage";
 
 export class RankingManager {
     constructor(private readonly storage: StorageManager) {
+        if ( !process.env.ANALYSE_RANKING || process.env.ANALYSE_RANKING.toLowerCase() !== "true" ) {
+            return;
+        }
+
         this.storage.db
             .getRepository(RankingEntity)
             .findOne({
@@ -27,10 +31,6 @@ export class RankingManager {
                 return this.run(ranking);
             })
         ;
-
-        if ( !process.env.ANALYSE_RANKING || process.env.ANALYSE_RANKING.toLowerCase() !== "true" ) {
-            return;
-        }
 
         new CronJob("0 5 */2 * * *", () => {
             this.run();
