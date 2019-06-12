@@ -29,6 +29,7 @@ import {FetchMemberGuidProcess} from "./exchange-process/FetchMemberGuidProcess"
 import {HaremFetchMoneyProcess} from "./exchange-process/HaremFetchMoneyProcess";
 import {HeroProcess} from "./exchange-process/HeroProcess";
 import {HomeProcess} from "./exchange-process/HomeProcess";
+import {LogoutProcess} from "./exchange-process/LogoutProcess";
 import {MissionGiveGiftProcess} from "./exchange-process/MissionGiveGiftProcess";
 import {MissionProcess} from "./exchange-process/MissionProcess";
 import {PachinkoNextRefreshProcess} from "./exchange-process/PachinkoNextRefreshProcess";
@@ -102,6 +103,7 @@ process.on("uncaughtException", err => {
     em.use(new ClaimLeagueRewardProcess());
     em.use(new PanelProcess());
     em.use(new SaveFieldProcess());
+    em.use(new LogoutProcess());
 
     storage.use(FetchMoneyHaremEvent, "fetchHaremMoney", "fetchMoneyHarem");
     storage.use(PvpBattleEvent, "leagueBattle", "pvpBattle");

@@ -1,5 +1,5 @@
 import {load} from "cheerio";
-import {IncomingMessage} from "http";
+import {IncomingMessage, ServerResponse} from "http";
 import {getExtension} from "mime";
 
 export class Response {
@@ -87,7 +87,7 @@ export class Response {
         return this.body;
     }
 
-    constructor(public readonly res: IncomingMessage, public readonly body?: Buffer) {}
+    constructor(public readonly res: IncomingMessage, public readonly serverRes: ServerResponse, public readonly body?: Buffer) {}
 
     /**
      * Vérifie si le corp est de type texte

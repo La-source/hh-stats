@@ -66,7 +66,7 @@ export class Proxy {
                             }
 
                             proxyRes.exchange = req.exchange;
-                            req.exchange.response = new Response(proxyRes, body);
+                            req.exchange.response = new Response(proxyRes, res, body);
 
                             return this.exchange$(req.exchange);
                         }),
