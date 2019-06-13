@@ -60,6 +60,9 @@ export class User {
     @ManyToOne(() => RankingUser, {onDelete: "SET NULL"})
     public lastRanking: RankingUser;
 
+    @OneToMany(() => RankingUser, rankingUser => rankingUser.user)
+    public rankingUser: RankingUser[];
+
     constructor(hero?: Hero) {
         if ( !hero ) {
             return;

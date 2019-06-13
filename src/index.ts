@@ -57,8 +57,6 @@ process.on("uncaughtException", err => {
 });
 
 (async () => {
-    // TODO wait mysql ready (docker-compose production)
-
     configure({directory: __dirname + "/locales"});
 
     const app = express();
@@ -74,7 +72,7 @@ process.on("uncaughtException", err => {
     const storage = new StorageManager(process.env.REDIS, await createConnection());
     new StatsManager(app, storage);
     new NotificationManager(app, storage);
-    new RankingManager(storage, process.env.USERNAME, process.env.PASSWORD);
+    new RankingManager(app, storage, process.env.USERNAME, process.env.PASSWORD);
     const proxy = new Proxy(app, process.env.TARGET);
     const em = new ExchangeManager(proxy, storage);
 

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Chart</title>
+    <style>
+        #container {
+            height: 500px;
+        }
+    </style>
+</head>
+<body>
+    <select id="type">
+        <option value="victoryPoints">Mojo</option>
+        <option value="experience">Expérience</option>
+    </select>
+    <div id="container">
+        <canvas id="myChart" width="400" height="400"></canvas>
+    </div>
+    <script src="https://unpkg.com/chart.js"></script>
+    <script src="https://unpkg.com/moment@2"></script>
+    <script src="https://unpkg.com/numeraljs"></script>
+    <script>
+        const myChart = new Chart(document.getElementById('myChart'), {
+            type: 'line',
+            options: {
+                elements: {
+                    line: {
+                        tension: 0,
+                    },
+                },
+                scales: {
+                    yAxes: [
+                        {
+                            ticks: {
+                                callback: label => numeral(label).format(),
+                            },
+                        }
+                    ],
+                },
+                responsive: true,
+                maintainAspectRatio: false
+            },
+        });
+
+        function showChart(users, type) {
+            const data = {
+                labels: [],
+                datasets: [],
+            };
+
+            for ( const user of users ) {
+                data.labels = user.rankingUser.map(rank => moment(rank.ranking.date).format("DD/MM HH:00"));
+                data.datasets.push({
+                    data: user.rankingUser.map(rank => rank[type]),
+                    label: user.name,
+                    fill: false,
+                });
+            }
+
+            myChart.data = data;
+            myChart.update();
+        }
+
+        let users;
+        const type = document.getElementById('type');
+
+        type.addEventListener("change", () => {
+            showChart(users, type.value);
+        });
+
+        fetch("_ranking?user[]=342828")
+            .then(result => result.json())
+            .then(_users => {
+                users = _users;
+                showChart(users, type.value);
+            })
+        ;
+    </script>
+
+</body>
+</html>
