@@ -228,6 +228,8 @@ export class Client {
         this.copyPropertyFrom(source, "lastHeroIdle");
         this.copyPropertyFrom(source, "isGirlLootable");
         this.copyPropertyFrom(source, "clubId");
+        this.copyPropertyFrom(source, "weeklyReward");
+        this.copyPropertyFrom(source, "leagueReward");
         this.battle = this.battle.concat(source.battle);
         this.reward = this.reward.concat(source.reward);
         this.sells = this.sells.concat(source.sells);
