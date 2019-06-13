@@ -272,6 +272,8 @@ export class Client {
         this.upgradeCarac = [];
         this.nbMissions = 0;
         this.nbContest = 0;
+        delete this.weeklyReward;
+        delete this.leagueReward;
         delete this.isGirlLootable;
         delete this.setting;
 
