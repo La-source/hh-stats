@@ -1,5 +1,6 @@
 import {load} from "cheerio";
 import {CronJob} from "cron";
+import {CookieJar} from "request";
 import * as request from "request-promise-native";
 import {DeleteResult} from "typeorm";
 import {Ranking as RankingEntity} from "../entities/Ranking";
@@ -11,7 +12,7 @@ import {RankingField} from "./RankingField";
 import {RankingPage} from "./RankingPage";
 
 export class RankingManager {
-    constructor(private readonly storage: StorageManager) {
+    constructor(private readonly storage: StorageManager, private readonly username, private readonly password) {
         if ( !process.env.ANALYSE_RANKING || process.env.ANALYSE_RANKING.toLowerCase() !== "true" ) {
             return;
         }
@@ -32,7 +33,7 @@ export class RankingManager {
             })
         ;
 
-        new CronJob("0 5 */2 * * *", () => {
+        new CronJob("0 5 */4 * * *", () => {
             this.run();
         }, null, null, "Europe/Paris").start();
     }
@@ -43,6 +44,8 @@ export class RankingManager {
      */
     public async run(ranking?: RankingEntity) {
         console.log(new Date(), "start build ranking");
+
+        const jar = await this.auth(this.username, this.password);
 
         let nbPage = 1;
 
@@ -67,8 +70,8 @@ export class RankingManager {
                     }
                 }
 
-                console.log(new Date(), `execute page ${page}/${nbPage} ${field}`);
-                const rankingPage = await this.buildPage(page, field, ranking);
+                console.log(new Date(), `build page ${page}/${nbPage} ${field}`);
+                const rankingPage = await this.buildPage(page, field, ranking, jar);
 
                 nbPage = rankingPage.maxPage;
                 nbPage = 100; // TODO remove
@@ -165,9 +168,13 @@ export class RankingManager {
      * @param page
      * @param field
      * @param ranking
+     * @param jar
      */
-    private async buildPage(page: number, field: RankingField, ranking: RankingEntity): Promise<RankingPage> {
-        const rankinPage = await this.fetchPage(page, field);
+    private async buildPage(page: number,
+                            field: RankingField,
+                            ranking: RankingEntity,
+                            jar: CookieJar): Promise<RankingPage> {
+        const rankinPage = await this.fetchPage(page, field, jar);
         const users: User[] = [];
         const ranks: RankingUser[] = [];
         const overwrite = {
@@ -275,8 +282,9 @@ export class RankingManager {
      * Récupère une page du classement
      * @param page
      * @param field
+     * @param jar
      */
-    private async fetchPage(page: number, field: RankingField): Promise<RankingPage> {
+    private async fetchPage(page: number, field: RankingField, jar: CookieJar): Promise<RankingPage> {
         const $ = await request({
             url: `${process.env.TARGET}/ajax.php`,
             method: "POST",
@@ -285,14 +293,6 @@ export class RankingManager {
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
                     + "AppleWebKit/537.36 (KHTML, like Gecko) "
                     + "Chrome/74.0.3729.169 Safari/537.36",
-                "Cookie": "HAPBK=web5; "
-                    + "age_verification=1; "
-                    + "stay_online=2075727%3Af25e5f8b9315786bcb3adc00e3ffd775; "
-                    + "lang=fr; "
-                    + "member_guid=335E9342-8697-4629-A06A-C8FBC45CF8B9; "
-                    + "HH_SESS_13=fqib8nr30n1rmjskr6pou4enn5; "
-                    + "_pk_ses.2.1fff=1; "
-                    + "_pk_id.2.1fff=74b82cc62c1f0174.1559666870.8.1559837375.1559833946.",
             },
             form: {
                 class: "TowerOfFame",
@@ -303,6 +303,7 @@ export class RankingManager {
                 ranking_type: "alltime",
             },
             transform: body => load(JSON.parse(body).html.WW),
+            jar,
         });
 
         const rankinPage = new RankingPage();
@@ -327,5 +328,45 @@ export class RankingManager {
         });
 
         return rankinPage;
+    }
+
+    /**
+     * Authentifie le compte afin de pouvoir analyser le classement
+     * @param username
+     * @param password
+     */
+    private async auth(username: string, password: string): Promise<CookieJar> {
+        const jar = request.jar();
+
+        await request({
+            uri: `${process.env.TARGET}/home.html`,
+            jar,
+        });
+
+        const result = await request({
+            method: "POST",
+            uri: `${process.env.TARGET}/phoenix-ajax.php`,
+            form: {
+                login: username,
+                password,
+                stay_online: 1,
+                module: "Member",
+                action: "form_log_in",
+                call: "Member",
+            },
+            json: true,
+            jar,
+        });
+
+        if ( !result.success ) {
+            throw new Error("Unable auth");
+        }
+
+        await request({
+            uri: `${process.env.TARGET}/tower-of-fame.html`,
+            jar,
+        });
+
+        return jar;
     }
 }

@@ -74,7 +74,7 @@ process.on("uncaughtException", err => {
     const storage = new StorageManager(process.env.REDIS, await createConnection());
     new StatsManager(app, storage);
     new NotificationManager(app, storage);
-    new RankingManager(storage);
+    new RankingManager(storage, process.env.USERNAME, process.env.PASSWORD);
     const proxy = new Proxy(app, process.env.TARGET);
     const em = new ExchangeManager(proxy, storage);
 
