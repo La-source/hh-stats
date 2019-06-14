@@ -20,6 +20,7 @@ export class RankingManager {
                 private readonly username,
                 private readonly password) {
         this.fetchData();
+        this.findUser();
 
         if ( !process.env.ANALYSE_RANKING || process.env.ANALYSE_RANKING.toLowerCase() !== "true" ) {
             return;
@@ -383,11 +384,39 @@ export class RankingManager {
      */
     private fetchData() {
         this.app.get("/_ranking", async (req: Request, res: Response) => {
+            console.log(new Date(), "load history", req.url);
+
             const start: moment.Moment = req.query.start ? moment(req.query.start) : moment().subtract(1, "month");
             const end: moment.Moment = req.query.end ? moment(req.query.end) : moment();
-            const users = req.query.user instanceof Array ? req.query.user.map(user => parseInt(user, 10)) : [];
+            const users = !(req.query.user instanceof Array) ? [] :
+                req.query.user
+                    .map(user => parseInt(user, 10))
+                    .filter(user => !isNaN(user))
+            ;
 
-            const result = await this.storage.getRanking(users, start.toDate(), end.toDate());
+            const result = users.length === 0 ? [] :
+                await this.storage.getRanking(users, start.toDate(), end.toDate());
+
+            res.setHeader("Content-Type", "application/json");
+            res.end(JSON.stringify(result));
+        });
+    }
+
+    private findUser() {
+        this.app.get("/_find", async (req: Request, res: Response) => {
+            console.log(new Date(), "find user", req.url);
+
+            const result = await this.storage.db
+                .getRepository(User)
+                .createQueryBuilder()
+                .select([
+                    "id",
+                    "name",
+                ])
+                .where("name LIKE :name", {name: `%${req.query.username}%`})
+                .take(20)
+                .getRawMany()
+            ;
 
             res.setHeader("Content-Type", "application/json");
             res.end(JSON.stringify(result));
