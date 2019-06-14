@@ -34,11 +34,13 @@ export class QuestEvent extends EventEntity {
             this.event.type = TypeEvent.quest;
             this.nbQuests = client.quests.length;
 
-            this.softCurrency = this.diff("softCurrency", client.quests, client.lastHeroIdle.softCurrency);
-            this.hardCurrency = this.diff("hardCurrency", client.quests, client.lastHeroIdle.hardCurrency);
-            this.energyQuest = this.diff("energyQuest", client.quests, client.lastHeroIdle.energyQuest);
-            this.xp = this.diff("xp", client.quests, client.lastHeroIdle.xp, Math.max);
-            this.level = this.diff("level", client.quests, client.lastHeroIdle.level, Math.max);
+            if ( client.lastHeroIdle ) {
+                this.softCurrency = this.diff("softCurrency", client.quests, client.lastHeroIdle.softCurrency);
+                this.hardCurrency = this.diff("hardCurrency", client.quests, client.lastHeroIdle.hardCurrency);
+                this.energyQuest = this.diff("energyQuest", client.quests, client.lastHeroIdle.energyQuest);
+                this.xp = this.diff("xp", client.quests, client.lastHeroIdle.xp, Math.max);
+                this.level = this.diff("level", client.quests, client.lastHeroIdle.level, Math.max);
+            }
 
             for ( const quest of client.quests ) {
                 if ( quest.girl ) {
