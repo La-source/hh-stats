@@ -9,6 +9,7 @@ gulp.task("default", () =>
         .pipe(gulp.src([
             "src/**/*.ejs",
             "src/**/*.css",
+            "src/**/*.html",
             "src/**/*.js",
             "src/**/*.png",
             "src/**/*.json",

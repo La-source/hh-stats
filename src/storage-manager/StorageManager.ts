@@ -388,6 +388,24 @@ export class StorageManager implements ExchangeListener {
         return this.db.getRepository(User).findOne(client.hero.id);
     }
 
+    /**
+     * Renvoie l'historique des classements des joueurs demandé dans la plage demandée
+     * @param users
+     * @param start
+     * @param end
+     */
+    public async getRanking(users: number[], start: Date, end: Date): Promise<User[]> {
+        return this.db
+            .getRepository(User)
+            .createQueryBuilder("user")
+            .innerJoinAndSelect("user.rankingUser", "rankingUser")
+            .innerJoinAndSelect("rankingUser.ranking", "ranking")
+            .where("user.id IN(:users)", {users})
+            .andWhere("ranking.date BETWEEN :start AND :end", {start, end})
+            .getMany()
+        ;
+    }
+
     private updateBackground(client: Client): Promise<void> {
         if ( !client.background ) {
             return;

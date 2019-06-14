@@ -1,5 +1,8 @@
 import {load} from "cheerio";
 import {CronJob} from "cron";
+import {Application} from "express";
+import {Request, Response} from "express-serve-static-core";
+import * as moment from "moment";
 import {CookieJar} from "request";
 import * as request from "request-promise-native";
 import {DeleteResult} from "typeorm";
@@ -12,7 +15,13 @@ import {RankingField} from "./RankingField";
 import {RankingPage} from "./RankingPage";
 
 export class RankingManager {
-    constructor(private readonly storage: StorageManager, private readonly username, private readonly password) {
+    constructor(private readonly app: Application,
+                private readonly storage: StorageManager,
+                private readonly username,
+                private readonly password) {
+        this.fetchData();
+        this.findUser();
+
         if ( !process.env.ANALYSE_RANKING || process.env.ANALYSE_RANKING.toLowerCase() !== "true" ) {
             return;
         }
@@ -368,5 +377,49 @@ export class RankingManager {
         });
 
         return jar;
+    }
+
+    /**
+     * Récupère les données historique pour les utilisateurs demandé
+     */
+    private fetchData() {
+        this.app.get("/_ranking", async (req: Request, res: Response) => {
+            console.log(new Date(), "load history", req.url);
+
+            const start: moment.Moment = req.query.start ? moment(req.query.start) : moment().subtract(1, "month");
+            const end: moment.Moment = req.query.end ? moment(req.query.end) : moment();
+            const users = !(req.query.user instanceof Array) ? [] :
+                req.query.user
+                    .map(user => parseInt(user, 10))
+                    .filter(user => !isNaN(user))
+            ;
+
+            const result = users.length === 0 ? [] :
+                await this.storage.getRanking(users, start.toDate(), end.toDate());
+
+            res.setHeader("Content-Type", "application/json");
+            res.end(JSON.stringify(result));
+        });
+    }
+
+    private findUser() {
+        this.app.get("/_find", async (req: Request, res: Response) => {
+            console.log(new Date(), "find user", req.url);
+
+            const result = await this.storage.db
+                .getRepository(User)
+                .createQueryBuilder()
+                .select([
+                    "id",
+                    "name",
+                ])
+                .where("name LIKE :name", {name: `%${req.query.username}%`})
+                .take(20)
+                .getRawMany()
+            ;
+
+            res.setHeader("Content-Type", "application/json");
+            res.end(JSON.stringify(result));
+        });
     }
 }

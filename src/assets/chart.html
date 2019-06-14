@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Chart</title>
+    <style>
+        #container {
+            max-height: 500px;
+        }
+
+        #form {
+            position: relative;
+        }
+
+        #form #search_result {
+            background-color: white;
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+    <div id="option">
+        <select id="type">
+            <option value="victoryPoints">Mojo</option>
+            <option value="pvpWins">pvpWins</option>
+            <option value="trollWins">trollWins</option>
+            <option value="softCurrency">softCurrency</option>
+            <option value="experience">experience</option>
+            <option value="girlsWon">girlsWon</option>
+            <option value="statsUpgrade">statsUpgrade</option>
+            <option value="girlsAffection">girlsAffection</option>
+            <option value="haremLevel">haremLevel</option>
+        </select>
+        <form id="form">
+            <input type="text" id="search_username" name="search_username" />
+        </form>
+        <div id="users"></div>
+    </div>
+    <div id="container">
+        <canvas id="myChart" width="400" height="400"></canvas>
+    </div>
+    <script src="https://unpkg.com/chart.js"></script>
+    <script src="https://unpkg.com/moment@2"></script>
+    <script src="https://unpkg.com/numeraljs"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@5.3.0/dist/js/autoComplete.min.js"></script>
+    <script src="chart.js"></script>
+</body>
+</html>
