@@ -29,6 +29,7 @@
   "repository": "github:La-source/hh-stats",
   "license": "ISC",
   "devDependencies": {
+    "@types/body-parser": "^1.17.0",
     "@types/cheerio": "^0.22.11",
     "@types/cron": "^1.7.1",
     "@types/express": "^4.17.0",
