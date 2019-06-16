@@ -4,12 +4,13 @@ import {__} from "i18n";
 import {sendNotification, setVapidDetails} from "web-push";
 import {PushSubscription as PushSubscriptionEntity} from "../entities/PushSubscription";
 import {User} from "../entities/User";
+import {ListenerExpire} from "../storage-manager/ListenerExpire";
 import {StorageManager} from "../storage-manager/StorageManager";
 import {Notification} from "./Notification";
 
-export class NotificationManager {
+export class NotificationManager implements ListenerExpire {
     constructor(private readonly app: Application) {
-        StorageManager.getInstance().registerNotificationManager(this);
+        StorageManager.getInstance().addExpireListener(this);
 
         setVapidDetails(
             `mailto:${process.env.VAPID_MAIL}`,
@@ -23,7 +24,42 @@ export class NotificationManager {
         this.getPublicVapidKey();
     }
 
-    public pachinko(user: User): Promise<void> {
+    public async onExpire(key: string): Promise<void> {
+        if ( !key.startsWith("timers_") ) {
+            return;
+        }
+
+        const [, type, userId] = key.split("_");
+        const user = await StorageManager.getInstance().db.getRepository(User).findOne(userId);
+
+        switch ( type ) {
+            case "pachinko":
+                this.pachinko(user);
+                break;
+
+            case "arena":
+                this.arena(user);
+                break;
+
+            case "shop":
+                this.shop(user);
+                break;
+
+            case "finishQuest":
+                this.finishQuest(user);
+                break;
+
+            case "finishFight":
+                this.finishFight(user);
+                break;
+
+            case "finishLeague":
+                this.finishLeague(user);
+                break;
+        }
+    }
+
+    private pachinko(user: User): Promise<void> {
         if ( !user.notificationPachinko ) {
             return;
         }
@@ -39,7 +75,7 @@ export class NotificationManager {
         });
     }
 
-    public shop(user: User): Promise<void> {
+    private shop(user: User): Promise<void> {
         if ( !user.notificationShop ) {
             return;
         }
@@ -55,7 +91,7 @@ export class NotificationManager {
         });
     }
 
-    public arena(user: User): Promise<void> {
+    private arena(user: User): Promise<void> {
         if ( !user.notificationArena ) {
             return;
         }
@@ -71,7 +107,7 @@ export class NotificationManager {
         });
     }
 
-    public finishQuest(user: User): Promise<void> {
+    private finishQuest(user: User): Promise<void> {
         if ( !user.notificationEnergyFull ) {
             return;
         }
@@ -87,7 +123,7 @@ export class NotificationManager {
         });
     }
 
-    public finishFight(user: User): Promise<void> {
+    private finishFight(user: User): Promise<void> {
         if ( !user.notificationEnergyFull ) {
             return;
         }
@@ -103,7 +139,7 @@ export class NotificationManager {
         });
     }
 
-    public finishLeague(user: User): Promise<void> {
+    private finishLeague(user: User): Promise<void> {
         if ( !user.notificationEnergyFull ) {
             return;
         }
@@ -119,7 +155,7 @@ export class NotificationManager {
         });
     }
 
-    public async sendNotification(user: User, notification: Notification): Promise<void> {
+    private async sendNotification(user: User, notification: Notification): Promise<void> {
         const subscriptions = await StorageManager.getInstance().db
             .getRepository(PushSubscriptionEntity)
             .find({

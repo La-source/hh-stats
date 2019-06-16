@@ -8,12 +8,12 @@ import {Event} from "../entities/Event";
 import {EventEntity} from "../entities/EventEntity";
 import {User} from "../entities/User";
 import {ExchangeListener} from "../exchange-manager/ExchangeListener";
-import {NotificationManager} from "../notification-manager/NotificationManager";
 import {ClubRepository} from "../repositories/ClubRepository";
 import {UserRepository} from "../repositories/UserRepository";
+import {ListenerExpire} from "./ListenerExpire";
 import {Queue} from "./Queue";
 
-export class StorageManager implements ExchangeListener {
+export class StorageManager implements ExchangeListener, ListenerExpire {
     /**
      * Timeout d'affacement d'un client dans redis
      */
@@ -54,9 +54,10 @@ export class StorageManager implements ExchangeListener {
 
     private readonly redis: RedisClient;
 
-    private notificationManager: NotificationManager;
+    private listenersExpire: ListenerExpire[] = [];
 
     protected constructor(readonly redisHost: string, public readonly db: Connection) {
+        this.addExpireListener(this);
         this.redis = createClient(redisHost);
         this.redisAsync = {
             get: promisify(this.redis.get).bind(this.redis),
@@ -71,10 +72,8 @@ export class StorageManager implements ExchangeListener {
                 const sub = createClient(redisHost);
                 sub.subscribe("__keyevent@0__:expired", () =>
                     sub.on("message", (_channel, key) => {
-                        if ( key.startsWith("activity_") ) {
-                            return this.storeClient(key.split("_")[1]);
-                        } else if ( key.startsWith("timers_") ) {
-                            this.executeTimer(key);
+                        for ( const listener of this.listenersExpire ) {
+                            listener.onExpire(key);
                         }
                     }));
             });
@@ -97,8 +96,16 @@ export class StorageManager implements ExchangeListener {
         });
     }
 
-    public registerNotificationManager(notificationManager: NotificationManager) {
-        this.notificationManager = notificationManager;
+    public addExpireListener(listener: ListenerExpire): void {
+        this.listenersExpire.push(listener);
+    }
+
+    public async onExpire(key: string): Promise<void> {
+        if ( !key.startsWith("activity_") ) {
+            return;
+        }
+
+        await this.storeClient(key.split("_")[1]);
     }
 
     /**
@@ -261,37 +268,6 @@ export class StorageManager implements ExchangeListener {
         }
 
         await this.db.manager.save(user);
-    }
-
-    private async executeTimer(key: string) {
-        const [, type, userId] = key.split("_");
-        const user = await this.db.getRepository(User).findOne(userId);
-
-        switch ( type ) {
-            case "pachinko":
-                this.notificationManager.pachinko(user);
-                break;
-
-            case "arena":
-                this.notificationManager.arena(user);
-                break;
-
-            case "shop":
-                this.notificationManager.shop(user);
-                break;
-
-            case "finishQuest":
-                this.notificationManager.finishQuest(user);
-                break;
-
-            case "finishFight":
-                this.notificationManager.finishFight(user);
-                break;
-
-            case "finishLeague":
-                this.notificationManager.finishLeague(user);
-                break;
-        }
     }
 
     private async persistClear(client: Client): Promise<void> {
