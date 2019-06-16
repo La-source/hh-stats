@@ -50,6 +50,9 @@ export class WeeklyRewardEvent extends EventEntity {
 
         this.event = new Event();
         this.event.type = TypeEvent.weeklyReward;
+        this.softCurrency = client.weeklyReward.newSoftCurrency - client.lastHeroIdle.softCurrency;
+        this.hardCurrency = client.weeklyReward.newHardCurrency - client.lastHeroIdle.hardCurrency;
+        this.xp = client.weeklyReward.newXp - client.lastHeroIdle.xp;
         Object.assign(this, client.weeklyReward);
     }
 }

@@ -23,4 +23,12 @@
         <td><%= __("sum_contest") %></td>
         <td><%= formatNumber(source.contest) %></td>
     </tr><% } %>
+    <% if ( source.weeklyReward !== 0 ) { %><tr>
+        <td><%= __("sum_weekly") %></td>
+        <td><%= formatNumber(source.weeklyReward) %></td>
+    </tr><% } %>
+    <% if ( source.leagueReward !== 0 ) { %><tr>
+        <td><%= __("sum_league") %></td>
+        <td><%= formatNumber(source.leagueReward) %></td>
+    </tr><% } %>
 </table>

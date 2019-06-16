@@ -1,10 +1,10 @@
 
 export class WeeklyReward {
-    public softCurrency: number;
+    public newSoftCurrency: number;
 
-    public hardCurrency: number;
+    public newHardCurrency: number;
 
-    public xp: number;
+    public newXp: number;
 
     public rankingVictoryPoints: number;
 
@@ -35,14 +35,14 @@ export class WeeklyReward {
 
         if ( source.rewards.heroChangesUpdate ) {
             const change = source.rewards.heroChangesUpdate;
-            this.softCurrency = change.soft_currency;
-            this.hardCurrency = change.hard_currency;
-            this.xp = change.xp;
+            this.newSoftCurrency = change.soft_currency;
+            this.newHardCurrency = change.hard_currency;
+            this.newXp = change.xp;
         }
 
         if ( source.rewards.list ) {
-            for ( const [index, result] of source.rewards.list.entiers() ) {
-                const ranking = parseInt(result.match(/\d+/g)[0], 10);
+            for ( const [index, result] of source.rewards.list.entries() ) {
+                const ranking = parseInt(result.rank.match(/\d+/g)[0], 10);
 
                 switch ( index ) {
                     case 0:

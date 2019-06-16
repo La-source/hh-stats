@@ -49,6 +49,8 @@ export class EventRepository extends Repository<Event> {
             .addSelect("SUM(girlUpgrade.softCurrency)", "girlUpgrade")
             .addSelect("SUM(quest.softCurrency)", "quest")
             .addSelect("SUM(contest.softCurrency)", "contest")
+            .addSelect("SUM(weeklyReward.softCurrency)", "weeklyReward")
+            .addSelect("SUM(leagueReward.softCurrency)", "leagueReward")
             .leftJoin("event.fetchMoneyHarem", "fetchMoneyHarem")
             .leftJoin("event.sell", "sell")
             .leftJoin("event.pvpBattle", "pvp")
@@ -60,6 +62,8 @@ export class EventRepository extends Repository<Event> {
             .leftJoin("event.girlUpgrade", "girlUpgrade")
             .leftJoin("event.quest", "quest")
             .leftJoin("event.contest", "contest")
+            .leftJoin("event.weeklyReward", "weeklyReward")
+            .leftJoin("event.leagueReward", "leagueReward")
             .where("event.userId = :userId", {userId})
         ;
 
@@ -83,12 +87,16 @@ export class EventRepository extends Repository<Event> {
                 + result.pvp
                 + result.troll
                 + result.mission
-                + result.contest;
+                + result.contest
+                + result.weeklyReward
+                + result.leagueReward
+            ;
             result.dispense = result.pachinko
                 + result.quest
                 + result.upgradeCarac
                 + result.buy
-                + result.girlUpgrade;
+                + result.girlUpgrade
+            ;
 
             return result;
         };
