@@ -228,6 +228,10 @@ export class RankingManager {
             url: `${process.env.TARGET}/ajax.php`,
         });
 
+        if ( $(".lead_no_result").length !== 0 ) {
+            throw new Error("Pas de résultat dans le classement");
+        }
+
         const rankinPage = new RankingPage();
         rankinPage.field = field;
         rankinPage.page = page;
@@ -285,8 +289,32 @@ export class RankingManager {
         }
 
         await request({
+            headers: {
+                "Referer": `${process.env.TARGET}/home.html`,
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                    + "AppleWebKit/537.36 (KHTML, like Gecko) "
+                    + "Chrome/74.0.3729.169 Safari/537.36",
+            },
             jar,
             url: `${process.env.TARGET}/tower-of-fame.html`,
+        });
+
+        await request({
+            form: {
+                action: "leaderboard_change",
+                class: "TowerOfFame",
+                ranking_field: "victory_points",
+                ranking_type: "alltime",
+            },
+            headers: {
+                "Referer": `${process.env.TARGET}/tower-of-fame.html?tab=leaderboard`,
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                    + "AppleWebKit/537.36 (KHTML, like Gecko) "
+                    + "Chrome/74.0.3729.169 Safari/537.36",
+            },
+            jar,
+            method: "POST",
+            url: `${process.env.TARGET}/ajax.php`,
         });
 
         return jar;
