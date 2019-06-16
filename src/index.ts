@@ -24,6 +24,7 @@ import {BattleProcess} from "./exchange-process/BattleProcess";
 import {BuyProcess} from "./exchange-process/BuyProcess";
 import {ChangeProxyUrlProcess} from "./exchange-process/ChangeProxyUrlProcess";
 import {ClaimLeagueRewardProcess} from "./exchange-process/ClaimLeagueRewardProcess";
+import {ClaimWeeklyRewardProcess} from "./exchange-process/ClaimWeeklyRewardProcess";
 import {ContestProcess} from "./exchange-process/ContestProcess";
 import {FetchMemberGuidProcess} from "./exchange-process/FetchMemberGuidProcess";
 import {HaremFetchMoneyProcess} from "./exchange-process/HaremFetchMoneyProcess";
@@ -43,7 +44,6 @@ import {ShopProcess} from "./exchange-process/ShopProcess";
 import {TowerHofFameProcess} from "./exchange-process/TowerHofFameProcess";
 import {TrollProcess} from "./exchange-process/TrollProcess";
 import {UpgradeCaracProcess} from "./exchange-process/UpgradeCaracProcess";
-import {ClaimWeeklyRewardProcess} from "./exchange-process/ClaimWeeklyRewardProcess";
 import {NotificationManager} from "./notification-manager/NotificationManager";
 import {Proxy} from "./proxy/Proxy";
 import {RankingManager} from "./ranking-manager/RankingManager";
@@ -69,10 +69,26 @@ process.on("uncaughtException", err => {
     app.set("view engine", "ejs");
     app.set("views", __dirname + "/views");
 
-    const storage = new StorageManager(process.env.REDIS, await createConnection());
-    new StatsManager(app, storage);
-    new NotificationManager(app, storage);
-    new RankingManager(app, storage, process.env.USERNAME, process.env.PASSWORD);
+    const storage = StorageManager.create(process.env.REDIS, await createConnection());
+    storage.use(FetchMoneyHaremEvent, "fetchHaremMoney", "fetchMoneyHarem");
+    storage.use(PvpBattleEvent, "leagueBattle", "pvpBattle");
+    storage.use(PvpBattleEvent, "arenaBattle");
+    storage.use(TrollBattleEvent, "trollBattle", "trollBattle");
+    storage.use(PachinkoEvent, "pachinko", "pachinko");
+    storage.use(MissionEvent, "mission", "mission");
+    storage.use(UpgradeCaracEvent, "upgradeCarac", "upgradeCarac");
+    storage.use(BuyEvent, "buy", "buy");
+    storage.use(SellEvent, "sell", "sell");
+    storage.use(QuestEvent, "quest", "quest");
+    storage.use(GirlUpgradeEvent, "girlUpgrade", "girlUpgrade");
+    storage.use(ContestEvent, "contest", "contest");
+    storage.use(MissionGiftEvent, "missionGiveGift", "missionGift");
+    storage.use(WeeklyRewardEvent, "weeklyReward", "weeklyReward");
+    storage.use(LeagueRewardEvent, "leagueReward", "leagueReward");
+
+    new StatsManager(app);
+    new NotificationManager(app);
+    new RankingManager(app, process.env.USERNAME, process.env.PASSWORD);
     const proxy = new Proxy(app, process.env.TARGET);
     const em = new ExchangeManager(proxy, storage);
 
@@ -102,22 +118,6 @@ process.on("uncaughtException", err => {
     em.use(new PanelProcess());
     em.use(new SaveFieldProcess());
     em.use(new LogoutProcess());
-
-    storage.use(FetchMoneyHaremEvent, "fetchHaremMoney", "fetchMoneyHarem");
-    storage.use(PvpBattleEvent, "leagueBattle", "pvpBattle");
-    storage.use(PvpBattleEvent, "arenaBattle");
-    storage.use(TrollBattleEvent, "trollBattle", "trollBattle");
-    storage.use(PachinkoEvent, "pachinko", "pachinko");
-    storage.use(MissionEvent, "mission", "mission");
-    storage.use(UpgradeCaracEvent, "upgradeCarac", "upgradeCarac");
-    storage.use(BuyEvent, "buy", "buy");
-    storage.use(SellEvent, "sell", "sell");
-    storage.use(QuestEvent, "quest", "quest");
-    storage.use(GirlUpgradeEvent, "girlUpgrade", "girlUpgrade");
-    storage.use(ContestEvent, "contest", "contest");
-    storage.use(MissionGiftEvent, "missionGiveGift", "missionGift");
-    storage.use(WeeklyRewardEvent, "weeklyReward", "weeklyReward");
-    storage.use(LeagueRewardEvent, "leagueReward", "leagueReward");
 
     app.listen(process.env.PORT || 3000);
 

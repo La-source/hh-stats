@@ -5,10 +5,12 @@ import {Request, Response} from "express-serve-static-core";
 import * as moment from "moment";
 import {CookieJar} from "request";
 import * as request from "request-promise-native";
-import {DeleteResult} from "typeorm";
+import {getCustomRepository} from "typeorm";
 import {Ranking as RankingEntity} from "../entities/Ranking";
 import {RankingUser} from "../entities/RankingUser";
 import {User} from "../entities/User";
+import {RankingUserRepository} from "../repositories/RankingUserRepository";
+import {UserRepository} from "../repositories/UserRepository";
 import {StorageManager} from "../storage-manager/StorageManager";
 import {Ranking} from "./Ranking";
 import {RankingField} from "./RankingField";
@@ -16,7 +18,6 @@ import {RankingPage} from "./RankingPage";
 
 export class RankingManager {
     constructor(private readonly app: Application,
-                private readonly storage: StorageManager,
                 private readonly username,
                 private readonly password) {
         this.fetchData();
@@ -26,7 +27,7 @@ export class RankingManager {
             return;
         }
 
-        this.storage.db
+        StorageManager.getInstance().db
             .getRepository(RankingEntity)
             .findOne({
                 where: {
@@ -67,7 +68,7 @@ export class RankingManager {
         const startPage = ranking.page;
         let startField = ranking.field;
 
-        await this.storage.db.manager.save(ranking);
+        await StorageManager.getInstance().db.manager.save(ranking);
 
         for ( let page = startPage; page <= nbPage; page++ ) {
             for ( const field of Object.values(RankingField) ) {
@@ -87,14 +88,14 @@ export class RankingManager {
 
                 ranking.page = page;
                 ranking.field = field;
-                await this.storage.db.manager.save(ranking);
+                await StorageManager.getInstance().db.manager.save(ranking);
             }
         }
 
         await this.reduce(ranking);
 
         ranking.build = false;
-        await this.storage.db.manager.save(ranking);
+        await StorageManager.getInstance().db.manager.save(ranking);
         console.log(new Date(), "end build ranking");
     }
 
@@ -104,70 +105,7 @@ export class RankingManager {
     private async reduce(ranking: RankingEntity): Promise<void> {
         console.log(new Date(), "start reduce");
 
-        const where = () => {
-            const q = this.storage.db
-                .createQueryBuilder()
-                .from(RankingUser, "currentRank")
-                .addFrom(User, "user")
-                .addFrom(RankingUser, "previousRank")
-                .where("user.id = currentRank.userId")
-                .andWhere(`currentRank.rankingId = ${ranking.id}`)
-                .andWhere("previousRank.id = user.lastRankingId")
-            ;
-
-            const fields = [
-                "victoryPoints",
-                "pvpWins",
-                "trollWins",
-                "softCurrency",
-                "experience",
-                "girlsWon",
-                "statsUpgrade",
-                "girlsAffection",
-                "haremLevel",
-            ];
-
-            for ( const field of fields ) {
-                q.andWhere(`(currentRank.${field} = previousRank.${field}
-                    OR (currentRank.${field} IS NULL AND previousRank.${field} IS NULL))`);
-            }
-
-            return q;
-        };
-
-        await this.storage.db
-            .getRepository(RankingUser)
-            .createQueryBuilder("rankingUser")
-            .update()
-            .set({
-                isDifferentPrevious: false,
-            })
-            .where(`ranking_user.id IN(${where()
-                .select("currentRank.id")
-                .getQuery()})`)
-            .execute()
-        ;
-
-        const del: DeleteResult = await this.storage.db
-            .getRepository(RankingUser)
-            .createQueryBuilder("rankingUser")
-            .delete()
-            .where(`ranking_user.id IN(${where()
-                .select("previousRank.id")
-                .andWhere("previousRank.isDifferentPrevious = 0")
-                .getQuery()})`)
-            .execute()
-        ;
-
-        await this.storage.db.query(`UPDATE user SET lastRankingId = (
-            SELECT
-                ranking_user.id
-            FROM ranking_user
-            WHERE
-                ranking_user.userId = user.id
-                AND ranking_user.rankingId = ${ranking.id})
-        WHERE
-            user.id IN(SELECT ranking_user.userId FROM ranking_user WHERE ranking_user.rankingId = ${ranking.id})`);
+        const del = await getCustomRepository(RankingUserRepository).reduce(ranking);
 
         console.log(new Date(), `end reduce - ${del.affected} elements clear`);
     }
@@ -254,35 +192,8 @@ export class RankingManager {
             users.push(user);
         }
 
-        await this.storage.db
-            .getRepository(User)
-            .createQueryBuilder()
-            .insert()
-            .into(User)
-            .values(users)
-            .orUpdate({
-                overwrite: [
-                    "name",
-                    "ico",
-                ],
-            })
-            .execute()
-        ;
-
-        await this.storage.db
-            .getRepository(RankingUser)
-            .createQueryBuilder()
-            .insert()
-            .into(RankingUser)
-            .values(ranks)
-            .orUpdate({
-                overwrite: [
-                    overwrite.value,
-                    overwrite.rank,
-                ],
-            })
-            .execute()
-        ;
+        await getCustomRepository(UserRepository).registerRanking(users);
+        await getCustomRepository(RankingUserRepository).register(ranks, overwrite);
 
         return rankinPage;
     }
@@ -395,7 +306,7 @@ export class RankingManager {
             ;
 
             const result = users.length === 0 ? [] :
-                await this.storage.getRanking(users, start.toDate(), end.toDate());
+                await getCustomRepository(UserRepository).getRankingHistory(users, start.toDate(), end.toDate());
 
             res.setHeader("Content-Type", "application/json");
             res.end(JSON.stringify(result));
@@ -406,17 +317,7 @@ export class RankingManager {
         this.app.get("/_find", async (req: Request, res: Response) => {
             console.log(new Date(), "find user", req.url);
 
-            const result = await this.storage.db
-                .getRepository(User)
-                .createQueryBuilder()
-                .select([
-                    "id",
-                    "name",
-                ])
-                .where("name LIKE :name", {name: `%${req.query.username}%`})
-                .take(20)
-                .getRawMany()
-            ;
+            const result = await getCustomRepository(UserRepository).findByName(req.query.username);
 
             res.setHeader("Content-Type", "application/json");
             res.end(JSON.stringify(result));

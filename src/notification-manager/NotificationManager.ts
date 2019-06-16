@@ -2,13 +2,14 @@ import {Application} from "express";
 import {Request, Response} from "express-serve-static-core";
 import {__} from "i18n";
 import {sendNotification, setVapidDetails} from "web-push";
+import {PushSubscription as PushSubscriptionEntity} from "../entities/PushSubscription";
 import {User} from "../entities/User";
 import {StorageManager} from "../storage-manager/StorageManager";
 import {Notification} from "./Notification";
 
 export class NotificationManager {
-    constructor(private readonly app: Application, private readonly storage: StorageManager) {
-        this.storage.registerNotificationManager(this);
+    constructor(private readonly app: Application) {
+        StorageManager.getInstance().registerNotificationManager(this);
 
         setVapidDetails(
             `mailto:${process.env.VAPID_MAIL}`,
@@ -117,7 +118,14 @@ export class NotificationManager {
     }
 
     public async sendNotification(user: User, notification: Notification): Promise<void> {
-        const subscriptions = await this.storage.getSubscriptionNotification(user.id);
+        const subscriptions = await StorageManager.getInstance().db
+            .getRepository(PushSubscriptionEntity)
+            .find({
+                where: {
+                    user: user.id,
+                },
+            });
+
         console.log(new Date(), `send notification to ${subscriptions.length} client for user ${user.id}`);
 
         for ( const subscription of subscriptions ) {
@@ -125,7 +133,7 @@ export class NotificationManager {
                 await sendNotification(subscription.data, JSON.stringify(notification));
             } catch (e) {
                 if ( e.statusCode === 410 ) {
-                    await this.storage.db.manager.remove(subscription);
+                    await StorageManager.getInstance().db.manager.remove(subscription);
                 } else {
                     console.error("Unable send notification", e);
                 }
@@ -136,7 +144,31 @@ export class NotificationManager {
     private registerPushSubscription(): void {
         this.app.post("/_notification", async (req: Request, res: Response) => {
             console.log(new Date(), "register push data", req.query.memberGuid);
-            await this.storage.savePushSubscription(req.query.memberGuid, req.body);
+
+            const pushSubscription = req.body;
+            const user = await StorageManager.getInstance().db
+                .getRepository(User)
+                .findOne(
+                    await StorageManager.getInstance().getUserId(req.query.memberGuid),
+                    {
+                        relations: ["pushSubscription"],
+                    },
+                );
+
+            if ( user.pushSubscription.find(subscription =>
+                subscription.data.endpoint === pushSubscription.endpoint) ) {
+                res.end();
+                return;
+            }
+
+            const notification = new PushSubscriptionEntity();
+            notification.data = pushSubscription;
+            notification.user = user;
+
+            await StorageManager.getInstance().db
+                .getRepository(PushSubscriptionEntity)
+                .save(notification);
+
             res.end();
         });
     }
