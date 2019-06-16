@@ -19,8 +19,7 @@
   "sum_contest": "Compet'",
 
   "battle_victory": "Victoire",
-  "battle_lost": "battle_lost",
-  "battle_defeat": "Perdu",
+  "battle_lost": "Perdu",
   "battle_ego": "Ego",
 
   "unit_softCurrency": "$",
