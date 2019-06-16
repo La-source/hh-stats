@@ -10,8 +10,9 @@ import {UserRepository} from "../repositories/UserRepository";
 import {StorageManager} from "../storage-manager/StorageManager";
 
 export class StatsManager {
+    constructor(private readonly app: Application) {}
 
-    constructor(private readonly app: Application) {
+    public use(): void {
         this.historyPlayer();
         this.opponentHistory();
     }
@@ -46,13 +47,13 @@ export class StatsManager {
             }
 
             res.render("history", {
-                events,
-                sum: {today, yesterday, lastWeek},
-                moment,
-                constant,
-                formatNumber,
                 background,
+                constant,
+                events,
+                formatNumber,
                 membersClub,
+                moment,
+                sum: {today, yesterday, lastWeek},
             });
         });
     }

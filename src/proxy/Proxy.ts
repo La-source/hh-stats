@@ -21,12 +21,14 @@ export class Proxy {
      */
     constructor(app: Application, private readonly target: string) {
         app.use(proxy({
-            target,
-            ws: true,
-            changeOrigin: true,
-            autoRewrite: true,
-            followRedirects: true,
-            selfHandleResponse: true,
+            logLevel: "silent",
+            onError: (err, _req, res) => {
+                console.error("Erreur requête", err);
+                res.writeHead(500, {
+                    "Content-Type": "text/plain",
+                });
+                res.end("Error sur la requête");
+            },
             onProxyRes: (proxyRes: IncomingMessage, req: IncomingMessage, res: ServerResponse): void => {
                 const headerIgnore = [
                     "content-encoding",
@@ -94,14 +96,12 @@ export class Proxy {
                         req.exchange.request = new Request(req, body);
                     });
             },
-            onError: (err, _req, res) => {
-                console.error("Erreur requête", err);
-                res.writeHead(500, {
-                    "Content-Type": "text/plain",
-                });
-                res.end("Error sur la requête");
-            },
-            logLevel: "silent",
+            target,
+            ws: true,
+            changeOrigin: true,
+            autoRewrite: true,
+            followRedirects: true,
+            selfHandleResponse: true,
         }));
     }
 

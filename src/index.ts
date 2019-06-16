@@ -86,9 +86,9 @@ process.on("uncaughtException", err => {
     storage.use(WeeklyRewardEvent, "weeklyReward", "weeklyReward");
     storage.use(LeagueRewardEvent, "leagueReward", "leagueReward");
 
-    new StatsManager(app);
-    new NotificationManager(app);
-    new RankingManager(app, process.env.USERNAME, process.env.PASSWORD);
+    new StatsManager(app).use();
+    new NotificationManager(app).use();
+    new RankingManager(app, process.env.USERNAME, process.env.PASSWORD).use();
     const proxy = new Proxy(app, process.env.TARGET);
     const em = new ExchangeManager(proxy, storage);
 

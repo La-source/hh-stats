@@ -20,9 +20,6 @@ export class RankingManager {
     constructor(private readonly app: Application,
                 private readonly username,
                 private readonly password) {
-        this.fetchData();
-        this.findUser();
-
         if ( !process.env.ANALYSE_RANKING || process.env.ANALYSE_RANKING.toLowerCase() !== "true" ) {
             return;
         }
@@ -46,6 +43,11 @@ export class RankingManager {
         new CronJob("0 5 */4 * * *", () => {
             this.run();
         }, null, null, "Europe/Paris").start();
+    }
+
+    public use() {
+        this.fetchData();
+        this.findUser();
     }
 
     /**
@@ -125,8 +127,8 @@ export class RankingManager {
         const users: User[] = [];
         const ranks: RankingUser[] = [];
         const overwrite = {
-            value: "",
             rank: "",
+            value: "",
         };
 
         switch (rankinPage.field) {
@@ -206,24 +208,24 @@ export class RankingManager {
      */
     private async fetchPage(page: number, field: RankingField, jar: CookieJar): Promise<RankingPage> {
         const $ = await request({
-            url: `${process.env.TARGET}/ajax.php`,
-            method: "POST",
+            form: {
+                action: "leaderboard_change",
+                class: "TowerOfFame",
+                page,
+                place: "global",
+                ranking_field: field,
+                ranking_type: "alltime",
+            },
             headers: {
                 "Referer": `${process.env.TARGET}/tower-of-fame.html?tab=leaderboard`,
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
                     + "AppleWebKit/537.36 (KHTML, like Gecko) "
                     + "Chrome/74.0.3729.169 Safari/537.36",
             },
-            form: {
-                class: "TowerOfFame",
-                action: "leaderboard_change",
-                place: "global",
-                page,
-                ranking_field: field,
-                ranking_type: "alltime",
-            },
-            transform: body => load(JSON.parse(body).html.WW),
             jar,
+            method: "POST",
+            transform: body => load(JSON.parse(body).html.WW),
+            url: `${process.env.TARGET}/ajax.php`,
         });
 
         const rankinPage = new RankingPage();
@@ -259,23 +261,23 @@ export class RankingManager {
         const jar = request.jar();
 
         await request({
-            uri: `${process.env.TARGET}/home.html`,
             jar,
+            uri: `${process.env.TARGET}/home.html`,
         });
 
         const result = await request({
-            method: "POST",
-            uri: `${process.env.TARGET}/phoenix-ajax.php`,
             form: {
-                login: username,
-                password,
-                stay_online: 1,
-                module: "Member",
                 action: "form_log_in",
                 call: "Member",
+                login: username,
+                module: "Member",
+                password,
+                stay_online: 1,
             },
-            json: true,
             jar,
+            json: true,
+            method: "POST",
+            url: `${process.env.TARGET}/phoenix-ajax.php`,
         });
 
         if ( !result.success ) {
@@ -283,8 +285,8 @@ export class RankingManager {
         }
 
         await request({
-            uri: `${process.env.TARGET}/tower-of-fame.html`,
             jar,
+            url: `${process.env.TARGET}/tower-of-fame.html`,
         });
 
         return jar;

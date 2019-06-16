@@ -16,7 +16,9 @@ export class NotificationManager {
             process.env.VAPID_PUBLIC_KEY,
             process.env.VAPID_PRIVATE_KEY,
         );
+    }
 
+    public use(): void {
         this.registerPushSubscription();
         this.getPublicVapidKey();
     }
