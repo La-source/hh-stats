@@ -41,7 +41,7 @@ export class ArenaProcess implements ExchangeProcess {
 
         exchange.response.$("body").append(`<script src="https://unpkg.com/popper.js@1"></script>
             <script src="https://unpkg.com/tippy.js@4"></script>
-            <script src="https://unpkg.com/moment@2"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
             <script type="text/javascript" src="arena.js?v=${getVersion()}"></script>`);
     }
 }
